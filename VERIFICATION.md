@@ -1,5 +1,16 @@
 # Verification — 28 October 2026
 
+## Teacher access update — 29 October 2026
+
+- Eight automated test groups pass, including valid/invalid code checks and the 15-minute inactivity boundary.
+- Browser checks confirm the Teacher button and homepage teaching-plan link both require the code.
+- Incorrect codes leave tools locked; the correct code unlocks presenter controls and opens a pending teaching plan.
+- Instructor notes are visible when unlocked and hidden in Student Mode, including on Quick check screens.
+- Choosing Student and refreshing both relock teacher access.
+- Five incorrect attempts trigger the 30-second local pause.
+- The plaintext code is stored only in the ignored local `.deployment/teacher-access.txt` file. The published app uses a SHA-256 verifier.
+- The owner selected a casual-access classroom lock after being informed it can be bypassed. This is not server-side authorization and does not make public source material confidential.
+
 ## Automated
 
 - TypeScript type checking and Vite production build pass.

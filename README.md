@@ -21,6 +21,12 @@ Deployment uses GitHub’s standard Pages actions, with read-only source access 
 
 ## Classroom flow
 
+Teacher tools require the instructor’s classroom access code. The Teacher button and teaching-plan link open a code dialog; instructor notes do not appear in Student Mode. Choose Student or **Lock teacher tools** to relock. Refreshing the page also relocks, and an unlocked session expires after 15 minutes without activity. Unlock state and the entered code are held only in memory. Five incorrect attempts trigger a 30-second pause in that tab.
+
+The private code is in the local, Git-ignored `.deployment/teacher-access.txt` file. Only a SHA-256 verifier is published. To generate a replacement, run `node scripts/rotate-teacher-code.mjs`, then commit and push `src/config/teacher.ts`. Do not commit the private code file or put the code in a GitHub issue, README, or commit message.
+
+**Protection level:** this is a classroom UI lock that discourages casual access, not real authentication or server-side authorization. GitHub Pages serves public static files; a determined visitor can alter client code or read the public source and its history, including teacher material. The attempt pause can also be bypassed locally. Do not use this mechanism to protect confidential content. Strong protection requires a backend or authenticated hosting service.
+
 Use the Student / Teacher switch in the top bar. Teacher mode adds larger lesson text, a persistent timer, the 60-minute plan, fullscreen presentation, and expandable notes. Each of six chapters has Discover, Experiment, Practice, and Quick check tabs. Practice contains a prediction gate, a repair exercise, and a mini challenge. Lessons are self-marked complete; assessment answers are stored separately. The overview links to nine real-world demos and five guided mini projects.
 
 The cheat sheet includes comparisons; Error Detective has six repair cases; revision has twelve flashcards; the challenge arena has ten questions. Scores reflect the latest checked answer per question and are not cumulative rewards for repeated clicks. Local storage keeps completion, results, and the current chapter. Reset progress asks for confirmation.

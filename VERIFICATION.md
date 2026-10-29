@@ -1,5 +1,20 @@
 # Verification — 28 October 2026
 
+## Curriculum V2 update — 29 October 2026
+
+- Original six chapters and ten-question arena are compared in full against a pre-V2 fixture, including educational text, code, IDs, answer choices, and explanations.
+- Legacy lesson completion, question results, and current chapter migrate without resetting the existing storage key. New concept completion is independently saved.
+- All expanded examples, debugging solutions, applied exercises, and 15 new project reference solutions execute in tests.
+- Every new prediction is checked against actual function-wrapper JavaScript, including SyntaxError, ReferenceError, and TypeError categories.
+- Extended loop traces match their displayed source for all seven supported traversal views, including zero-limit do…while and callback traversal.
+- Array return values/mutations, numeric sorting, nested reference sharing, deep clones, special-value logging, and safe value parsing are tested.
+- Browser checks opened all initial 31 visual labs and all 15 new guided projects; the added closure lab was separately exercised with independent counters.
+- The production runner executes rest/spread, callbacks, objects, optional chaining, structuredClone, and special-value console snapshots; infinite loops are still stopped after one second.
+- Browser checks verify Ctrl+Enter runs only the focused editor, prediction gates unlock independently, and concept completion survives refresh.
+- Student manager add/update/search/detail actions work; splice displays both removed values and the updated source array.
+- Responsive visual checks cover a 1265px desktop viewport and a 375px iframe viewport; chapter navigation, wrapped controls, array boxes, and method results remain usable. This is not an exhaustive physical-device/browser audit.
+- Original teacher plan and new multi-session navigation are verified. The existing teacher code unlocks the new instructor notes, and Student Mode continues to hide them.
+
 ## Teacher access update — 29 October 2026
 
 - Eight automated test groups pass, including valid/invalid code checks and the 15-minute inactivity boundary.

@@ -1,0 +1,14 @@
+import { useEffect, useState } from 'react';
+import { ChevronLeft, ChevronRight, Pause, Play, RotateCcw } from 'lucide-react';
+import { Code } from './Playground';
+import { displayValue } from '../utils/displayValue.mjs';
+type Frame={phase:string;detail:string;[key:string]:unknown};
+export default function TracePlayer({frames,code,label='Execution trace'}:{frames:Frame[];code?:string;label?:string}) {
+ const [index,setIndex]=useState(0),[playing,setPlaying]=useState(false),[speed,setSpeed]=useState(700);
+ const signature=JSON.stringify(frames);
+ useEffect(()=>{setIndex(0);setPlaying(false)},[signature]);
+ useEffect(()=>{if(!playing)return;const timer=setInterval(()=>setIndex(i=>{if(i>=frames.length-1){setPlaying(false);return i;}return i+1;}),speed);return()=>clearInterval(timer)},[playing,speed,frames.length]);
+ const frame=frames[Math.min(index,frames.length-1)];
+ function step(direction:number,iteration=false){setPlaying(false);if(!iteration){setIndex(i=>Math.max(0,Math.min(frames.length-1,i+direction)));return;}const candidates=frames.map((f,i)=>({f,i})).filter(({f,i})=>f.phase==='body'&&(direction>0?i>index:i<index));setIndex(direction>0?(candidates[0]?.i??frames.length-1):(candidates.at(-1)?.i??0));}
+ return <div className="trace-player" aria-label={label}>{code&&<Code>{code}</Code>}<div className="loop-flow">{[...new Set(frames.map(f=>f.phase))].map(phase=><span key={phase} className={frame.phase===phase?'current':''}><b>{phase}</b></span>)}</div><div className="trace-values">{Object.entries(frame).filter(([key])=>!['phase','detail'].includes(key)).map(([key,value])=><div key={key}><span>{key}</span><strong>{displayValue(value)}</strong></div>)}</div><p className="observation" aria-live="polite">Step {index+1}/{frames.length}: {frame.detail}</p><div className="controls"><button className="button primary small" onClick={()=>{if(index===frames.length-1)setIndex(0);setPlaying(!playing)}}>{playing?<Pause size={14}/>:<Play size={14}/>} {playing?'Pause':'Start'}</button><button className="icon-label" disabled={index===0} onClick={()=>step(-1)}><ChevronLeft size={14}/> Previous step</button><button className="icon-label" disabled={index===frames.length-1} onClick={()=>step(1)}>Next step <ChevronRight size={14}/></button><button className="icon-label" onClick={()=>{setIndex(0);setPlaying(false)}}><RotateCcw size={14}/> Reset</button></div>{frames.some(f=>f.phase==='body')&&<div className="controls"><button className="text-button" disabled={index===0} onClick={()=>step(-1,true)}>← Previous iteration</button><button className="text-button" disabled={index===frames.length-1} onClick={()=>step(1,true)}>Next iteration →</button></div>}<label className="form-field">Speed<input type="range" min="200" max="1400" step="100" value={1600-speed} onChange={e=>setSpeed(1600-Number(e.target.value))}/></label></div>
+}

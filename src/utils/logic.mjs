@@ -1,3 +1,4 @@
+import { LESSON_IDS } from '../data/catalog.mjs';
 export function grade(marks) {
   if (!Number.isFinite(marks) || marks < 0 || marks > 100) return 'Invalid';
   return marks >= 90 ? 'A' : marks >= 75 ? 'B' : marks >= 60 ? 'C' : marks >= 40 ? 'D' : 'Retry';
@@ -25,12 +26,12 @@ export function discounted(total) {
   return total >= 1000 ? total * 0.9 : total;
 }
 export function readProgress(raw) {
-  const fallback = {completed:[],answers:{},current:0};
+  const fallback = {completed:[],answers:{},current:0,concepts:[]};
   try {
     const p = JSON.parse(raw || 'null');
     if (!p || typeof p !== 'object') return fallback;
     const answers = {};
     if (p.answers && typeof p.answers === 'object') for (const [key,value] of Object.entries(p.answers)) if (typeof value === 'boolean') answers[key] = value;
-    return {completed:Array.isArray(p.completed) ? [...new Set(p.completed.filter(n => Number.isInteger(n) && n>=1 && n<=6))] : [], answers, current:Number.isInteger(p.current) && p.current>=0 && p.current<=6 ? p.current : 0};
+    return {completed:Array.isArray(p.completed) ? [...new Set(p.completed.filter(n => LESSON_IDS.includes(n)))] : [], answers, current:p.current===0||LESSON_IDS.includes(p.current) ? p.current : 0, concepts:Array.isArray(p.concepts)?[...new Set(p.concepts.filter(id=>typeof id==='string'&&id.length<120))]:[]};
   } catch { return fallback; }
 }

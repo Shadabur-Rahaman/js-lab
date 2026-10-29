@@ -2,6 +2,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
 import './styles.css';
+import './styles-v2.css';
 class ErrorBoundary extends React.Component<{children: React.ReactNode}, {error: boolean}> {
   state = { error: false };
   static getDerivedStateFromError() { return { error: true }; }

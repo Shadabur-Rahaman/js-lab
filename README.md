@@ -27,9 +27,13 @@ The private code is in the local, Git-ignored `.deployment/teacher-access.txt` f
 
 **Protection level:** this is a classroom UI lock that discourages casual access, not real authentication or server-side authorization. GitHub Pages serves public static files; a determined visitor can alter client code or read the public source and its history, including teacher material. The attempt pause can also be bypassed locally. Do not use this mechanism to protect confidential content. Strong protection requires a backend or authenticated hosting service.
 
-Use the Student / Teacher switch in the top bar. Teacher mode adds larger lesson text, a persistent timer, the 60-minute plan, fullscreen presentation, and expandable notes. Each of six chapters has Discover, Experiment, Practice, and Quick check tabs. Practice contains a prediction gate, a repair exercise, and a mini challenge. Lessons are self-marked complete; assessment answers are stored separately. The overview links to nine real-world demos and five guided mini projects.
+Use the Student / Teacher switch in the top bar. Teacher mode adds larger lesson text, a persistent timer, the 60-minute plan, fullscreen presentation, and expandable notes. Each of nine chapters has Discover, Experiment, Practice, and Quick check tabs. Practice contains a prediction gate, a repair exercise, and a mini challenge. Lessons are self-marked complete; assessment answers are stored separately. The overview links to nine real-world demos and the five original guided mini projects, with 15 additional projects in the expanded chapters.
 
-The cheat sheet includes comparisons; Error Detective has six repair cases; revision has twelve flashcards; the challenge arena has ten questions. Scores reflect the latest checked answer per question and are not cumulative rewards for repeated clicks. Local storage keeps completion, results, and the current chapter. Reset progress asks for confirmation.
+The cheat sheet includes comparisons; Error Detective has nine repair cases; revision has eighteen flashcards; the challenge arena has ten questions. Scores reflect the latest checked answer per question and are not cumulative rewards for repeated clicks. Local storage keeps completion, results, and the current chapter. Reset progress asks for confirmation.
+
+## V2 curriculum
+
+See [CURRICULUM_V2.md](CURRICULUM_V2.md) for the complete chapter/concept/project map, progress compatibility, teaching guidance, and execution context. New concept completion is additive; the original six lessons and assessment IDs are retained. The course now extends through Functions, Arrays, and Objects using the same lesson tabs and design.
 
 ## Code runner boundaries
 

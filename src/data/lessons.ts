@@ -1,3 +1,5 @@
+import { v2Comparisons } from './v2Comparisons.ts';
+import { newLessons } from './newLessons.ts';
 export type Question = { id: string; kind: string; prompt: string; code?: string; choices: string[]; answer: number; explanation: string };
 export type Lesson = { id: number; title: string; short: string; subtitle: string; minutes: number; color: string; objective: string; why: string; real: string; analogy: string; sections: {title: string; text: string; code?: string}[]; examples: {title: string; code: string; explanation: string}[]; predict: Question; debug: {prompt: string; starter: string; solution: string; hint: string}; challenge: {prompt: string; starter: string; solution: string; hint: string}; quiz: Question[]; summary: string; notes: {say: string; demo: string; ask: string; answer: string; misconception: string; exercise: string; transition: string} };
 const q = (id: string, kind: string, prompt: string, choices: string[], answer: number, explanation: string, code?: string): Question => ({id, kind, prompt, choices, answer, explanation, code});
@@ -129,9 +131,12 @@ export const arena: Question[] = [
  q('arena-9','Fill in the code','Leave the nearest loop immediately with ___.',['continue','break','else'],1,'break exits the loop. continue skips only the current iteration.'),
  q('arena-10','Predict the output','What is the sum?',['6','10','4'],0,'The accumulator adds 1, then 2, then 3: 6.','let sum = 0;\nfor (let i = 1; i <= 3; i++) sum += i;\nconsole.log(sum);')
 ];
+lessons.push(...newLessons);
 export const comparisons = [
  {a:'let',b:'const',left:'A binding that can be reassigned. Use for counters and changing scores.',right:'A binding that cannot be reassigned. Use for values you do not replace. Objects inside can still change.',code:'let score = 1; score = 2;\nconst course = "JS"; // no reassignment'},
  {a:'=',b:'===',left:'Assigns a value. It changes what a variable stores.',right:'Compares without type conversion. It produces true or false.',code:'let age = 18;\nconsole.log(age === 18); // true'},
  {a:'if',b:'switch',left:'Good for ranges, combined conditions, and flexible questions.',right:'Good for comparing one value with several fixed cases. Remember break.',code:'if (marks >= 75) console.log("B or above");\n// switch (color) { case "red": ... }'},
  {a:'for',b:'while',left:'Keeps initialization, condition, and update together. Useful for counting.',right:'Repeats based on a condition. Update the relevant state in the body.',code:'for (let i = 1; i <= 3; i++) console.log(i);\nlet n = 3; while (n > 0) { console.log(n); n--; }'}
 ];
+
+comparisons.push(...v2Comparisons);

@@ -1,0 +1,10 @@
+export const teachingSessions=[
+ {title:'Session 1 · The original first hour',minutes:'60 min',lesson:1,focus:'Use the original introductory plan above: curiosity, console, variables, operators, decisions, and a first loop. Leave optional deeper concepts for later.'},
+ {title:'Session 2 · Names, bindings, scope & types',minutes:'75–90 min',lesson:3,focus:'Begin with the chapter 2 code microscope, then declarations, scope rooms, dynamic types, coercion, and truthiness. Introduce hoisting and TDZ after students can trace ordinary assignment.'},
+ {title:'Session 3 · Decisions with clear boundaries',minutes:'60–75 min',lesson:4,focus:'Trace prefix/postfix and operand-returning logic. Revisit grading boundaries and switch fallthrough. Play rock-paper-scissors and connect early guards to functions.'},
+ {title:'Session 4 · Repetition and list processing',minutes:'75 min',lesson:6,focus:'Keep the original loop machine as the starting point. Compare for, while, do…while, for…of, for…in, and forEach. Practice vowel counts, maxima, totals, and student records.'},
+ {title:'Session 5 · Reusable functions',minutes:'75–90 min',lesson:7,focus:'Use the function machine, parameter mapping, return values, defaults, rest, and callbacks. Build a converter or validation helper. Treat lexical this and closures as optional follow-up discussion.'},
+ {title:'Session 6 · Useful arrays',minutes:'90 min',lesson:8,focus:'Inspect memory boxes and method return values. Step map/filter/reduce, compare numeric sorting, and test shallow copies. Build a cart, salary report, or task list.'},
+ {title:'Session 7 · Records and references',minutes:'75–90 min',lesson:9,focus:'Explore nested objects, dynamic keys, own/inherited fields, optional chaining, and copying. Build the student manager, address book, or inventory.'},
+ {title:'Session 8 · Combine, debug, explain',minutes:'60–90 min',lesson:9,focus:'Pairs choose a project, write a prediction before each run, test empty and boundary inputs, and explain a bug fix. Use concept completion as a personal checklist, not a race.'}
+];

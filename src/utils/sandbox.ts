@@ -1,3 +1,4 @@
+import { displayValue } from './displayValue.mjs';
 export type RunResult = { logs: {kind: string; text: string}[]; preview: string; error?: string };
 // The opaque-origin frame supplies an additional boundary around a disposable Worker.
 // Its CSP denies network access. Only a bounded, validated result is accepted.
@@ -11,7 +12,7 @@ export function runCode(code: string, promptValue: string, signal?: AbortSignal)
     const workerSource = `
       const send = self.postMessage.bind(self);
       const logs = []; let preview = 'Your message will appear here.'; let count = 0;
-      const format = v => { try { return typeof v === 'string' ? v : typeof v === 'undefined' ? 'undefined' : typeof v === 'bigint' ? v.toString()+'n' : typeof v === 'number' ? String(v) : JSON.stringify(v) ?? String(v); } catch { return '[unprintable value]'; } };
+      const format = ${displayValue.toString()};
       const emit = (kind, args) => { if (count++ < 150) logs.push({kind, text:args.map(format).join(' ').slice(0, 2000)}); };
       const fakeConsole = {log:(...a)=>emit('log',a),info:(...a)=>emit('log',a),warn:(...a)=>emit('warn',a),error:(...a)=>emit('error',a),clear:()=>{logs.length=0;}};
       const message = {get textContent(){return preview}, set textContent(v){preview=String(v).slice(0,4000)}};

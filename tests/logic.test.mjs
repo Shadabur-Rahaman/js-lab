@@ -27,12 +27,12 @@ test('project arithmetic and discounts validate boundaries',()=>{
  assert.equal(discounted(999),999);assert.equal(discounted(1000),900);assert.throws(()=>discounted(-1));
 });
 test('progress recovers from corrupt storage and validates its schema',()=>{
- assert.deepEqual(readProgress('nope'),{completed:[],answers:{},current:0});
- assert.deepEqual(readProgress('{"completed":[1,1,7,"2"],"answers":{"1-a":true,"bad":7},"current":99}'),{completed:[1],answers:{'1-a':true},current:0});
- const p={completed:[1,2],answers:{'1-a':true},current:3};assert.deepEqual(readProgress(JSON.stringify(p)),p);
+ assert.deepEqual(readProgress('nope'),{completed:[],answers:{},current:0,concepts:[]});
+ assert.deepEqual(readProgress('{"completed":[1,1,99,"2"],"answers":{"1-a":true,"bad":7},"current":99}'),{completed:[1],answers:{'1-a':true},current:0,concepts:[]});
+ const p={completed:[1,2],answers:{'1-a':true},current:3};assert.deepEqual(readProgress(JSON.stringify(p)),{...p,concepts:[]});
 });
 function execute(code){
- const logs=[];const message={textContent:''};const context=vm.createContext({console:{log:(...a)=>logs.push(a),warn:()=>{},error:()=>{}},prompt:()=> '20',alert:()=>{},document:{getElementById:()=>message,write:()=>{}}});
+ const logs=[];const message={textContent:''};const context=vm.createContext({structuredClone,console:{log:(...a)=>logs.push(a),warn:()=>{},error:()=>{}},prompt:()=> '20',alert:()=>{},document:{getElementById:()=>message,write:()=>{}}});
  vm.runInContext(code,context,{timeout:500});return logs;
 }
 test('all lesson examples and reference solutions execute successfully',()=>{

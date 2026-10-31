@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Native browser checks</title>
+    <style>
+      body {
+        font: 16px/1.6 system-ui;
+        padding: 24px;
+      }
+      .pass {
+        color: #17522c;
+      }
+      .fail {
+        color: #a02020;
+      }
+      #frames {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        z-index: 1;
+        background: white;
+      }
+      iframe {
+        width: 500px;
+        height: 220px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Native browser checks</h1>
+    <button id="run">Run native checks</button>
+    <p id="status">Ready</p>
+    <ol id="results"></ol>
+    <div id="frames"></div>
+    <script type="module" src="./native-browser.ts"></script>
+  </body>
+</html>

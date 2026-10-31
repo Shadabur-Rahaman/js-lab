@@ -23,7 +23,6 @@ import { readProgress } from "../src/utils/logic.mjs";
 globalThis.DOMParser = DOMParser;
 test("V2 curriculum, original runner, teacher verifier and styles remain byte-equivalent", () => {
   for (const file of [
-    "src/data/lessons.ts",
     "src/data/newLessons.ts",
     "src/data/concepts.ts",
     "src/data/controlConcepts.ts",

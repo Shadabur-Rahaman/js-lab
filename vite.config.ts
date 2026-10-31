@@ -31,7 +31,11 @@ const v3Worker = {
 };
 export default defineConfig({
   base: "./",
-  server: { watch: { ignored: ["**/html-lab/**", "**/.deployment/**"] } },
+  server: {
+    watch: {
+      ignored: ["**/html-lab/**", "**/css-lab/**", "**/.deployment/**"],
+    },
+  },
   plugins: [react(), tailwindcss(), v3Worker],
   build: {
     rollupOptions: {

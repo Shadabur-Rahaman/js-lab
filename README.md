@@ -67,3 +67,7 @@ Tests cover loop trace ordering and boundaries, grading thresholds, project calc
 - `src/utils`: isolated code runner and independently tested learning logic
 
 No external fonts or image services are required at runtime. After dependencies are installed, development and the built site work offline when served locally.
+
+## Browser mastery path
+
+Chapters 10–14 add native DOM, events, forms, timers and isolated storage learning. Eight editable browser application references are at #academy/browser-projects. See BROWSER_GAP_AUDIT.md and CURRICULUM_V3.md for coverage and execution limits. Native browser checks run at /tests/native-browser.html under the development server; prior V3 browser regressions remain at /tests/v3-browser.html. These harnesses are development-only and are not part of the published site.

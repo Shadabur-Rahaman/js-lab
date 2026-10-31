@@ -14,8 +14,8 @@ function execute(code){const logs=[];let error;const context=vm.createContext({s
 test('published chapters, examples, assessment IDs, and original arena remain intact',()=>{
  assert.deepEqual(JSON.parse(JSON.stringify(lessons.slice(0,6))),legacy.lessons);
  assert.deepEqual(JSON.parse(JSON.stringify(arena)),legacy.arena);
- assert.deepEqual(lessons.map(l=>l.id),[1,2,3,4,5,6,7,8,9]);
- assert.deepEqual(lessons.slice(6).map(l=>l.short),['Functions','Arrays','Objects']);
+ assert.deepEqual(lessons.slice(0,9).map(l=>l.id),[1,2,3,4,5,6,7,8,9]);
+ assert.deepEqual(lessons.slice(6,9).map(l=>l.short),['Functions','Arrays','Objects']);
 });
 test('legacy progress migrates additively and V2 progress survives a round trip',()=>{
  const old={completed:[1,2,3,4,5,6],answers:{'1-a':true,'arena-10':true,'3-p':false},current:6};

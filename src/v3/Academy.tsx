@@ -1,3 +1,4 @@
+import BrowserProjects from "../browser/BrowserProjects";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, BookOpen } from "lucide-react";
 import { newTopics, languageUnits } from "./language.mjs";
@@ -15,8 +16,15 @@ type Props = {
   teacher: boolean;
   legacy: Progress;
   onImport: (p: Progress) => void;
+  onAnswer: (id: string, correct: boolean) => void;
 };
-export default function Academy({ section, teacher, legacy, onImport }: Props) {
+export default function Academy({
+  section,
+  teacher,
+  legacy,
+  onImport,
+  onAnswer,
+}: Props) {
   const [progress, setProgress] = useState(() => {
       try {
         return readAcademy(localStorage.getItem(V3_KEY));
@@ -187,6 +195,12 @@ export default function Academy({ section, teacher, legacy, onImport }: Props) {
             />
           </section>
         </>
+      ) : section === "browser-projects" ? (
+        <BrowserProjects
+          teacher={teacher}
+          onAnswer={onAnswer}
+          onComplete={done}
+        />
       ) : section === "projects" ? (
         <ApplicationAcademy done={done} />
       ) : section === "workflow" ? (

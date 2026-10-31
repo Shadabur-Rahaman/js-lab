@@ -463,3 +463,36 @@
 .project-render .v3-preview-area {
   border-left: 0;
 }
+
+.browser-unit-select {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 20px 0;
+}
+.browser-unit-select select {
+  max-width: 100%;
+  padding: 10px;
+}
+.native-tree .tabs {
+  max-height: 180px;
+  overflow: auto;
+}
+.v3-browser:fullscreen {
+  background: #fafaf5;
+  overflow: auto;
+  padding: 24px;
+}
+.v3-card table {
+  display: block;
+  max-width: 100%;
+  overflow: auto;
+  border-collapse: collapse;
+}
+.v3-card td,
+.v3-card th {
+  padding: 10px;
+  border: 1px solid #d5ddd2;
+  text-align: left;
+}

@@ -74,3 +74,18 @@ No external service, authentication, deployment, or paid API is needed. The buil
 - V3 limits are documented in `CURRICULUM_V3.md` and in each runner/workspace. The DOM bridge is a supported subset, not a full native browser or arbitrary step debugger. Live public API mode, binary assets, cyclic/dynamic/package imports and automated learner publication are not implemented.
 
 Release readiness: existing public repo/Pages workflow retained; unrelated `html-lab/` is excluded from the commit. Roll back if the published old lesson route, teacher unlock, or new worker/module preview fails: revert the V3 release commit and let the same workflow republish the prior `0cfaa23` baseline. There is no backend schema migration; new progress/projects use separate keys and no existing records are deleted.
+
+## Browser mastery follow-up — 2026-10-31
+
+Baseline: 5e07e28. The original nine-chapter registry is byte-equivalent after removing its additive import/registration; original runner, teacher verifier, legacy styles and V2 curriculum hashes still pass. Chapters 10–14 append stable IDs without changing the existing progress key.
+
+- npm test: **35 test groups passed**. Includes cross-platform original-source SHA fixture, new metadata, guarded loop/function execution, cookie lifecycle/request flags, origin/tab storage model and additive progress.
+- Production TypeScript/Vite build passed; relative Pages assets retained. Private classroom code scan passed.
+- /tests/native-browser.html: **35 passed, zero failed** in the actual in-app Chromium browser. Covers 22 native unit sources (including exact initial DOM predictions), eight project interaction sequences, native propagation/live collections/rendered text/FormData/constraint submission, opaque-origin isolation and ordinary loop interruption; explicit stopImmediatePropagation; seeded to-do/notes persistence and malformed JSON recovery; race/any/retry cleanup. Focus-dependent interactions run after initial frame layout.
+- /tests/v3-browser.html: **31 passed, zero failed** for the existing worker/module runtime and prior application references.
+- UI smoke: native lesson route, actual form submit with repeated and externally associated entries, authorized teacher unlock, authored unit-specific notes, existing timer/presenter controls and return to Student. Production browser-project route ran learner code and added a task with visible counts; source ZIP download completed. A 320px project preview remained operable.
+- Full app mobile viewport override was requested but the browser continued reporting a desktop viewport; full-page mobile emulation is not claimed for this pass. Existing responsive styles remain intact.
+
+Native mode is explicitly for ordinary classroom snippets, not hostile-code execution. Cooperative guards cannot guarantee handling of all native blocking calls or memory exhaustion. CSP restricts ordinary subresources/form navigation; frame self-navigation is outside its guarantees. The original restricted worker runners remain available and unchanged. Storage/cookies are explicitly labeled learning facades/models, not access to the real app origin or a backend.
+
+Deployment uses the existing main-branch Pages workflow. Rollback for this follow-up is its single release commit; the prior working release is 5e07e28. No backend migration or old progress deletion is involved.

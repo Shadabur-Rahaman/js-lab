@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>JS LAB resource UI verification</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+    <link rel="stylesheet" href="./resources-browser.bundle.css" />
+    <style>
+      body {
+        padding: 24px;
+      }
+      #mount {
+        max-width: 1000px;
+        margin: auto;
+      }
+      #results {
+        line-height: 1.8;
+      }
+      .pass {
+        color: #37652a;
+      }
+      .fail {
+        color: #a72e20;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Resource UI verification</h1>
+    <p>Local UI fixtures only — this does not test hosted Supabase.</p>
+    <button id="run">Run resource UI checks</button>
+    <p id="status">Ready</p>
+    <ol id="results"></ol>
+    <div id="mount"></div>
+    <script type="module" src="./resources-browser.bundle.js"></script>
+  </body>
+</html>

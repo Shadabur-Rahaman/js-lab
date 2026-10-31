@@ -1,0 +1,5 @@
+[functions.resource-api]
+verify_jwt = false
+
+[functions.resource-maintenance]
+verify_jwt = false

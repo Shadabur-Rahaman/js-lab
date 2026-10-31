@@ -3,3 +3,12 @@ dist/
 *.tsbuildinfo
 .deployment/
 js-lab-preview.png
+
+.env
+.env.*
+!.env.example
+supabase/.temp/
+supabase/.branches/
+resource-backups/
+tests/resources-browser.bundle.js
+tests/resources-browser.bundle.css

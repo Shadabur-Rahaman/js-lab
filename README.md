@@ -77,3 +77,11 @@ Chapters 10–14 add native DOM, events, forms, timers and isolated storage lear
 Chapters 15–19 deepen scope/execution/closures, this/binding, async/Promises, HTTP/Fetch and API applications. Development academy includes the V4 roadmap, eight advanced projects, final challenge and optional controlled Live API Lab. Earlier runners and mock exercises retain their boundaries. See [CURRICULUM_V4.md](CURRICULUM_V4.md) and [V4_IMPLEMENTATION.md](V4_IMPLEMENTATION.md) for the additive map, provider conditions and limits.
 
 V4 source downloads include a labeled fictional API adapter for standalone static practice. Real API mode is restricted to approved fixed requests in a separate integration; arbitrary editable student code remains offline. Private-key services and a backend are not included. Run /tests/v4-browser.html on the dev server for deterministic checks; its live-provider button is optional and separate from CI.
+
+## V5 classroom resource library
+
+Study Materials (`#resources`) and Manage Resources (`#teacher/resources`) add a Supabase-backed classroom file library. The existing classroom code remains separate from cloud teacher authentication. The integration includes private Storage, verified resumable uploads, metadata editing, versioned replacement, publishing, trash/restore, signed downloads, safe previews, categories, audit records and retention cleanup. All nineteen chapters and existing progress/runner boundaries are preserved.
+
+**Owner setup is required:** no Supabase project has been connected. Until then the public library shows an honest setup state and cloud operations are disabled. Follow [RESOURCE_LIBRARY_SETUP.md](RESOURCE_LIBRARY_SETUP.md) for migrations, teacher authorization, Edge Functions, public Pages settings, backups and hosted acceptance checks. Once configured, file changes require no frontend redeployment. Learning features remain usable independently of the resource backend.
+
+Run `node scripts/build-resource-browser-tests.mjs` before opening `/tests/resources-browser.html` in Vite. Its explicitly labeled fixtures test the interface, not cloud persistence. `npm test` covers validation and upload coordination; the Pages workflow additionally checks the migration and permissions in disposable PostgreSQL. Actual hosted Auth, Storage and Edge acceptance tests still require the owner's project.

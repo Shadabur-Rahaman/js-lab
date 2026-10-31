@@ -13,6 +13,29 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  resource-permissions:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready --health-interval 5s
+          --health-timeout 5s --health-retries 10
+    env:
+      PGHOST: 127.0.0.1
+      PGPORT: '5432'
+      PGUSER: postgres
+      PGDATABASE: postgres
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Check migration and resource permissions in disposable PostgreSQL
+        run: |
+          psql -v ON_ERROR_STOP=1 -f supabase/tests/bootstrap.sql
+          psql -v ON_ERROR_STOP=1 -f supabase/tests/permissions.sql
   build:
     runs-on: ubuntu-latest
     steps:
@@ -28,13 +51,16 @@ jobs:
       - name: Check lesson logic and examples
         run: npm test
       - name: Build the learning platform
+        env:
+          VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ vars.VITE_SUPABASE_PUBLISHABLE_KEY }}
         run: npm run build
       - name: Upload the site
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5
         with:
           path: dist
   deploy:
-    needs: build
+    needs: [build, resource-permissions]
     runs-on: ubuntu-latest
     permissions:
       pages: write

@@ -1,0 +1,14 @@
+{
+  "lessons": "9698e287fb98b55495088857a224a8c3690632e56be2ba21451fdd6a4e55cd40",
+  "arena": "31fd56f9b9c22307536cf45aeffc56a8c07018945f6b3d5e231134858eacec6e",
+  "hashes": {
+    "src/data/lessons.ts": "cdef5914fcd25c9ef7cc7ca09e001d5e9b0d9fcad13d771932b20858f808aed4",
+    "src/data/curriculum.ts": "134d7a53fe3a1c7e226b2c547dac53932da47773b92c4b36b2b12e81178859fa",
+    "src/v4/curriculum.ts": "7c11db14b49af2526c3e734fca71597c4be61e8c5352d1967f5fb802d95345f0",
+    "src/v4/AdvancedChapter.tsx": "5447ef269e7632f232fb7cadd4dd48339c5361b9d9db976f9740e4bfd6a2dd2f",
+    "src/browser/native.mjs": "f4c30ca775a6c97d5b11a9da618c7405d32389de1531e47ee43ec82b9bf78ebb",
+    "src/hooks/useProgress.ts": "05ccf2ff47beaee6549201a7e84fc52d8b55915f99af7aeda6795a10d0bfb0f0",
+    "src/config/teacher.ts": "5d16ba32117c1c3933908b72307d033f48ec6de0e191efb15d840bfad7193bbb",
+    "src/styles.css": "730e6e731e5fbd990abfd450cf1be5d6b5820c3a1c6171f5259ee25b201e7bdc"
+  }
+}

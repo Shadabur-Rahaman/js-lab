@@ -1,0 +1,14 @@
+{
+  "baseline": "0cfaa23",
+  "hashes": {
+    "src/data/lessons.ts": "e69a65ab03495f5f4ffcc4cc6faaa150a7550209659ece723b5ac8e7fef79581",
+    "src/data/newLessons.ts": "84f79458688e0e79a6c7fb06a24975d947d967f555a04afb480782a8760bfe37",
+    "src/data/concepts.ts": "fe31ab3d45315ccac2dd55b64c6e6349a999b659c966a8158abe52e315e473d4",
+    "src/data/controlConcepts.ts": "fb3ed9635d96206955c6ff1048cd58127b485c3d7d2d6513ab1bd2cf19ef601d",
+    "src/data/advancedConcepts.ts": "67fa72e543a0705da992a4dbbe3f65568ed1c58d7b6921d4dbd024a3f007ed44",
+    "src/data/appliedProjects.ts": "0139ff62771eec6c0f5e026ad3dd36970775e3e1eb6f008abd88eaaff78c5cd0",
+    "src/utils/sandbox.ts": "56cc8bcdf7c7e984a18824b62962f00d157f2c26ad8ef2250154cf560045f23c",
+    "src/config/teacher.ts": "5d16ba32117c1c3933908b72307d033f48ec6de0e191efb15d840bfad7193bbb",
+    "src/styles.css": "730e6e731e5fbd990abfd450cf1be5d6b5820c3a1c6171f5259ee25b201e7bdc"
+  }
+}

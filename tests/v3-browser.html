@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>JS LAB V3 browser verification</title>
+    <style>
+      body {
+        font: 15px/1.8 system-ui;
+        background: #111318;
+        color: #ddd;
+        padding: 30px;
+      }
+      li {
+        margin: 12px 0;
+      }
+      .pass {
+        color: #a9d6a3;
+      }
+      .fail {
+        color: #ffb5a5;
+      }
+      button {
+        padding: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>JS LAB V3 browser verification</h1>
+    <button id="run">Run browser checks</button>
+    <p id="status">Ready</p>
+    <ol id="results"></ol>
+    <script type="module" src="./v3-browser.ts"></script>
+  </body>
+</html>

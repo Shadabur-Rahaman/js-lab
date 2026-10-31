@@ -31,7 +31,13 @@ Use the Student / Teacher switch in the top bar. Teacher mode adds larger lesson
 
 The cheat sheet includes comparisons; Error Detective has nine repair cases; revision has eighteen flashcards; the challenge arena has ten questions. Scores reflect the latest checked answer per question and are not cumulative rewards for repeated clicks. Local storage keeps completion, results, and the current chapter. Reset progress asks for confirmation.
 
-## V2 curriculum
+## Curriculum upgrades
+
+## V3 development academy
+
+Open **Development academy** in the sidebar for the additive beginner, DOM/events/forms, async/API, storage, workspace, debugging/testing, project and workflow paths. See [CURRICULUM_V3.md](CURRICULUM_V3.md) for the complete scope, architecture, progress strategy and explicit supported-feature limits. V3 retains every existing chapter and the original synchronous runner; the new worker DOM bridge is a separate execution mode. Live API access and full native-browser APIs are not provided. Learners can export source and test/publish it through their own real development tools.
+
+### Existing V2 material
 
 See [CURRICULUM_V2.md](CURRICULUM_V2.md) for the complete chapter/concept/project map, progress compatibility, teaching guidance, and execution context. New concept completion is additive; the original six lessons and assessment IDs are retained. The course now extends through Functions, Arrays, and Objects using the same lesson tabs and design.
 

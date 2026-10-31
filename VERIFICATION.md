@@ -61,3 +61,16 @@
 The playground supports synchronous educational JavaScript with a limited simulated DOM, rather than a full HTML/CSS browser editor. Its limitations and supported APIs are visible beneath each editor and documented in README.md. It is intended for trusted classroom snippets; intentional extreme memory allocation and browser exploits are outside its guarantees.
 
 No external service, authentication, deployment, or paid API is needed. The built app is in dist/. A local development preview was opened during handoff.
+
+## V3 verification — 31 October 2026
+
+- `npm test`: 28 groups passed, including all original tests, nine extra language units, 24 function contracts, seven repair references, mock API semantics, module compilation, ZIP round trips/rejections, and progress compatibility.
+- `npm run build`: passed. The V3 academy and worker source are separate lazy-loaded chunks; no chunk-size warning. Relative GitHub Pages asset URLs retained.
+- `/tests/v3-browser.html`: **31 passed, 0 failed** in the in-app Chromium browser. This executes the real opaque worker host, checking DOM updates, console/errors, native module imports, Promise/microtask/timer order, both synchronous and event-handler infinite-loop termination, isolation from parent progress, no external fetch, preview restrictions, five mock response scenarios, interactions in all 13 application references, and five form templates.
+- Manual UI: edited JavaScript changes the actual preview heading; a real preview click updates a counter. The workspace saves and reopens an IndexedDB project, compiles native relative modules and updates its preview. The challenge UI displays normal/boundary/error results. Algorithm steps reorder using accessible Move controls and produce the expected result.
+- All new route screens load without the React recovery view. The same teacher code unlocks new guides; Student relocks them. The verifier is unchanged, and the private code is absent from built assets.
+- At 375px width, the DOM lab and workspace have no page-level horizontal overflow. Desktop and stacked editors were inspected. This is not exhaustive physical-device, assistive-technology, or cross-browser testing.
+- Minified production preview: counter events and multi-file module preview work; generated module URLs are hidden from the editing flow. The original chapter 8 synchronous example prints the expected values. No application console errors in these checked flows.
+- V3 limits are documented in `CURRICULUM_V3.md` and in each runner/workspace. The DOM bridge is a supported subset, not a full native browser or arbitrary step debugger. Live public API mode, binary assets, cyclic/dynamic/package imports and automated learner publication are not implemented.
+
+Release readiness: existing public repo/Pages workflow retained; unrelated `html-lab/` is excluded from the commit. Roll back if the published old lesson route, teacher unlock, or new worker/module preview fails: revert the V3 release commit and let the same workflow republish the prior `0cfaa23` baseline. There is no backend schema migration; new progress/projects use separate keys and no existing records are deleted.

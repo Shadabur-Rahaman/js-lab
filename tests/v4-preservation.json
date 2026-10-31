@@ -1,0 +1,1846 @@
+{
+  "baseline": "7e79e25fd6954b74956953dd3f854cc03fdce25a",
+  "lessons": [
+    {
+      "id": 1,
+      "title": "Meet JavaScript",
+      "short": "What is JavaScript?",
+      "subtitle": "A little code. A whole new world of possibilities.",
+      "minutes": 10,
+      "color": "yellow",
+      "objective": "Explain what JavaScript does, where it runs, and how it works with HTML and CSS.",
+      "why": "A document can show information. A program can respond to information. JavaScript gives websites instructions for responding to people and changing data.",
+      "real": "When a shopping cart updates its total without reloading the page, browser JavaScript can update the interface. A server still checks prices, stock, and payment.",
+      "analogy": "Think of a café: HTML is the building and menu, CSS is the décor, and JavaScript is the staff responding to your order.",
+      "sections": [
+        {
+          "title": "Three languages, one experience",
+          "text": "HTML describes structure: headings, inputs, and buttons. CSS controls presentation: color, spacing, and layout. JavaScript adds general-purpose behavior and logic: checking an answer, calculating a total, or changing text after a click. HTML and CSS offer some built-in interactions, but do not replace general-purpose programming."
+        },
+        {
+          "title": "A small beginning, a big reach",
+          "text": "Brendan Eich created JavaScript in 1995 at Netscape to add scripting to web pages. It later became standardized as ECMAScript. JavaScript and Java are different languages; their similar names do not mean their syntax or runtime is the same."
+        },
+        {
+          "title": "Where does the code run?",
+          "text": "A browser contains a JavaScript engine: a program that reads and executes your instructions. The browser also provides APIs (ready-made tools) for the page, clicks, and timers. Node.js runs JavaScript outside the browser, often on a server. A server is a computer that responds to requests from other computers."
+        },
+        {
+          "title": "JavaScript, Python, PHP, and Java",
+          "text": "Browser JavaScript runs in the visitor’s browser. PHP commonly runs on a server and generates responses such as HTML. JavaScript can also run on servers using Node.js. Python is widely used for automation, data work, and servers; Java is used in many server and enterprise systems. These languages overlap in capability and are chosen for different contexts. PHP is actively used, not obsolete."
+        },
+        {
+          "title": "Power comes with boundaries",
+          "text": "JavaScript is built into browsers and responds quickly to user input. Its flexible types can also cause surprising conversions. Browser code cannot freely read your computer’s files, and visible client code must never contain secret passwords. Long-running code can block an interface; our practice runner uses a separate worker with a time limit."
+        }
+      ],
+      "examples": [
+        {
+          "title": "Give the browser an instruction",
+          "code": "console.log(\"Hello, curious human!\");",
+          "explanation": "console.log sends a message to the console, a window into what your program is doing. The quoted text is a string."
+        },
+        {
+          "title": "Let JavaScript calculate",
+          "code": "console.log(149 + 51);\nconsole.log(\"Items in cart:\", 2);",
+          "explanation": "Numbers can be added. A comma lets console.log display several values on one line."
+        },
+        {
+          "title": "Change what people see",
+          "code": "document.getElementById(\"message\").textContent = \"You made this happen!\";",
+          "explanation": "The DOM is the browser’s representation of a page. getElementById finds a page element; textContent changes its text. The lab provides a small simulated preview with a message element."
+        }
+      ],
+      "predict": {
+        "id": "1-p",
+        "kind": "Predict the output",
+        "prompt": "What will the console show?",
+        "choices": [
+          "10",
+          "7",
+          "3 + 7"
+        ],
+        "answer": 0,
+        "explanation": "Without quotes, 3 and 7 are numbers. The + operator adds them.",
+        "code": "console.log(3 + 7);"
+      },
+      "debug": {
+        "prompt": "This message is missing a closing quote. Repair it and run the code.",
+        "starter": "console.log(\"JavaScript makes things happen);",
+        "solution": "console.log(\"JavaScript makes things happen\");",
+        "hint": "Strings need matching quotes at both ends."
+      },
+      "challenge": {
+        "prompt": "Introduce yourself in the console, then print the number of students in a class of 12 + 8.",
+        "starter": "// Print a greeting and the class total\n",
+        "solution": "console.log(\"Hello! I am learning JavaScript.\");\nconsole.log(12 + 8);",
+        "hint": "Use one console.log for text in quotes and another for the calculation."
+      },
+      "quiz": [
+        {
+          "id": "1-a",
+          "kind": "Multiple choice",
+          "prompt": "Which language describes the structure of a page?",
+          "choices": [
+            "CSS",
+            "HTML",
+            "JavaScript"
+          ],
+          "answer": 1,
+          "explanation": "HTML describes elements such as headings, paragraphs, and buttons."
+        },
+        {
+          "id": "1-b",
+          "kind": "True or false",
+          "prompt": "JavaScript can run on a server.",
+          "choices": [
+            "True",
+            "False"
+          ],
+          "answer": 0,
+          "explanation": "Node.js is a runtime that executes JavaScript outside the browser, including on servers."
+        },
+        {
+          "id": "1-c",
+          "kind": "Real-world scenario",
+          "prompt": "A cart total changes after you add an item. Which role fits JavaScript?",
+          "choices": [
+            "Storing the physical product",
+            "Providing behavior and calculations",
+            "Defining only the font"
+          ],
+          "answer": 1,
+          "explanation": "JavaScript can respond to a click and calculate a displayed total. The backend still validates purchases."
+        }
+      ],
+      "summary": "HTML gives a page structure. CSS gives it style. JavaScript gives it behavior and logic. It runs in browsers and in other runtimes such as Node.js.",
+      "notes": {
+        "say": "A website can listen, decide, and respond. JavaScript describes those instructions.",
+        "demo": "Toggle HTML, CSS, and JavaScript one at a time. Click the preview button after each change.",
+        "ask": "Does a yellow button automatically know what to do when clicked?",
+        "answer": "No. CSS controls its appearance. JavaScript can attach the behavior.",
+        "misconception": "JavaScript is not Java, and it is not limited to browsers.",
+        "exercise": "Ask pairs to name one structure, one style, and one behavior on a food ordering website.",
+        "transition": "Now that we know what JavaScript does, let’s give it our first instruction."
+      }
+    },
+    {
+      "id": 2,
+      "title": "Your first program",
+      "short": "Your first program",
+      "subtitle": "Turn an idea into your very first instruction.",
+      "minutes": 10,
+      "color": "green",
+      "objective": "Write and run statements, understand console output, and update text on a page.",
+      "why": "Programs are sequences of instructions. Output helps us see whether those instructions are doing what we intended.",
+      "real": "Developers use the console to inspect values and diagnose bugs. Websites update DOM text to show a cart count or a welcome message.",
+      "analogy": "The console is like a kitchen order window: you send out a message so someone can see what is happening inside.",
+      "sections": [
+        {
+          "title": "Your browser has a workshop",
+          "text": "Open developer tools with F12 or Ctrl+Shift+J (Cmd+Option+J on macOS in Chrome), then choose Console. Browser shortcuts vary. The console accepts JavaScript and displays results and errors. The editor below gives you a classroom console without leaving this site."
+        },
+        {
+          "title": "Statements, comments, and punctuation",
+          "text": "A statement is one instruction. Parentheses pass information into a function, a reusable action. Quoted text is a string. Semicolons explicitly end statements; JavaScript can insert many automatically, but we use them for clarity. // begins a one-line comment that the engine ignores.",
+          "code": "// This explains the next instruction\nconsole.log(\"Hello World!\");"
+        },
+        {
+          "title": "Inside HTML or in a separate file",
+          "text": "An internal script goes inside a script element. An external script uses src to load a .js file. defer lets an external script run after the HTML is parsed. The following is HTML setup, not code to paste into our JavaScript-only runner.",
+          "code": "<script>console.log(\"Internal script\");</script>\n<script src=\"app.js\" defer></script>"
+        },
+        {
+          "title": "Different ways to communicate",
+          "text": "console.log writes developer output. alert normally shows a blocking browser dialog. prompt normally asks for text and returns a string, or null if cancelled. Our isolated runner displays alert messages in the console and uses the editable prompt response field instead of opening dialogs.",
+          "code": "let name = prompt(\"What is your name?\");\nalert(\"Hello, \" + name);"
+        },
+        {
+          "title": "Updating the page safely",
+          "text": "document.write inserts HTML while a document is loading. Calling it later can replace the page, so modern apps generally avoid it. Use DOM methods and textContent for text updates. Our preview simulates just getElementById(\"message\").textContent and document.write for this introduction; it is not a complete browser DOM."
+        }
+      ],
+      "examples": [
+        {
+          "title": "Hello, console",
+          "code": "console.log(\"Hello World!\");\nconsole.log(10 + 20);\nconsole.log(\"I am learning JavaScript\");",
+          "explanation": "The first line prints a greeting. The second calculates 30 before printing it. The third prints another string. Each call creates a separate output line."
+        },
+        {
+          "title": "Ask and greet",
+          "code": "let name = prompt(\"Your name?\");\nconsole.log(\"Welcome, \" + name);\nalert(\"Ready to experiment?\");",
+          "explanation": "prompt returns text. The + joins two strings. Set a response below the editor before running."
+        },
+        {
+          "title": "A live text update",
+          "code": "document.getElementById(\"message\").textContent = \"Hello from JavaScript!\";\nconsole.log(\"The preview now has new text.\");",
+          "explanation": "The message element is found by its id, then its text is replaced. Other page elements are unchanged."
+        },
+        {
+          "title": "Historical output",
+          "code": "document.write(\"Hello from an older technique\");",
+          "explanation": "The lab simulates this as text. On real pages, document.write is generally avoided because it can replace the document and has other loading and security drawbacks."
+        }
+      ],
+      "predict": {
+        "id": "2-p",
+        "kind": "Predict the output",
+        "prompt": "Which output appears?",
+        "choices": [
+          "Hello World! then 30",
+          "Hello World! then 1020",
+          "Only 30"
+        ],
+        "answer": 0,
+        "explanation": "The first call prints text. The second adds two numbers before printing.",
+        "code": "console.log(\"Hello World!\");\nconsole.log(10 + 20);"
+      },
+      "debug": {
+        "prompt": "Find the punctuation error.",
+        "starter": "console.log(\"I can code!\";",
+        "solution": "console.log(\"I can code!\");",
+        "hint": "The opening parenthesis needs a closing partner before the semicolon."
+      },
+      "challenge": {
+        "prompt": "Change the preview message to “My first program” and print 5 × 6.",
+        "starter": "// Update the message, then log a calculation\n",
+        "solution": "document.getElementById(\"message\").textContent = \"My first program\";\nconsole.log(5 * 6);",
+        "hint": "Use textContent for the preview and * for multiplication."
+      },
+      "quiz": [
+        {
+          "id": "2-a",
+          "kind": "Fill in the code",
+          "prompt": "console.___(\"Hello\")",
+          "choices": [
+            "print",
+            "log",
+            "show"
+          ],
+          "answer": 1,
+          "explanation": "console.log is the method that writes a message to the console."
+        },
+        {
+          "id": "2-b",
+          "kind": "Find the error",
+          "prompt": "Which is a valid comment?",
+          "choices": [
+            "// a note",
+            "a note //",
+            "<comment>"
+          ],
+          "answer": 0,
+          "explanation": "// tells JavaScript to ignore the rest of that line."
+        },
+        {
+          "id": "2-c",
+          "kind": "True or false",
+          "prompt": "prompt returns a number automatically.",
+          "choices": [
+            "True",
+            "False"
+          ],
+          "answer": 1,
+          "explanation": "prompt returns a string, or null on cancellation. Convert numeric input explicitly."
+        }
+      ],
+      "summary": "Use console.log to inspect a program. Match quotes and parentheses. Comments explain code. Use textContent to update text; avoid document.write in modern applications.",
+      "notes": {
+        "say": "The computer follows exactly what we write, including punctuation.",
+        "demo": "Run three console.log calls. Remove a quote, observe the error, then repair it.",
+        "ask": "What changes if we put 10 + 20 inside quotes?",
+        "answer": "It becomes text, so the console prints 10 + 20 instead of calculating 30.",
+        "misconception": "The console is not the same thing as the visible web page.",
+        "exercise": "Print a name, an addition, and a sentence on separate lines.",
+        "transition": "Programs become more useful when they can remember information."
+      }
+    },
+    {
+      "id": 3,
+      "title": "Variables & data types",
+      "short": "Variables & data types",
+      "subtitle": "Give your ideas a name. Give your program a memory.",
+      "minutes": 10,
+      "color": "purple",
+      "objective": "Declare variables, distinguish data types, reassign values, and convert text to numbers.",
+      "why": "A program needs to remember changing information instead of repeating the same literal values everywhere.",
+      "real": "A shop remembers a product name (string), price (number), and availability (boolean).",
+      "analogy": "Variables are labeled storage boxes. The label is the name; the contents are the value. A const label cannot be reassigned to a different value.",
+      "sections": [
+        {
+          "title": "Declare once, update when needed",
+          "text": "A declaration introduces a name. let allows later reassignment. const requires an initial value and prevents reassignment. Prefer const when you do not need to reassign; choose let for a changing value. var is older, function-scoped, and can be redeclared; let and const are block-scoped (limited to their surrounding { } block).",
+          "code": "let age = 20; // declaration\nage = 21;     // reassignment\nconst school = \"JS LAB\";"
+        },
+        {
+          "title": "Names that explain themselves",
+          "text": "Use descriptive camelCase names such as studentName. Names can include letters, digits, _, and $, but cannot start with a digit or use reserved keywords. Names are case-sensitive: age and Age are different variables."
+        },
+        {
+          "title": "Meet the everyday types",
+          "text": "A string is text in quotes. A number represents numeric values, including decimals. A boolean is true or false. undefined commonly means no value has been assigned. null is a deliberate empty value. typeof reports a type name; a historical quirk makes typeof null return \"object\".",
+          "code": "let name = \"Rahul\";\nlet age = 20;\nlet isStudent = true;\nlet nickname;\nlet selectedCourse = null;"
+        },
+        {
+          "title": "Other types, without the overwhelm",
+          "text": "Objects group information. Arrays are objects that hold ordered lists. Functions are callable objects. BigInt handles whole numbers beyond the safe integer range of Number; Symbol creates unique identifiers. You do not need these advanced types to complete today’s class. const does not freeze an object’s contents; it prevents replacing the variable’s value."
+        },
+        {
+          "title": "Text and numbers are different",
+          "text": "Number(\"20\") converts numeric text to a number. String(20) converts a number to text. Boolean(value) converts to true or false; empty string and 0 are false, but \"false\" and \"0\" are nonempty strings and therefore true. Number(\"hello\") gives NaN, a special numeric value meaning Not a Number. Number(\"\") gives 0, so validate empty form inputs before conversion.",
+          "code": "console.log(\"20\" + 1); // \"201\"\nconsole.log(Number(\"20\") + 1); // 21"
+        }
+      ],
+      "examples": [
+        {
+          "title": "A student profile",
+          "code": "let name = \"Rahul\";\nlet age = 20;\nlet isStudent = true;\nconsole.log(name, age, isStudent);\nconsole.log(typeof name, typeof age, typeof isStudent);",
+          "explanation": "Each name holds a different kind of value. typeof prints string, number, and boolean."
+        },
+        {
+          "title": "Update a box",
+          "code": "let age = 20;\nage = age + 1;\nconsole.log(age);\nconst course = \"JavaScript\";\nconsole.log(course);",
+          "explanation": "The right side is calculated using the old age. The result replaces the stored value."
+        },
+        {
+          "title": "Convert an input",
+          "code": "let input = prompt(\"Your age?\");\nlet age = Number(input);\nconsole.log(\"Next year:\", age + 1);\nconsole.log(typeof age);",
+          "explanation": "Use the prompt response field for numeric text. Number converts it before addition."
+        }
+      ],
+      "predict": {
+        "id": "3-p",
+        "kind": "Predict the output",
+        "prompt": "What is printed?",
+        "choices": [
+          "21",
+          "201",
+          "Error"
+        ],
+        "answer": 1,
+        "explanation": "The left operand is a string, so + joins the string and the converted text \"1\".",
+        "code": "let age = \"20\";\nconsole.log(age + 1);"
+      },
+      "debug": {
+        "prompt": "The score should be allowed to change. Fix the declaration.",
+        "starter": "const score = 10;\nscore = 20;\nconsole.log(score);",
+        "solution": "let score = 10;\nscore = 20;\nconsole.log(score);",
+        "hint": "const prevents reassignment. Which keyword allows the box to hold a new value?"
+      },
+      "challenge": {
+        "prompt": "Create a student profile with a name, age, and isStudent. Print each type and increase age by one.",
+        "starter": "// Declare three variables, then update age\n",
+        "solution": "const name = \"Aisha\";\nlet age = 19;\nconst isStudent = true;\nage = age + 1;\nconsole.log(name, age, isStudent);\nconsole.log(typeof name, typeof age, typeof isStudent);",
+        "hint": "Use strings for names, numbers for ages, and booleans for yes/no facts."
+      },
+      "quiz": [
+        {
+          "id": "3-a",
+          "kind": "Multiple choice",
+          "prompt": "Which allows reassignment?",
+          "choices": [
+            "const",
+            "let",
+            "typeof"
+          ],
+          "answer": 1,
+          "explanation": "let allows a name to hold a new value after declaration."
+        },
+        {
+          "id": "3-b",
+          "kind": "Fill in the code",
+          "prompt": "Convert \"42\" to a number: ___(\"42\")",
+          "choices": [
+            "String",
+            "Number",
+            "Boolean"
+          ],
+          "answer": 1,
+          "explanation": "Number converts valid numeric text so arithmetic works as expected."
+        },
+        {
+          "id": "3-c",
+          "kind": "True or false",
+          "prompt": "undefined and null always mean exactly the same thing.",
+          "choices": [
+            "True",
+            "False"
+          ],
+          "answer": 1,
+          "explanation": "undefined often means not assigned; null is an intentional empty value."
+        }
+      ],
+      "summary": "Use const by default and let for reassignment. Values have types. Convert input deliberately. Names are case-sensitive, and declaration is different from reassignment.",
+      "notes": {
+        "say": "A variable gives a value a useful name so we can remember and update it.",
+        "demo": "Change the age box. Lock it as const and try changing it again.",
+        "ask": "Is \"20\" the same kind of value as 20?",
+        "answer": "No. The quoted value is a string; the unquoted value is a number. This affects +.",
+        "misconception": "const prevents reassignment, not all mutation inside objects.",
+        "exercise": "Write a profile with a string, a number, and a boolean. Print their types.",
+        "transition": "Now that we can store values, let’s do something with them."
+      }
+    },
+    {
+      "id": 4,
+      "title": "The operator lab",
+      "short": "Operators",
+      "subtitle": "Calculate, compare, and ask better questions.",
+      "minutes": 8,
+      "color": "blue",
+      "objective": "Calculate with numbers, compare values, combine boolean conditions, and understand equality.",
+      "why": "Stored values are useful when we can transform them or ask questions about them.",
+      "real": "A checkout calculates a bill, a scoreboard compares results, and a form combines several validation checks.",
+      "analogy": "Arithmetic operators are calculator keys. Comparison operators are questions whose answers are true or false.",
+      "sections": [
+        {
+          "title": "Arithmetic and order",
+          "text": "+ adds numbers, - subtracts, * multiplies, / divides, % gives the remainder, and ** raises a number to a power. Multiplication and division happen before addition and subtraction; parentheses make order explicit. Dividing a nonzero number by zero yields Infinity; 0 / 0 yields NaN.",
+          "code": "console.log(2 + 3 * 4); // 14\nconsole.log((2 + 3) * 4); // 20\nconsole.log(7 % 2); // 1"
+        },
+        {
+          "title": "Assignment changes a value",
+          "text": "= assigns a value. += adds and assigns; -= subtracts and assigns. ++ increases by one and -- decreases by one. In a standalone statement, score++ updates score. Inside a larger expression, postfix score++ returns the old value; prefix ++score returns the new one.",
+          "code": "let score = 10;\nscore += 5;\nscore++;\nconsole.log(score); // 16"
+        },
+        {
+          "title": "Comparison asks a question",
+          "text": ">, <, >=, and <= compare values. === checks equality without converting types; !== checks strict inequality. == and != can convert types first. Prefer strict equality for predictable beginner code. = is assignment and should not be confused with ===.",
+          "code": "console.log(5 === \"5\"); // false\nconsole.log(5 == \"5\");  // true\nconsole.log(5 !== 3);   // true"
+        },
+        {
+          "title": "Combine yes/no answers",
+          "text": "&& means AND, || means OR, and ! means NOT. With boolean operands, AND is true only when both are true; OR is true when at least one is true. NOT flips truthiness. In general, && and || return an operand and short-circuit (stop when the result is decided), so use boolean expressions for clear beginner decisions.",
+          "code": "let hasTicket = true;\nlet gateOpen = false;\nconsole.log(hasTicket && gateOpen); // false\nconsole.log(hasTicket || gateOpen); // true\nconsole.log(!hasTicket); // false"
+        }
+      ],
+      "examples": [
+        {
+          "title": "A shopping bill",
+          "code": "const price = 150;\nconst quantity = 3;\nconst delivery = 40;\nconsole.log(\"Total:\", price * quantity + delivery);",
+          "explanation": "Multiplication calculates the item total, then delivery is added: 490."
+        },
+        {
+          "title": "Exam percentage",
+          "code": "const obtained = 420;\nconst maximum = 500;\nconsole.log(\"Percentage:\", obtained / maximum * 100);\nconsole.log(\"Passed?\", obtained / maximum >= 0.4);",
+          "explanation": "Divide by the maximum, then multiply by 100. A comparison produces a boolean."
+        },
+        {
+          "title": "Even numbers and higher scores",
+          "code": "const number = 14;\nconsole.log(\"Even?\", number % 2 === 0);\nconst aisha = 82;\nconst rahul = 76;\nconsole.log(\"Aisha scored higher?\", aisha > rahul);",
+          "explanation": "Even integers leave a remainder of zero when divided by two."
+        }
+      ],
+      "predict": {
+        "id": "4-p",
+        "kind": "Predict the output",
+        "prompt": "What does precedence produce?",
+        "choices": [
+          "20",
+          "14",
+          "24"
+        ],
+        "answer": 1,
+        "explanation": "3 * 4 happens first, then 2 is added. Parentheses would change the order.",
+        "code": "console.log(2 + 3 * 4);"
+      },
+      "debug": {
+        "prompt": "The bill joins text instead of adding. Convert the input before adding delivery.",
+        "starter": "let price = \"150\";\nconsole.log(price + 40);",
+        "solution": "let price = \"150\";\nconsole.log(Number(price) + 40);",
+        "hint": "The + operator joins when one value is a string. Number() can convert the price."
+      },
+      "challenge": {
+        "prompt": "A notebook costs 60. Buy 4 and add 25 delivery. Print the bill and whether it is greater than 250.",
+        "starter": "const price = 60;\nconst quantity = 4;\n// Calculate the bill and compare it\n",
+        "solution": "const price = 60;\nconst quantity = 4;\nconst bill = price * quantity + 25;\nconsole.log(bill);\nconsole.log(bill > 250);",
+        "hint": "Store the total first, then compare that total to 250."
+      },
+      "quiz": [
+        {
+          "id": "4-a",
+          "kind": "Multiple choice",
+          "prompt": "Which checks equality without converting types?",
+          "choices": [
+            "=",
+            "==",
+            "==="
+          ],
+          "answer": 2,
+          "explanation": "=== compares without type coercion. = assigns; == may convert types."
+        },
+        {
+          "id": "4-b",
+          "kind": "Real-world scenario",
+          "prompt": "Both a ticket AND an open gate are required. Choose the operator.",
+          "choices": [
+            "||",
+            "&&",
+            "!"
+          ],
+          "answer": 1,
+          "explanation": "AND requires both boolean conditions to be true."
+        },
+        {
+          "id": "4-c",
+          "kind": "Fill in the code",
+          "prompt": "Check an even integer: number ___ 2 === 0",
+          "choices": [
+            "/",
+            "%",
+            "*"
+          ],
+          "answer": 1,
+          "explanation": "The remainder operator gives zero when an integer divides evenly by two."
+        }
+      ],
+      "summary": "Arithmetic transforms values. Comparisons return booleans. = assigns, === compares. Use parentheses for clarity and && / || to combine conditions.",
+      "notes": {
+        "say": "Some operators calculate answers. Others ask questions.",
+        "demo": "Move a and b in the operator lab; make them equal, then set b to zero.",
+        "ask": "Why is 5 === \"5\" false?",
+        "answer": "The values have different types, and strict equality does not convert them.",
+        "misconception": "= does not ask whether two values are equal.",
+        "exercise": "Calculate a snack bill and check whether it exceeds a budget.",
+        "transition": "A true or false answer can now choose which instruction happens next."
+      }
+    },
+    {
+      "id": 5,
+      "title": "Decisions & conditions",
+      "short": "Conditional statements",
+      "subtitle": "Teach your program to choose its next move.",
+      "minutes": 12,
+      "color": "orange",
+      "objective": "Use if, else if, else, nested conditions, and switch to choose a branch.",
+      "why": "A program must respond differently to different situations instead of executing every possible action.",
+      "real": "An app can show a pass message for one score and a retry message for another. Server-side checks must still enforce access and validate important decisions.",
+      "analogy": "Conditions are decision gates. At a gate, a yes/no question sends you down one path.",
+      "sections": [
+        {
+          "title": "The first gate: if and else",
+          "text": "A condition is an expression evaluated for truthiness. if runs its block when the condition is truthy. else runs when it is falsy. true and false are booleans; other values have truthiness too. 0, \"\", null, undefined, and NaN are falsy. Braces group instructions into a block.",
+          "code": "let age = 18;\nif (age >= 18) {\n  console.log(\"Eligible\");\n} else {\n  console.log(\"Not yet\");\n}"
+        },
+        {
+          "title": "More than two choices",
+          "text": "else if checks another condition only if earlier checks failed. The first matching branch wins. Order matters: check high grade thresholds before lower ones. In this lab, A is 90–100, B is 75–89, C is 60–74, D is 40–59, and below 40 means retry.",
+          "code": "let marks = 82;\nif (marks >= 90) console.log(\"A\");\nelse if (marks >= 75) console.log(\"B\");\nelse if (marks >= 60) console.log(\"C\");\nelse if (marks >= 40) console.log(\"D\");\nelse console.log(\"Retry\");"
+        },
+        {
+          "title": "A decision inside a decision",
+          "text": "A nested condition is an if inside another if. It is useful when a second question only matters after the first is answered. Keep nesting shallow so the code is easy to follow.",
+          "code": "let hasTicket = true;\nlet age = 19;\nif (hasTicket) {\n  if (age >= 18) console.log(\"Enter adult show\");\n  else console.log(\"Choose family show\");\n} else {\n  console.log(\"Please buy a ticket\");\n}"
+        },
+        {
+          "title": "switch for fixed choices",
+          "text": "switch compares an expression to each case using strict equality. break exits the switch; without it, execution falls through to later cases. default handles unmatched choices. if is convenient for ranges; switch is convenient for discrete values.",
+          "code": "let color = \"red\";\nswitch (color) {\n  case \"red\": console.log(\"Stop\"); break;\n  case \"yellow\": console.log(\"Wait\"); break;\n  case \"green\": console.log(\"Go\"); break;\n  default: console.log(\"Unknown signal\");\n}"
+        },
+        {
+          "title": "Optional: the ternary shortcut",
+          "text": "condition ? valueIfTrue : valueIfFalse chooses between two values. Use it for simple choices. Common mistakes include using = inside a condition, putting a semicolon immediately after if (...), or forgetting braces around multiple statements.",
+          "code": "let age = 16;\nlet message = age >= 18 ? \"Eligible\" : \"Not yet\";\nconsole.log(message);"
+        }
+      ],
+      "examples": [
+        {
+          "title": "Traffic controller",
+          "code": "let color = \"green\";\nif (color === \"red\") {\n  console.log(\"Stop\");\n} else if (color === \"yellow\") {\n  console.log(\"Wait\");\n} else if (color === \"green\") {\n  console.log(\"Go\");\n} else {\n  console.log(\"Invalid signal\");\n}",
+          "explanation": "Exactly one matching branch prints its message. Try red, yellow, and an unknown color."
+        },
+        {
+          "title": "Grade a result",
+          "code": "const marks = 82;\nif (marks < 0 || marks > 100) console.log(\"Invalid marks\");\nelse if (marks >= 90) console.log(\"A\");\nelse if (marks >= 75) console.log(\"B\");\nelse if (marks >= 60) console.log(\"C\");\nelse if (marks >= 40) console.log(\"D\");\nelse console.log(\"Retry\");",
+          "explanation": "Validate the range first, then test the thresholds in descending order."
+        },
+        {
+          "title": "A mock login",
+          "code": "// Teaching demo only. Never secure a real app this way.\nconst username = \"student\";\nconst password = \"learn123\";\nif (username === \"student\" && password === \"learn123\") {\n  console.log(\"Demo access granted\");\n} else {\n  console.log(\"Try the demo credentials again\");\n}",
+          "explanation": "Both comparisons must be true. Real authentication needs secure server-side verification and must not expose passwords in client code."
+        }
+      ],
+      "predict": {
+        "id": "5-p",
+        "kind": "Predict the output",
+        "prompt": "Which branch runs?",
+        "choices": [
+          "A",
+          "B",
+          "Retry"
+        ],
+        "answer": 1,
+        "explanation": "82 is below 90, but at least 75. The second branch runs and later branches are skipped.",
+        "code": "let marks = 82;\nif (marks >= 90) console.log(\"A\");\nelse if (marks >= 75) console.log(\"B\");\nelse console.log(\"Retry\");"
+      },
+      "debug": {
+        "prompt": "This code overwrites age rather than comparing it. Make it check strict equality.",
+        "starter": "let age = 16;\nif (age = 18) {\n  console.log(\"Exactly eighteen\");\n} else {\n  console.log(\"A different age\");\n}",
+        "solution": "let age = 16;\nif (age === 18) {\n  console.log(\"Exactly eighteen\");\n} else {\n  console.log(\"A different age\");\n}",
+        "hint": "A single = assigns. Use three equals signs to compare without type conversion."
+      },
+      "challenge": {
+        "prompt": "Give a 10% discount when a cart total is at least 1000. Print the final payable amount.",
+        "starter": "const total = 1200;\nlet payable = total;\n// Apply a discount conditionally\n",
+        "solution": "const total = 1200;\nlet payable = total;\nif (total >= 1000) {\n  payable = total * 0.9;\n}\nconsole.log(payable);",
+        "hint": "Multiplying by 0.9 leaves 90% of the original total."
+      },
+      "quiz": [
+        {
+          "id": "5-a",
+          "kind": "Multiple choice",
+          "prompt": "How many branches run in one if / else if / else chain?",
+          "choices": [
+            "All matching branches",
+            "At most one",
+            "Always two"
+          ],
+          "answer": 1,
+          "explanation": "The first matching branch runs. The rest of the chain is skipped."
+        },
+        {
+          "id": "5-b",
+          "kind": "Find the error",
+          "prompt": "What can happen without break in a switch case?",
+          "choices": [
+            "Fall-through into the next case",
+            "The app always closes",
+            "Nothing can run"
+          ],
+          "answer": 0,
+          "explanation": "Execution continues into following cases until a break or the end of the switch."
+        },
+        {
+          "id": "5-c",
+          "kind": "Real-world scenario",
+          "prompt": "Which is clearest for checking a range of marks?",
+          "choices": [
+            "if / else if",
+            "console.log alone",
+            "A variable name"
+          ],
+          "answer": 0,
+          "explanation": "Comparisons such as marks >= 75 naturally fit an if / else if chain."
+        }
+      ],
+      "summary": "Conditions select branches. Check ranges with if / else if, discrete cases with switch, and combine checks with logical operators. Validate input before making decisions.",
+      "notes": {
+        "say": "The computer does not guess. We define a question and the instruction for each answer.",
+        "demo": "Try marks 74, 75, 89, and 90 to show exact boundaries.",
+        "ask": "What happens if we check marks >= 40 before marks >= 90?",
+        "answer": "A score of 95 matches the first check, so the chain stops too early.",
+        "misconception": "Client-side demo credentials are not secure authentication.",
+        "exercise": "Write an age check with one message for 18 or older and another for younger ages.",
+        "transition": "We can choose instructions. Next, we’ll repeat them without copying the same line."
+      }
+    },
+    {
+      "id": 6,
+      "title": "Loops & repetition",
+      "short": "Loops",
+      "subtitle": "Write it once. Make it happen again and again.",
+      "minutes": 10,
+      "color": "pink",
+      "objective": "Trace for, while, and do…while loops; control repetition with break and continue.",
+      "why": "Repeating the same instruction manually is slow and error-prone. A loop describes what repeats and when it stops.",
+      "real": "A shop can process each cart item, a game can count down, and a classroom tool can generate a multiplication table.",
+      "analogy": "A loop is a repeated instruction like “give each student a worksheet.” The condition asks whether there are students left.",
+      "sections": [
+        {
+          "title": "A for loop has three controls",
+          "text": "Initialization runs once. The condition is checked before each iteration (one pass through the body). If true, the body runs, then the update runs. If false, execution leaves the loop. With i from 1 through 5, the final check is 6 <= 5, which is false.",
+          "code": "for (let i = 1; i <= 5; i++) {\n  console.log(i);\n}"
+        },
+        {
+          "title": "while: check, then repeat",
+          "text": "while checks its condition before every iteration. It may run zero times. Choose for when the counting pattern is clear; choose while when repetition depends on a changing condition. Remember to change something that eventually makes the condition false.",
+          "code": "let remaining = 3;\nwhile (remaining > 0) {\n  console.log(remaining);\n  remaining--;\n}"
+        },
+        {
+          "title": "do…while: do it at least once",
+          "text": "do…while runs the body before checking the condition, so it always runs at least once. Notice the semicolon after the final condition.",
+          "code": "let attempts = 0;\ndo {\n  console.log(\"Try once\");\n  attempts++;\n} while (attempts < 0);"
+        },
+        {
+          "title": "Skip or stop",
+          "text": "continue skips the rest of the current iteration. In a for loop, the update still runs. break exits the nearest loop immediately. In a while loop, an update placed after continue may be skipped and cause an infinite loop.",
+          "code": "for (let i = 1; i <= 10; i++) {\n  if (i === 3) continue;\n  if (i === 6) break;\n  console.log(i);\n} // 1, 2, 4, 5"
+        },
+        {
+          "title": "Optional: a loop inside a loop",
+          "text": "Nested loops repeat one complete inner loop for every outer iteration. They can draw rows and columns. Large nested loops do a lot of work. A missing update, a condition that never becomes false, or the wrong direction can create an infinite loop. Our visual simulator caps the limit at 20 and our code runner terminates after one second.",
+          "code": "for (let row = 1; row <= 3; row++) {\n  let line = \"\";\n  for (let col = 1; col <= row; col++) {\n    line += \"*\";\n  }\n  console.log(line);\n}"
+        }
+      ],
+      "examples": [
+        {
+          "title": "Count from 1 to 10",
+          "code": "for (let i = 1; i <= 10; i++) {\n  console.log(i);\n}",
+          "explanation": "There are ten successful condition checks, ten prints, and one final false check."
+        },
+        {
+          "title": "Even numbers from 1 to 20",
+          "code": "for (let i = 1; i <= 20; i++) {\n  if (i % 2 !== 0) continue;\n  console.log(i);\n}",
+          "explanation": "Odd numbers skip the print. The update still runs after continue."
+        },
+        {
+          "title": "A multiplication table",
+          "code": "const number = 7;\nfor (let i = 1; i <= 10; i++) {\n  console.log(number + \" × \" + i + \" = \" + number * i);\n}",
+          "explanation": "i changes each time; number stays the same."
+        },
+        {
+          "title": "Sum and countdown",
+          "code": "let sum = 0;\nfor (let i = 1; i <= 5; i++) sum += i;\nconsole.log(\"Sum:\", sum);\nlet count = 3;\nwhile (count > 0) {\n  console.log(count);\n  count--;\n}\nconsole.log(\"Go!\");",
+          "explanation": "An accumulator stores a running total. A countdown uses a decreasing value."
+        }
+      ],
+      "predict": {
+        "id": "6-p",
+        "kind": "Predict the output",
+        "prompt": "How many values are printed?",
+        "choices": [
+          "3",
+          "4",
+          "5"
+        ],
+        "answer": 1,
+        "explanation": "i takes 1, 2, 3, and 4. When i becomes 5, i < 5 is false.",
+        "code": "for (let i = 1; i < 5; i++) {\n  console.log(i);\n}"
+      },
+      "debug": {
+        "prompt": "This loop never changes i. Repair it before running.",
+        "starter": "let i = 1;\nwhile (i <= 5) {\n  console.log(i);\n}",
+        "solution": "let i = 1;\nwhile (i <= 5) {\n  console.log(i);\n  i++;\n}",
+        "hint": "Update the counter inside the body so the condition eventually becomes false."
+      },
+      "challenge": {
+        "prompt": "Print numbers 1 to 10, skip 3, and stop before printing 8.",
+        "starter": "for (let i = 1; i <= 10; i++) {\n  // Skip, stop, then print\n}",
+        "solution": "for (let i = 1; i <= 10; i++) {\n  if (i === 3) continue;\n  if (i === 8) break;\n  console.log(i);\n}",
+        "hint": "Use continue for 3 and break for 8, before console.log."
+      },
+      "quiz": [
+        {
+          "id": "6-a",
+          "kind": "Multiple choice",
+          "prompt": "Which loop always runs its body at least once?",
+          "choices": [
+            "for",
+            "while",
+            "do…while"
+          ],
+          "answer": 2,
+          "explanation": "do…while checks after the body, so the first pass happens even if the condition is false."
+        },
+        {
+          "id": "6-b",
+          "kind": "Fill in the code",
+          "prompt": "Skip only the current iteration using ___.",
+          "choices": [
+            "break",
+            "continue",
+            "const"
+          ],
+          "answer": 1,
+          "explanation": "continue skips the rest of the current body. break would leave the loop entirely."
+        },
+        {
+          "id": "6-c",
+          "kind": "Find the error",
+          "prompt": "A while loop condition stays true forever. What is likely missing?",
+          "choices": [
+            "A counter update",
+            "A console color",
+            "A string quote in every number"
+          ],
+          "answer": 0,
+          "explanation": "A loop must eventually change something that makes its condition false, or use break."
+        }
+      ],
+      "summary": "Initialize, check, run the body, update, and repeat. for and while check first; do…while checks after. continue skips a pass, break stops the loop. Always plan a stopping condition.",
+      "notes": {
+        "say": "A loop is a question we keep asking, with an instruction between each answer.",
+        "demo": "Step through all five prints and the final false condition. Go backward to compare the state.",
+        "ask": "When the loop finishes, is the last checked value 5 or 6?",
+        "answer": "6. The update after printing 5 changes i to 6, and the next condition is false.",
+        "misconception": "The last printed value and the final checked counter are not necessarily the same.",
+        "exercise": "Print five even numbers, then change the loop to count backward.",
+        "transition": "You can now remember, calculate, choose, and repeat. Combine those tools in a small project."
+      }
+    },
+    {
+      "id": 7,
+      "title": "Functions & reusable logic",
+      "short": "Functions",
+      "subtitle": "Give a useful idea a name. Use it again and again.",
+      "minutes": 65,
+      "color": "green",
+      "objective": "Define and call functions, map arguments to parameters, return values, and choose between declarations, expressions, and arrows.",
+      "why": "A reusable function keeps the same rule consistent wherever an application needs it.",
+      "real": "Calculators, validation, discounts, and array callbacks all use callable functions.",
+      "analogy": "A vending machine receives inputs, performs a known process, and returns an output.",
+      "summary": "Functions package behavior. Arguments become parameters; return sends a value back and stops the call. Defaults handle undefined, rest collects inputs, and arrows capture lexical this.",
+      "sections": [
+        {
+          "title": "Start with the small case",
+          "text": "A reusable function keeps the same rule consistent wherever an application needs it. A vending machine receives inputs, performs a known process, and returns an output.",
+          "code": "function greet() {\n  console.log(\"Hello!\");\n}\ngreet();\ngreet();"
+        },
+        {
+          "title": "How to use this chapter",
+          "text": "Work through the concept sections below at your own pace. Begin with the explanation and visual experiment, predict before you run, then repair the bug and apply the idea. Optional deeper sections can wait for a later class. The Experiment tab collects the chapter’s visual labs and guided projects."
+        }
+      ],
+      "examples": [
+        {
+          "title": "Define, then call",
+          "code": "function greet() {\n  console.log(\"Hello!\");\n}\ngreet();\ngreet();",
+          "explanation": "The declaration creates the function. Each call executes the log once."
+        },
+        {
+          "title": "Arguments become parameters",
+          "code": "function add(a, b) {\n  return a + b;\n}\nconst firstPrice = 10;\nconsole.log(add(firstPrice, 20));\nconsole.log(add(3, 4));",
+          "explanation": "The first argument is mapped to a, the second to b. The caller’s variable name is irrelevant."
+        },
+        {
+          "title": "Print versus return",
+          "code": "function printDouble(n) { console.log(n * 2); }\nfunction double(n) { return n * 2; }\nconsole.log(printDouble(4));\nconsole.log(double(4) + 1);",
+          "explanation": "The first call prints 8 then yields undefined; double returns 8, allowing addition to produce 9."
+        },
+        {
+          "title": "Guard invalid units",
+          "code": "function bmi(weightKg, heightM) {\n if (!Number.isFinite(weightKg) || !Number.isFinite(heightM) || weightKg <= 0 || heightM <= 0) return null;\n return weightKg / (heightM ** 2);\n}\nconsole.log(bmi(72, 1.8).toFixed(2));\nconsole.log(bmi(72, 0));",
+          "explanation": "The function explicitly expects kilograms and meters. Invalid input exits before division."
+        },
+        {
+          "title": "Compare three forms",
+          "code": "function declaration(a, b) { return a + b; }\nconst expression = function (a, b) { return a + b; };\nconst arrow = (a, b) => a + b;\nconsole.log(declaration(2, 3), expression(2, 3), arrow(2, 3));",
+          "explanation": "All three return 5, but they differ in setup and advanced this behavior."
+        },
+        {
+          "title": "A first callback",
+          "code": "function applyTwice(value, transform) {\n return transform(transform(value));\n}\nconst addOne = n => n + 1;\nconsole.log(applyTwice(3, addOne));\nconsole.log([1, 2, 3].map(n => n * 2));",
+          "explanation": "The function value addOne is passed, not called at the argument site. map is explored in the next chapter."
+        },
+        {
+          "title": "When defaults apply",
+          "code": "function greet(name = \"Guest\") { return \"Hello, \" + name; }\nconsole.log(greet());\nconsole.log(greet(undefined));\nconsole.log(greet(null));\nconsole.log(greet(\"\"));",
+          "explanation": "Only missing and undefined arguments use Guest."
+        },
+        {
+          "title": "Collect and expand",
+          "code": "function sum(...numbers) {\n let total = 0;\n for (const number of numbers) total += number;\n return total;\n}\nconsole.log(sum(10, 20, 30));\nconst prices = [5, 10];\nconsole.log(sum(...prices));",
+          "explanation": "Rest creates an array inside sum. Spread sends the array’s elements as separate arguments."
+        },
+        {
+          "title": "Call site supplies the receiver",
+          "code": "\"use strict\";\nfunction readName() { return this.name; }\nconst a = { name: \"Asha\", readName };\nconst b = { name: \"Dev\", readName };\nconsole.log(a.readName(), b.readName());\nconsole.log(readName.call({ name: \"Mira\" }));",
+          "explanation": "One function receives three different this values through three different calls."
+        },
+        {
+          "title": "An arrow remembers its surrounding receiver",
+          "code": "\"use strict\";\nconst user = {\n name: \"Asha\",\n makeReader() { return () => this.name; }\n};\nconst reader = user.makeReader();\nconsole.log(reader.call({ name: \"Dev\" }));",
+          "explanation": "The arrow captured this from user.makeReader(). call cannot override it."
+        },
+        {
+          "title": "One counter remembers",
+          "code": "function makeCounter() {\n let count = 0;\n return () => ++count;\n}\nconst next = makeCounter();\nconsole.log(next(), next(), next());",
+          "explanation": "The outer call has finished, but next still reaches and updates the same count binding."
+        },
+        {
+          "title": "Separate calls, separate notebooks",
+          "code": "function makeCounter() {\n let count = 0;\n return () => ++count;\n}\nconst first = makeCounter();\nconst second = makeCounter();\nconsole.log(first(), first(), second(), first());",
+          "explanation": "first and second come from separate outer calls, so their counters are independent."
+        }
+      ],
+      "predict": {
+        "id": "7-p",
+        "kind": "Predict the output",
+        "prompt": "Predict the result before running this code.",
+        "code": "function greet() { console.log(\"Hi\"); }\nconsole.log(typeof greet);\ngreet();",
+        "choices": [
+          "Hi then function",
+          "function then Hi",
+          "undefined"
+        ],
+        "answer": 1,
+        "explanation": "typeof inspects the function value without calling it; the explicit call prints Hi.",
+        "expected": {
+          "logs": [
+            "function",
+            "Hi"
+          ]
+        }
+      },
+      "debug": {
+        "prompt": "Actually call the helper.",
+        "starter": "function total() { return 50; }\nconsole.log(typeof total);",
+        "solution": "function total() { return 50; }\nconsole.log(total());",
+        "hint": "Use parentheses to invoke a function."
+      },
+      "challenge": {
+        "prompt": "Return a helper that remembers a chosen greeting prefix.",
+        "starter": "function makeGreeting(prefix) {\n // Return a function accepting a name\n}\nconst welcome = makeGreeting(\"Welcome\");\nconsole.log(welcome(\"Asha\"));",
+        "solution": "function makeGreeting(prefix) {\n return name => prefix + \", \" + name;\n}\nconst welcome = makeGreeting(\"Welcome\");\nconsole.log(welcome(\"Asha\"));",
+        "hint": "The returned function can read prefix from its defining environment."
+      },
+      "quiz": [
+        {
+          "id": "7-a",
+          "kind": "Multiple choice",
+          "prompt": "In add(10, 20), what are 10 and 20?",
+          "choices": [
+            "Parameters in the definition",
+            "Arguments supplied by the caller",
+            "Object property names"
+          ],
+          "answer": 1,
+          "explanation": "Arguments are actual supplied values. Parameters are the local names written in the function definition."
+        },
+        {
+          "id": "7-b",
+          "kind": "Fill in the missing code",
+          "prompt": "A function should send a result back: ___ total;",
+          "choices": [
+            "console.log",
+            "return",
+            "const"
+          ],
+          "answer": 1,
+          "explanation": "return passes the value to the caller and ends that function call. Logging only displays a message."
+        },
+        {
+          "id": "7-c",
+          "kind": "Real-world scenario",
+          "prompt": "A default discount parameter should apply to which input?",
+          "choices": [
+            "Every falsy value",
+            "Only a missing or undefined argument",
+            "Any negative number"
+          ],
+          "answer": 1,
+          "explanation": "Default parameters apply when an argument is omitted or undefined. Null, zero, and empty text are still supplied values."
+        }
+      ],
+      "notes": {
+        "say": "A function is a callable object containing reusable instructions. Defining it creates the function; calling it runs its body.",
+        "demo": "Enter two arguments in the Function Machine and step through parameter binding, calculation, and return.",
+        "ask": "Predict the result before running this code.",
+        "answer": "typeof inspects the function value without calling it; the explicit call prints Hi.",
+        "misconception": "Writing greet without () refers to the function value; it does not run it. Parameter names do not force the caller to use matching variable names.",
+        "exercise": "Create a reusable temperature converter from Celsius to Fahrenheit.",
+        "transition": "Closures and callbacks explain how array transformations keep access to the rules surrounding them."
+      }
+    },
+    {
+      "id": 8,
+      "title": "Arrays & useful collections",
+      "short": "Arrays",
+      "subtitle": "Turn a list of values into something useful.",
+      "minutes": 70,
+      "color": "blue",
+      "objective": "Create and update arrays; distinguish mutations from return values; transform, filter, summarize, sort, unpack, and copy collections.",
+      "why": "Applications process collections of products, marks, people, and tasks.",
+      "real": "Shopping totals, leaderboards, user filters, and task lists all work with arrays.",
+      "analogy": "An array is a row of numbered lockers, starting at zero.",
+      "summary": "Arrays are ordered objects. Check each method’s return value and mutation behavior. map transforms, filter selects, reduce combines. Use numeric sort comparators and remember that spread copies only the outer container.",
+      "sections": [
+        {
+          "title": "Start with the small case",
+          "text": "Applications process collections of products, marks, people, and tasks. An array is a row of numbered lockers, starting at zero.",
+          "code": "const fruits = [\"Apple\", \"Mango\", \"Banana\"];\nconsole.log(fruits[0], fruits.length);\nfruits[1] = \"Orange\";\nconsole.log(fruits);\nconsole.log(fruits[3]);"
+        },
+        {
+          "title": "How to use this chapter",
+          "text": "Work through the concept sections below at your own pace. Begin with the explanation and visual experiment, predict before you run, then repair the bug and apply the idea. Optional deeper sections can wait for a later class. The Experiment tab collects the chapter’s visual labs and guided projects."
+        }
+      ],
+      "examples": [
+        {
+          "title": "Create, read, and update",
+          "code": "const fruits = [\"Apple\", \"Mango\", \"Banana\"];\nconsole.log(fruits[0], fruits.length);\nfruits[1] = \"Orange\";\nconsole.log(fruits);\nconsole.log(fruits[3]);",
+          "explanation": "There are three elements at indices 0, 1, and 2. Index 3 is missing."
+        },
+        {
+          "title": "Arrays can contain records",
+          "code": "const students = [{ name: \"Asha\", marks: 82 }, { name: \"Dev\", marks: 68 }];\nconsole.log(students[0].name, students[1].marks);\nconsole.log(typeof students, Array.isArray(students));",
+          "explanation": "Indexing selects a record, then dot notation reads a property."
+        },
+        {
+          "title": "Different return types",
+          "code": "const tasks = [\"Read\", \"Code\"];\nconsole.log(tasks.push(\"Test\"));\nconsole.log(tasks.pop());\nconsole.log(tasks.unshift(\"Plan\"));\nconsole.log(tasks.shift());\nconsole.log(tasks);",
+          "explanation": "Length-returning and element-returning methods both mutate the list."
+        },
+        {
+          "title": "slice versus splice",
+          "code": "const items = [\"A\", \"B\", \"C\", \"D\"];\nconsole.log(items.slice(1, 3));\nconsole.log(items);\nconsole.log(items.splice(1, 2, \"X\"));\nconsole.log(items);\nconst result = items.reverse();\nconsole.log(result === items, items);",
+          "explanation": "slice copies B and C without mutation. splice removes them and inserts X. reverse mutates and returns the same array."
+        },
+        {
+          "title": "Transform, select, combine",
+          "code": "const numbers = [1, 2, 3, 4];\nconsole.log(numbers.map(n => n * 2));\nconsole.log(numbers.filter(n => n % 2 === 0));\nconsole.log(numbers.reduce((sum, n) => sum + n, 0));\nconsole.log(numbers);",
+          "explanation": "The original list is unchanged because these callbacks do not mutate it."
+        },
+        {
+          "title": "Find and test records",
+          "code": "const users = [{ name: \"Asha\", active: true }, { name: \"Dev\", active: false }];\nconsole.log(users.filter(user => user.active));\nconsole.log(users.find(user => !user.active)?.name);\nconsole.log(users.some(user => user.active), users.every(user => user.active));\nconst returned = users.forEach(user => console.log(user.name));\nconsole.log(returned);",
+          "explanation": "filter returns an array, find returns a record, some/every return booleans, and forEach returns undefined."
+        },
+        {
+          "title": "Compare sort orders",
+          "code": "const values = [2, 10, 1, 30];\nconsole.log([...values].sort());\nconsole.log([...values].sort((a, b) => a - b));\nconsole.log(values);",
+          "explanation": "The first copy sorts as strings; the second uses numeric order. The original remains untouched."
+        },
+        {
+          "title": "Top three ratings",
+          "code": "const products = [{ name: \"Pen\", rating: 4.2 }, { name: \"Book\", rating: 4.8 }, { name: \"Bag\", rating: 4.5 }, { name: \"Cup\", rating: 4.1 }];\nconst top = [...products].sort((a, b) => b.rating - a.rating).slice(0, 3);\nconsole.log(top.map(product => product.name));",
+          "explanation": "The copied container is sorted descending and the first three records are selected."
+        },
+        {
+          "title": "Unpack and combine",
+          "code": "const [first, second = \"Guest\", ...rest] = [\"Asha\", undefined, \"Dev\", \"Mira\"];\nconsole.log(first, second, rest);\nconsole.log([...[1, 2], ...[3, 4]]);",
+          "explanation": "The default replaces undefined; rest collects remaining values; spread combines lists."
+        },
+        {
+          "title": "Nested references remain shared",
+          "code": "const original = [{ name: \"Asha\" }];\nconst copy = [...original];\ncopy[0].name = \"Mira\";\nconsole.log(original === copy, original[0] === copy[0], original[0].name);",
+          "explanation": "The containers differ, but they point to the same nested record."
+        }
+      ],
+      "predict": {
+        "id": "8-p",
+        "kind": "Predict the output",
+        "prompt": "Predict the result before running this code.",
+        "code": "const values = [10, 20, 30];\nconsole.log(values[0], values[values.length]);",
+        "choices": [
+          "10 30",
+          "10 undefined",
+          "20 30"
+        ],
+        "answer": 1,
+        "explanation": "Indices start at 0; length is one past the last ordinary index.",
+        "expected": {
+          "logs": [
+            "10 undefined"
+          ]
+        }
+      },
+      "debug": {
+        "prompt": "Read the last element correctly.",
+        "starter": "const marks = [75, 82, 91];\nconsole.log(marks[marks.length]);",
+        "solution": "const marks = [75, 82, 91];\nconsole.log(marks[marks.length - 1]);",
+        "hint": "The last index is one less than length."
+      },
+      "challenge": {
+        "prompt": "Destructure a first product and collect the rest.",
+        "starter": "const products = [\"Pen\", \"Book\", \"Bag\"];\n// Unpack and print both parts\n",
+        "solution": "const products = [\"Pen\", \"Book\", \"Bag\"];\nconst [featured, ...others] = products;\nconsole.log(featured, others);",
+        "hint": "A rest element collects remaining elements into an array."
+      },
+      "quiz": [
+        {
+          "id": "8-a",
+          "kind": "Multiple choice",
+          "prompt": "Which method returns the first matching record rather than an array of all matches?",
+          "choices": [
+            "filter",
+            "find",
+            "map"
+          ],
+          "answer": 1,
+          "explanation": "find returns one matching value or undefined. filter returns an array, and map transforms each element."
+        },
+        {
+          "id": "8-b",
+          "kind": "Fill in the missing code",
+          "prompt": "Sort numbers ascending: values.sort((a, b) => ___)",
+          "choices": [
+            "a > b",
+            "a - b",
+            "b - a"
+          ],
+          "answer": 1,
+          "explanation": "a - b supplies the negative/zero/positive comparison result needed for ascending numeric order."
+        },
+        {
+          "id": "8-c",
+          "kind": "Real-world scenario",
+          "prompt": "A cart can be empty. Which reduce pattern safely totals it?",
+          "choices": [
+            "cart.reduce((sum, item) => sum + item.price)",
+            "cart.reduce((sum, item) => sum + item.price, 0)",
+            "cart.forEach(item => item.price)"
+          ],
+          "answer": 1,
+          "explanation": "An explicit initial 0 returns zero even for an empty cart. reduce without an initial value throws on an empty array; forEach returns undefined."
+        }
+      ],
+      "notes": {
+        "say": "An array is an object designed to hold an ordered collection, with zero-based indexed elements and a length property.",
+        "demo": "Edit an indexed memory box and observe index, value, and length. Include an out-of-range read.",
+        "ask": "Predict the result before running this code.",
+        "answer": "Indices start at 0; length is one past the last ordinary index.",
+        "misconception": "The last ordinary index is length - 1, not length. typeof an array is object, so use Array.isArray.",
+        "exercise": "Update one student mark and calculate a simple average with a loop.",
+        "transition": "Objects organize the information within each record."
+      }
+    },
+    {
+      "id": 9,
+      "title": "Objects & connected data",
+      "short": "Objects",
+      "subtitle": "Put related facts together. Follow the references.",
+      "minutes": 60,
+      "color": "purple",
+      "objective": "Build nested records, access dynamic properties, destructure, iterate own fields, compare references, and choose an appropriate copy strategy.",
+      "why": "Related facts need a clear structure and intentional ownership when they are edited.",
+      "real": "User profiles, inventory products, student records, and API responses are objects.",
+      "analogy": "An object is a folder with named fields and nested folders; several names may point at the same folder.",
+      "summary": "Objects group named properties and methods. Dots use fixed keys; brackets evaluate keys. Assignment shares a reference, spread and Object.assign copy shallowly, and structuredClone handles supported deep data. Optional chaining guards nullish intermediate values.",
+      "sections": [
+        {
+          "title": "Start with the small case",
+          "text": "Related facts need a clear structure and intentional ownership when they are edited. An object is a folder with named fields and nested folders; several names may point at the same folder.",
+          "code": "const student = { name: \"Asha\", marks: 82, address: { city: \"Pune\" }, label() { return this.name + \": \" + this.marks; } };\nconsole.log(student.name, student.address.city);\nconsole.log(student.label());\nstudent.marks = 90;\nconsole.log(student.marks);"
+        },
+        {
+          "title": "How to use this chapter",
+          "text": "Work through the concept sections below at your own pace. Begin with the explanation and visual experiment, predict before you run, then repair the bug and apply the idea. Optional deeper sections can wait for a later class. The Experiment tab collects the chapter’s visual labs and guided projects."
+        }
+      ],
+      "examples": [
+        {
+          "title": "Build a student folder",
+          "code": "const student = { name: \"Asha\", marks: 82, address: { city: \"Pune\" }, label() { return this.name + \": \" + this.marks; } };\nconsole.log(student.name, student.address.city);\nconsole.log(student.label());\nstudent.marks = 90;\nconsole.log(student.marks);",
+          "explanation": "The object stores data and a regular method. Calling student.label() supplies student as its receiver."
+        },
+        {
+          "title": "Dynamic keys and deletion",
+          "code": "const product = { name: \"Pen\", \"unit price\": 20 };\nconst field = \"name\";\nconsole.log(product[field], product[\"unit price\"]);\nproduct.stock = 5;\ndelete product.stock;\nconsole.log(product.stock);",
+          "explanation": "Brackets handle an expression or a key containing a space. A missing property reads undefined."
+        },
+        {
+          "title": "Destructure and rename",
+          "code": "const student = { name: \"Asha\", marks: 82, address: { city: \"Pune\" } };\nconst { name, marks: score, age = 18, address: { city } } = student;\nconsole.log(name, score, age, city);",
+          "explanation": "Renaming creates score, defaults fill undefined, and a nested pattern reads city."
+        },
+        {
+          "title": "Own versus inherited fields",
+          "code": "const record = Object.create({ inherited: 1 });\nrecord.own = 2;\nfor (const key in record) console.log(key, Object.hasOwn(record, key));\nconsole.log(Object.keys(record), Object.values(record));\nfor (const [key, value] of Object.entries(record)) console.log(key, value);",
+          "explanation": "for…in sees the inherited enumerable property too. The Object helpers select own enumerable string keys."
+        },
+        {
+          "title": "Three different relationships",
+          "code": "const original = { name: \"Asha\", address: { city: \"Pune\" } };\nconst alias = original;\nconst shallow = { ...original };\nconst assigned = Object.assign({}, original);\nconst deep = structuredClone(original);\nshallow.address.city = \"Delhi\";\nconsole.log(alias === original, shallow === original);\nconsole.log(original.address.city, assigned.address.city, deep.address.city);",
+          "explanation": "The shallow copies still share address. The deep clone keeps its independent Pune address."
+        },
+        {
+          "title": "Clone limits",
+          "code": "try {\n structuredClone({ action() { return 1; } });\n} catch (error) { console.log(error.name); }\nconst original = { count: 1 };\nconsole.log(original === { count: 1 });",
+          "explanation": "A function value cannot be structured-cloned. Equal-looking object literals still have different identities."
+        },
+        {
+          "title": "Handle a missing address",
+          "code": "const student = { name: \"Asha\" };\nconsole.log(student.address?.city);\nconsole.log(student.address?.city ?? \"City not provided\");\nconst absent = null;\nconsole.log(absent?.address?.city);",
+          "explanation": "The optional chain yields undefined when an intermediate value is nullish."
+        },
+        {
+          "title": "Compute a property name",
+          "code": "const field = \"nickname\";\nconst profile = { name: \"Asha\", [field]: \"Ash\" };\nconsole.log(profile[field]);\nconst { name, nickname = \"No nickname\" } = profile;\nconsole.log(name, nickname);",
+          "explanation": "The expression field becomes the key nickname; destructuring then extracts its value."
+        }
+      ],
+      "predict": {
+        "id": "9-p",
+        "kind": "Predict the output",
+        "prompt": "Predict the result before running this code.",
+        "code": "const user = { name: \"Asha\", field: \"Other\" };\nconst field = \"name\";\nconsole.log(user[field], user.field);",
+        "choices": [
+          "Asha Other",
+          "name Other",
+          "Asha Asha"
+        ],
+        "answer": 0,
+        "explanation": "The bracket expression evaluates field to name; dot notation uses the literal key field.",
+        "expected": {
+          "logs": [
+            "Asha Other"
+          ]
+        }
+      },
+      "debug": {
+        "prompt": "Read the property selected by the variable.",
+        "starter": "const student = { name: \"Asha\" };\nconst key = \"name\";\nconsole.log(student.key);",
+        "solution": "const student = { name: \"Asha\" };\nconst key = \"name\";\nconsole.log(student[key]);",
+        "hint": "Brackets evaluate key; dots do not."
+      },
+      "challenge": {
+        "prompt": "Build a profile with a computed field and display a safe city fallback.",
+        "starter": "const field = \"role\";\n// Create the record and safely read its city\n",
+        "solution": "const field = \"role\";\nconst profile = { name: \"Asha\", [field]: \"Learner\" };\nconsole.log(profile[field], profile.address?.city ?? \"Unknown\");",
+        "hint": "Use [field] in the literal and ?. for the optional address."
+      },
+      "quiz": [
+        {
+          "id": "9-a",
+          "kind": "Multiple choice",
+          "prompt": "A variable field holds \"name\". How do you read that chosen property?",
+          "choices": [
+            "record.field",
+            "record[field]",
+            "record(\"field\")"
+          ],
+          "answer": 1,
+          "explanation": "Brackets evaluate field to obtain the property key. Dot notation uses the literal property name field."
+        },
+        {
+          "id": "9-b",
+          "kind": "Real-world scenario",
+          "prompt": "A draft must independently edit a nested plain-data address. Which creates that independence?",
+          "choices": [
+            "const draft = saved",
+            "const draft = { ...saved }",
+            "const draft = structuredClone(saved)"
+          ],
+          "answer": 2,
+          "explanation": "For supported plain data, structuredClone separates nested data. Assignment aliases the same object, and spread is only a shallow outer copy."
+        },
+        {
+          "id": "9-c",
+          "kind": "Fill in the missing code",
+          "prompt": "Safely handle a missing address: student.address ___ city",
+          "choices": [
+            ".",
+            "?.",
+            "==="
+          ],
+          "answer": 1,
+          "explanation": "student.address?.city returns undefined when address is null or undefined, rather than trying to read city through a missing value. The student binding must itself exist."
+        }
+      ],
+      "notes": {
+        "say": "An object groups named properties. A method is a function stored as a property and commonly called through that object.",
+        "demo": "Expand nested folders in Object Inspector. Add, update, delete, and inspect a property in the property editor.",
+        "ask": "Predict the result before running this code.",
+        "answer": "The bracket expression evaluates field to name; dot notation uses the literal key field.",
+        "misconception": "A dynamic key requires brackets. Object properties may use keyword-like names even though binding names have separate reserved-word rules.",
+        "exercise": "Create a nested profile and read the city with both fixed and dynamic access.",
+        "transition": "Combine records, collections, and functions in the student manager and inventory projects."
+      }
+    },
+    {
+      "id": 10,
+      "short": "The DOM",
+      "title": "The DOM & living documents",
+      "subtitle": "Select, inspect and change a real browser document.",
+      "minutes": 100,
+      "color": "green",
+      "objective": "The document is a tree; Choose the right selector; Live collection or static snapshot?; textContent, innerText & innerHTML; Attributes, properties & dataset; Create, move, replace & clone nodes; Let CSS own presentation; When is the document ready?.",
+      "why": "Code needs a structured way to locate and change content.",
+      "real": "Build interactive browser applications with explicit input, state, errors and lifecycle management.",
+      "analogy": "A folder has documents and notes; a parent node likewise can contain different kinds of children.",
+      "sections": [
+        {
+          "title": "The document is a tree",
+          "text": "The DOM is a programming interface representing a document. Element nodes have type 1, text nodes 3, comments 8, the document 9. Whitespace can create text nodes. children includes only elements; childNodes includes all child nodes."
+        },
+        {
+          "title": "Choose the right selector",
+          "text": "getElementById returns one Element or null. querySelector returns the first match or null. getElementsByClassName/getElementsByTagName return live HTMLCollections, possibly empty. querySelectorAll returns a static NodeList. Invalid selector syntax can throw SyntaxError."
+        },
+        {
+          "title": "Live collection or static snapshot?",
+          "text": "An HTMLCollection returned by getElementsByClassName is live. A querySelectorAll NodeList is static. NodeList is an interface, not a universal promise of static behavior: childNodes is live."
+        },
+        {
+          "title": "textContent, innerText & innerHTML",
+          "text": "textContent follows DOM text nodes; innerText is rendered-text-aware and affected by CSS/layout (a non-rendered or detached element falls back to textContent); innerHTML serializes/parses markup. Use value for a form control’s current value. Prefer textContent for untrusted ordinary text."
+        },
+        {
+          "title": "Attributes, properties & dataset",
+          "text": "get/set/remove/hasAttribute inspect markup attributes. Boolean attributes are true by presence: disabled=\"false\" still disables. Properties can reflect attributes, but value and defaultValue can differ after editing. dataset exposes data-* as strings with camelCase keys."
+        },
+        {
+          "title": "Create, move, replace & clone nodes",
+          "text": "createElement and createTextNode create nodes. append/appendChild/prepend/insertBefore place or move them. remove/removeChild detach them. replaceChildren/replaceWith replace nodes. cloneNode(true) copies descendants, not listeners attached with addEventListener. A DocumentFragment groups nodes before insertion."
+        },
+        {
+          "title": "Let CSS own presentation",
+          "text": "style edits inline declarations. classList add/remove/toggle/contains manages class tokens. CSS classes can describe a state and keep visual rules together."
+        },
+        {
+          "title": "When is the document ready?",
+          "text": "A parser encounters scripts and markup in order. A classic script can run before later markup exists. defer fetches classic external scripts without blocking parsing and executes after parsing, before DOMContentLoaded. Module scripts defer by default. load also waits for dependent resources such as images; exact async/module timing has additional rules."
+        }
+      ],
+      "examples": [
+        {
+          "title": "The document is a tree",
+          "code": "const main = document.querySelector(\"#main\");\nconsole.log(main.nodeType, main.children.length);\nconsole.log([...main.childNodes].map((n) => n.nodeType));\nconsole.log(main.firstElementChild.tagName, main.lastElementChild.tagName);\nconsole.log(main.firstElementChild.nextElementSibling.tagName);\nconsole.log(main.lastElementChild.previousElementSibling.tagName);",
+          "explanation": "Elements are one kind of node. Inspect relationships, not indentation alone."
+        },
+        {
+          "title": "Choose the right selector",
+          "code": "console.log(document.getElementById(\"title\").tagName);\nconsole.log(document.getElementsByClassName(\"item\").length);\nconsole.log(document.getElementsByTagName(\"p\").length);\nconsole.log(document.querySelector(\".item\").textContent);\nconsole.log(document.querySelectorAll(\".item\").length);\nconsole.log(document.querySelector(\"#missing\"));\nfor (const el of document.querySelectorAll(\".item\"))\n  el.style.outline = \"2px solid teal\";",
+          "explanation": "One selector may return null; a collection may be empty."
+        },
+        {
+          "title": "Live collection or static snapshot?",
+          "code": "const live = document.getElementsByClassName(\"item\");\nconst fixed = document.querySelectorAll(\".item\");\nconst list = document.querySelector(\"#list\");\nconst children = list.childNodes;\nfunction show() {\n  document.querySelector(\"#counts\").textContent =\n    \"Live: \" +\n    live.length +\n    \"; static: \" +\n    fixed.length +\n    \"; childNodes: \" +\n    children.length;\n}\ndocument.querySelector(\"#add\").addEventListener(\"click\", () => {\n  const li = document.createElement(\"li\");\n  li.className = \"item\";\n  li.textContent = \"New\";\n  list.append(li);\n  show();\n});\nshow();",
+          "explanation": "Ask which API created the collection."
+        }
+      ],
+      "predict": {
+        "id": "10-p",
+        "kind": "Predict the result",
+        "prompt": "Does main.children include its comment?",
+        "choices": [
+          "Yes",
+          "No, children contains only elements"
+        ],
+        "answer": 1,
+        "explanation": "Comments appear in childNodes, but not children. Not all nodes are elements."
+      },
+      "debug": {
+        "prompt": "Compare children with childNodes, then inspect nodeType rather than guessing from the source layout.",
+        "starter": "const main = document.querySelector(\"#main\");\nconsole.log(main.children[1].nodeType === 8);",
+        "solution": "const main = document.querySelector(\"#main\");\nconsole.log(main.nodeType, main.children.length);\nconsole.log([...main.childNodes].map((n) => n.nodeType));\nconsole.log(main.firstElementChild.tagName, main.lastElementChild.tagName);\nconsole.log(main.firstElementChild.nextElementSibling.tagName);\nconsole.log(main.lastElementChild.previousElementSibling.tagName);",
+        "hint": "Compare children with childNodes, then inspect nodeType rather than guessing from the source layout."
+      },
+      "challenge": {
+        "prompt": "Export a page and compare a script in head, a script at the end of body, and an external defer script. This lab’s JS panel runs after its HTML is parsed.",
+        "starter": "// Build your independent browser exercise in the native experiment.",
+        "solution": "console.log(document.querySelector(\"#title\") !== null);\nconsole.log(document.readyState);\nfunction ready() {\n  document.querySelector(\"#status\").textContent = \"DOM is available\";\n  console.log(\"DOM ready\");\n}\nif (document.readyState === \"loading\")\n  document.addEventListener(\"DOMContentLoaded\", ready, { once: true });\nelse ready();\nwindow.addEventListener(\"load\", () => console.log(\"Window load\"), {\n  once: true,\n});",
+        "hint": "For DOM availability, use DOMContentLoaded on document with a readyState fallback. For window resources, use window.load."
+      },
+      "quiz": [
+        {
+          "id": "10-a",
+          "kind": "Browser checkpoint",
+          "prompt": "Which result is static for the original query?",
+          "choices": [
+            "querySelectorAll result",
+            "getElementsByClassName result",
+            "Every NodeList"
+          ],
+          "answer": 0,
+          "explanation": "querySelectorAll returns a static NodeList; childNodes is a live NodeList."
+        },
+        {
+          "id": "10-b",
+          "kind": "Browser checkpoint",
+          "prompt": "Which value is rendered-text-aware?",
+          "choices": [
+            "textContent",
+            "innerText",
+            "innerHTML"
+          ],
+          "answer": 1,
+          "explanation": "innerText depends on rendering/layout; textContent follows DOM text nodes."
+        },
+        {
+          "id": "10-c",
+          "kind": "Browser checkpoint",
+          "prompt": "What does cloneNode(true) omit?",
+          "choices": [
+            "Descendants",
+            "Listeners registered with addEventListener",
+            "Attributes"
+          ],
+          "answer": 1,
+          "explanation": "It copies markup/descendants, not addEventListener registrations. Review duplicate ids and attach/delegate behavior."
+        }
+      ],
+      "summary": "Elements are one kind of node. Inspect relationships, not indentation alone. One selector may return null; a collection may be empty. Ask which API created the collection. Text, rendered text and markup are different questions. Presence for Boolean attributes; strings for dataset. Create, configure, then insert. A clone is not the same node. JavaScript chooses a state; CSS describes its appearance. Select after creation, and distinguish DOM-ready from resource-loaded.",
+      "notes": {
+        "say": "The DOM is a programming interface representing a document. Element nodes have type 1, text nodes 3, comments 8, the document 9. Whitespace can create text nodes. children includes only elements; childNodes includes all child nodes.",
+        "demo": "Select main by id. Read its element children and all child nodes. Follow parentElement, first/lastElementChild and next/previousElementSibling. Click a rendered element and inspect the corresponding node below the preview.",
+        "ask": "Does main.children include its comment?",
+        "answer": "Comments appear in childNodes, but not children. Not all nodes are elements.",
+        "misconception": "Comments appear in childNodes, but not children. Not all nodes are elements.",
+        "exercise": "Export a page and compare a script in head, a script at the end of body, and an external defer script. This lab’s JS panel runs after its HTML is parsed.",
+        "transition": "Use the next chapter or browser applications pathway to connect these skills."
+      }
+    },
+    {
+      "id": 11,
+      "short": "Events",
+      "title": "Events & interactive interfaces",
+      "subtitle": "Follow a real action from its target through the document.",
+      "minutes": 90,
+      "color": "blue",
+      "objective": "Listeners, references & options; Similar events, different meanings; Capture, target & bubble in a real DOM; Delegate actions for dynamic content.",
+      "why": "An interface reacts when a relevant event occurs; setup and cleanup must use the right function identity.",
+      "real": "Build interactive browser applications with explicit input, state, errors and lifecycle management.",
+      "analogy": "Give a named instruction to the bell operator, then cancel that same instruction.",
+      "sections": [
+        {
+          "title": "Listeners, references & options",
+          "text": "addEventListener registers a callback. removeEventListener requires the same type, function reference and capture setting. once removes after one invocation; capture selects the capture phase; passive promises not to prevent the default action. An AbortSignal can remove related listeners."
+        },
+        {
+          "title": "Similar events, different meanings",
+          "text": "input reacts to editing; change commonly signals a committed change. keydown precedes keyup; key is the interpreted key and code describes the physical key position. mouseover/out bubble and can fire crossing descendants; mouseenter/leave do not bubble. focus/blur do not bubble; focusin/out do. Pointer events support multiple pointing-device types. dblclick is separate from click, and click handlers may already run before it."
+        },
+        {
+          "title": "Capture, target & bubble in a real DOM",
+          "text": "Native event propagation travels through capture ancestors, the target, and (if bubbles is true) bubble ancestors. target stays the origin; currentTarget is the listener’s node. preventDefault cancels a cancelable default action; stopPropagation stops travel to later nodes; stopImmediatePropagation also stops later listeners on the same node."
+        },
+        {
+          "title": "Delegate actions for dynamic content",
+          "text": "An event can bubble from a new descendant. closest locates a relevant ancestor of the target; contains or an ownership check keeps matching within the intended component. Handle form submission on the form rather than assuming button clicks cover keyboard submission."
+        }
+      ],
+      "examples": [
+        {
+          "title": "Listeners, references & options",
+          "code": "let count = 0;\nconst button = document.querySelector(\"#button\");\nfunction onClick(event) {\n  document.querySelector(\"#out\").textContent = String(++count);\n  console.log(event.type);\n}\nbutton.addEventListener(\"click\", onClick);\ndocument\n  .querySelector(\"#remove\")\n  .addEventListener(\"click\", () =>\n    button.removeEventListener(\"click\", onClick),\n  );",
+          "explanation": "Same reference, same type, same capture."
+        },
+        {
+          "title": "Similar events, different meanings",
+          "code": "const types = [\n  \"click\",\n  \"dblclick\",\n  \"input\",\n  \"change\",\n  \"keydown\",\n  \"keyup\",\n  \"mouseover\",\n  \"mouseout\",\n  \"mouseenter\",\n  \"mouseleave\",\n  \"focus\",\n  \"blur\",\n  \"focusin\",\n  \"focusout\",\n  \"pointerdown\",\n  \"pointerup\",\n];\nconst rows = [];\nfor (const selector of [\"#input\", \"#area\", \"#button\"]) {\n  const node = document.querySelector(selector);\n  for (const type of types)\n    node.addEventListener(type, (event) => {\n      rows.push(\n        event.type +\n          \" target=\" +\n          event.target.tagName +\n          \" current=\" +\n          event.currentTarget.tagName +\n          \" key=\" +\n          event.key +\n          \" code=\" +\n          event.code,\n      );\n      document.querySelector(\"#events\").textContent = rows\n        .slice(-12)\n        .join(\"\\n\");\n    });\n}",
+          "explanation": "Ask what action the event describes and whether it bubbles."
+        },
+        {
+          "title": "Capture, target & bubble in a real DOM",
+          "code": "const out = document.querySelector(\"#events\");\nfunction record(label, event) {\n  const li = document.createElement(\"li\");\n  li.textContent =\n    label +\n    \" phase=\" +\n    event.eventPhase +\n    \" target=\" +\n    event.target.id +\n    \" current=\" +\n    event.currentTarget.id;\n  out.append(li);\n}\nfor (const id of [\"outer\", \"inner\"]) {\n  const node = document.getElementById(id);\n  node.addEventListener(\n    \"click\",\n    (e) => {\n      if (id === \"outer\") out.replaceChildren();\n      record(id + \" capture\", e);\n    },\n    true,\n  );\n  node.addEventListener(\"click\", (e) => {\n    record(id + \" bubble\", e);\n    if (id === \"inner\") {\n      const mode = document.querySelector(\"#stop\").value;\n      if (mode === \"propagation\") e.stopPropagation();\n      if (mode === \"immediate\") e.stopImmediatePropagation();\n    }\n  });\n}\ndocument\n  .querySelector(\"#inner\")\n  .addEventListener(\"click\", (e) => record(\"inner second listener\", e));\ndocument\n  .querySelector(\"#target\")\n  .addEventListener(\"click\", (e) => record(\"target listener\", e));",
+          "explanation": "Target is where it started; currentTarget is who is listening."
+        }
+      ],
+      "predict": {
+        "id": "11-p",
+        "kind": "Predict the result",
+        "prompt": "Can a new arrow function remove a previously registered arrow function?",
+        "choices": [
+          "Yes, if the source looks identical",
+          "No, a different function object is a different reference"
+        ],
+        "answer": 1,
+        "explanation": "Listeners are identified by function reference, type and capture. Matching source text is not matching identity."
+      },
+      "debug": {
+        "prompt": "Keep the original function reference. Match capture when removing.",
+        "starter": "const button = document.querySelector(\"#button\");\nbutton.addEventListener(\"click\", () => console.log(\"click\"));\nbutton.removeEventListener(\"click\", () => console.log(\"click\"));",
+        "solution": "let count = 0;\nconst button = document.querySelector(\"#button\");\nfunction onClick(event) {\n  document.querySelector(\"#out\").textContent = String(++count);\n  console.log(event.type);\n}\nbutton.addEventListener(\"click\", onClick);\ndocument\n  .querySelector(\"#remove\")\n  .addEventListener(\"click\", () =>\n    button.removeEventListener(\"click\", onClick),\n  );",
+        "hint": "Keep the original function reference. Match capture when removing."
+      },
+      "challenge": {
+        "prompt": "Build a real-time search list with delegated delete actions, and add a no-results status.",
+        "starter": "// Build your independent browser exercise in the native experiment.",
+        "solution": "const list = document.querySelector(\"#list\");\ndocument.querySelector(\"#add\").addEventListener(\"click\", () => {\n  const input = document.querySelector(\"#task\");\n  if (!input.value.trim()) return;\n  const li = document.createElement(\"li\"),\n    button = document.createElement(\"button\");\n  button.dataset.action = \"remove\";\n  button.textContent = input.value;\n  li.append(button);\n  list.append(li);\n  input.value = \"\";\n});\nlist.addEventListener(\"click\", (event) => {\n  const button = event.target.closest('button[data-action=\"remove\"]');\n  if (!button || !list.contains(button)) return;\n  button.closest(\"li\").remove();\n  document.querySelector(\"#status\").textContent = \"Task removed\";\n});",
+        "hint": "Selecting buttons before they exist attaches nothing. Delegate from the stable list or attach during each creation."
+      },
+      "quiz": [
+        {
+          "id": "11-a",
+          "kind": "Browser checkpoint",
+          "prompt": "Which field names the node running the listener now?",
+          "choices": [
+            "target",
+            "currentTarget",
+            "key"
+          ],
+          "answer": 1,
+          "explanation": "target identifies the origin, currentTarget identifies this listener’s node."
+        },
+        {
+          "id": "11-b",
+          "kind": "Browser checkpoint",
+          "prompt": "Which method stops later listeners on the same node as well as propagation?",
+          "choices": [
+            "preventDefault",
+            "stopPropagation",
+            "stopImmediatePropagation"
+          ],
+          "answer": 2,
+          "explanation": "stopImmediatePropagation stops later listeners on this node; preventDefault affects a default action."
+        },
+        {
+          "id": "11-c",
+          "kind": "Browser checkpoint",
+          "prompt": "Which focus events bubble?",
+          "choices": [
+            "focus and blur",
+            "focusin and focusout",
+            "No focus event ever bubbles"
+          ],
+          "answer": 1,
+          "explanation": "focusin/out bubble. focus/blur can be observed on ancestors with capture."
+        }
+      ],
+      "summary": "Same reference, same type, same capture. Ask what action the event describes and whether it bubbles. Target is where it started; currentTarget is who is listening. Delegate to a stable ancestor; verify the target belongs to it.",
+      "notes": {
+        "say": "addEventListener registers a callback. removeEventListener requires the same type, function reference and capture setting. once removes after one invocation; capture selects the capture phase; passive promises not to prevent the default action. An AbortSignal can remove related listeners.",
+        "demo": "Store a named function. Pass it without calling it during registration. Update state when a click occurs. Remove precisely the same registration.",
+        "ask": "Can a new arrow function remove a previously registered arrow function?",
+        "answer": "Listeners are identified by function reference, type and capture. Matching source text is not matching identity.",
+        "misconception": "Listeners are identified by function reference, type and capture. Matching source text is not matching identity.",
+        "exercise": "Build a real-time search list with delegated delete actions, and add a no-results status.",
+        "transition": "Use the next chapter or browser applications pathway to connect these skills."
+      }
+    },
+    {
+      "id": 12,
+      "short": "Forms",
+      "title": "Forms & useful validation",
+      "subtitle": "Read user input, explain errors and respect the trust boundary.",
+      "minutes": 90,
+      "color": "purple",
+      "objective": "Read controls and FormData; Submit behavior and native constraints; Validate, explain, clear and review.",
+      "why": "A form contains more than text boxes, and some controls can be associated from outside it.",
+      "real": "Build interactive browser applications with explicit input, state, errors and lifecycle management.",
+      "analogy": "A form is a structured questionnaire; only applicable completed entries go into its envelope.",
+      "sections": [
+        {
+          "title": "Read controls and FormData",
+          "text": "value reads a current string; checked reads checkbox/radio state; selectedOptions identifies selected option elements. FormData(form) includes successful named controls, repeats values for repeated names, omits unchecked checkboxes and disabled controls, and supports form-associated controls outside the form."
+        },
+        {
+          "title": "Submit behavior and native constraints",
+          "text": "Native constraints include required, min/max, minlength/maxlength, pattern and type=email. validity gives individual states; checkValidity returns a Boolean and dispatches invalid events; reportValidity also requests browser feedback. requestSubmit uses the validation/submission path; form.submit bypasses validation and submit listeners. Server validation remains required."
+        },
+        {
+          "title": "Validate, explain, clear and review",
+          "text": "Validation checks a requirement; sanitization transforms/removes unwanted content; context-sensitive output encoding keeps data from being interpreted as code in its destination. Safe DOM insertion uses textContent for plain text. Server-side validation must independently enforce service rules."
+        }
+      ],
+      "examples": [
+        {
+          "title": "Read controls and FormData",
+          "code": "document.querySelector(\"#form\").addEventListener(\"submit\", (event) => {\n  event.preventDefault();\n  const form = event.currentTarget;\n  const data = new FormData(form);\n  document.querySelector(\"#out\").textContent = JSON.stringify(\n    [...data.entries()],\n    null,\n    2,\n  );\n  console.log(\n    [...document.querySelector(\"#topics\").selectedOptions].map(\n      (o) => o.value,\n    ),\n  );\n  console.log(data.getAll(\"topics\"));\n});",
+          "explanation": "Control state and submission entries are different views."
+        },
+        {
+          "title": "Submit behavior and native constraints",
+          "code": "const form = document.querySelector(\"#form\"),\n  out = document.querySelector(\"#status\");\nform.addEventListener(\"submit\", (event) => {\n  event.preventDefault();\n  out.textContent = \"Valid demo form. No data was sent.\";\n});\nform.addEventListener(\n  \"invalid\",\n  (event) => {\n    out.textContent =\n      \"Review \" + event.target.name + \": \" + event.target.validationMessage;\n  },\n  true,\n);\ndocument\n  .querySelector(\"#request\")\n  .addEventListener(\"click\", () =>\n    form.requestSubmit(document.querySelector(\"#submit\")),\n  );\ndocument.querySelector(\"#check\").addEventListener(\"click\", () => {\n  console.log(form.checkValidity());\n  console.log(document.querySelector(\"#email\").validity.typeMismatch);\n  form.reportValidity();\n});",
+          "explanation": "Listen to submit; let native constraints do their job."
+        },
+        {
+          "title": "Validate, explain, clear and review",
+          "code": "const form = document.querySelector(\"#form\");\nfunction validate() {\n  const email = document.querySelector(\"#email\"),\n    a = document.querySelector(\"#first\"),\n    b = document.querySelector(\"#second\");\n  const emailError = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email.value.trim())\n    ? \"\"\n    : \"Enter a plausible fictional email.\";\n  const confirmError =\n    a.value.length < 8\n      ? \"Use at least eight fictional characters.\"\n      : a.value !== b.value\n        ? \"The two strings must match.\"\n        : \"\";\n  document.querySelector(\"#email-error\").textContent = emailError;\n  document.querySelector(\"#confirm-error\").textContent = confirmError;\n  email.setAttribute(\"aria-invalid\", String(!!emailError));\n  b.setAttribute(\"aria-invalid\", String(!!confirmError));\n  return !emailError && !confirmError;\n}\nform.addEventListener(\"input\", () => {\n  validate();\n  document.querySelector(\"#count\").textContent =\n    document.querySelector(\"#feedback\").value.length + \" / 200\";\n});\nform.addEventListener(\"submit\", (event) => {\n  event.preventDefault();\n  if (validate())\n    document.querySelector(\"#status\").textContent =\n      \"Demo review complete. No account or submission was created.\";\n  else {\n    document.querySelector(\"#status\").textContent =\n      \"Repair the described errors.\";\n    form.querySelector('[aria-invalid=\"true\"]')?.focus();\n  }\n});",
+          "explanation": "Give a repairable message; never treat client checks as the trust boundary."
+        }
+      ],
+      "predict": {
+        "id": "12-p",
+        "kind": "Predict the result",
+        "prompt": "Will an unchecked checkbox appear in FormData automatically?",
+        "choices": [
+          "Yes, with false",
+          "No, it is omitted unless handled explicitly"
+        ],
+        "answer": 1,
+        "explanation": "Only successful controls contribute. A checkbox’s checked state is a Boolean, but its submitted value is its configured string."
+      },
+      "debug": {
+        "prompt": "Object.fromEntries loses repeated keys. Use getAll or explicitly collect repeated values.",
+        "starter": "const data = Object.fromEntries(\n  new FormData(document.querySelector(\"#form\")),\n);\nconsole.log(data.topics);",
+        "solution": "document.querySelector(\"#form\").addEventListener(\"submit\", (event) => {\n  event.preventDefault();\n  const form = event.currentTarget;\n  const data = new FormData(form);\n  document.querySelector(\"#out\").textContent = JSON.stringify(\n    [...data.entries()],\n    null,\n    2,\n  );\n  console.log(\n    [...document.querySelector(\"#topics\").selectedOptions].map(\n      (o) => o.value,\n    ),\n  );\n  console.log(data.getAll(\"topics\"));\n});",
+        "hint": "Object.fromEntries loses repeated keys. Use getAll or explicitly collect repeated values."
+      },
+      "challenge": {
+        "prompt": "Add numeric range validation and conditional fields, clear messages when fixed, and test with only the keyboard.",
+        "starter": "// Build your independent browser exercise in the native experiment.",
+        "solution": "const form = document.querySelector(\"#form\");\nfunction validate() {\n  const email = document.querySelector(\"#email\"),\n    a = document.querySelector(\"#first\"),\n    b = document.querySelector(\"#second\");\n  const emailError = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email.value.trim())\n    ? \"\"\n    : \"Enter a plausible fictional email.\";\n  const confirmError =\n    a.value.length < 8\n      ? \"Use at least eight fictional characters.\"\n      : a.value !== b.value\n        ? \"The two strings must match.\"\n        : \"\";\n  document.querySelector(\"#email-error\").textContent = emailError;\n  document.querySelector(\"#confirm-error\").textContent = confirmError;\n  email.setAttribute(\"aria-invalid\", String(!!emailError));\n  b.setAttribute(\"aria-invalid\", String(!!confirmError));\n  return !emailError && !confirmError;\n}\nform.addEventListener(\"input\", () => {\n  validate();\n  document.querySelector(\"#count\").textContent =\n    document.querySelector(\"#feedback\").value.length + \" / 200\";\n});\nform.addEventListener(\"submit\", (event) => {\n  event.preventDefault();\n  if (validate())\n    document.querySelector(\"#status\").textContent =\n      \"Demo review complete. No account or submission was created.\";\n  else {\n    document.querySelector(\"#status\").textContent =\n      \"Repair the described errors.\";\n    form.querySelector('[aria-invalid=\"true\"]')?.focus();\n  }\n});",
+        "hint": "Render submitted text with textContent. Do not equate validation, sanitization, encoding and authorization."
+      },
+      "quiz": [
+        {
+          "id": "12-a",
+          "kind": "Browser checkpoint",
+          "prompt": "Which API follows normal validation and submit-event behavior?",
+          "choices": [
+            "form.submit()",
+            "form.requestSubmit()",
+            "A generic click listener on any element"
+          ],
+          "answer": 1,
+          "explanation": "requestSubmit follows the submission path; form.submit bypasses validation and submit handlers."
+        },
+        {
+          "id": "12-b",
+          "kind": "Browser checkpoint",
+          "prompt": "How should repeated FormData values be read?",
+          "choices": [
+            "getAll(name)",
+            "Only Object.fromEntries",
+            "Treat every checkbox as false"
+          ],
+          "answer": 0,
+          "explanation": "getAll preserves repeated entries; Object.fromEntries retains only one value per key."
+        },
+        {
+          "id": "12-c",
+          "kind": "Browser checkpoint",
+          "prompt": "Can client validation enforce server trust?",
+          "choices": [
+            "Yes",
+            "No, the service must validate independently",
+            "Only if a password input is masked"
+          ],
+          "answer": 1,
+          "explanation": "Client validation improves usability; requests can bypass it. Authentication and authorization need trusted infrastructure."
+        }
+      ],
+      "summary": "Control state and submission entries are different views. Listen to submit; let native constraints do their job. Give a repairable message; never treat client checks as the trust boundary.",
+      "notes": {
+        "say": "value reads a current string; checked reads checkbox/radio state; selectedOptions identifies selected option elements. FormData(form) includes successful named controls, repeats values for repeated names, omits unchecked checkboxes and disabled controls, and supports form-associated controls outside the form.",
+        "demo": "Handle submit at the form. Build native FormData from associated successful controls. Read repeated values with getAll. Compare checked and selectedOptions with the payload.",
+        "ask": "Will an unchecked checkbox appear in FormData automatically?",
+        "answer": "Only successful controls contribute. A checkbox’s checked state is a Boolean, but its submitted value is its configured string.",
+        "misconception": "Only successful controls contribute. A checkbox’s checked state is a Boolean, but its submitted value is its configured string.",
+        "exercise": "Add numeric range validation and conditional fields, clear messages when fixed, and test with only the keyboard.",
+        "transition": "Use the next chapter or browser applications pathway to connect these skills."
+      }
+    },
+    {
+      "id": 13,
+      "short": "Timers",
+      "title": "Timers & time-based interactions",
+      "subtitle": "Schedule deliberately. Measure time. Clean up.",
+      "minutes": 80,
+      "color": "yellow",
+      "objective": "Schedule, cancel, pause & resume; Intervals, recursive timeouts & drift; Debounce and throttle deliberately; Coordinate promises, retries & cleanup.",
+      "why": "A callback should run at the right point in an interface’s lifecycle and stop when no longer needed.",
+      "real": "Build interactive browser applications with explicit input, state, errors and lifecycle management.",
+      "analogy": "A reminder can be scheduled or canceled; the delivery time is not an exact appointment guarantee.",
+      "sections": [
+        {
+          "title": "Schedule, cancel, pause & resume",
+          "text": "setTimeout schedules one callback after a minimum delay; setInterval repeats. Timer ids are cancellation handles, not promises. Browsers can delay/throttle timers, especially in background pages; zero delay does not run before synchronous work. Pausing is application logic, not a built-in timeout method."
+        },
+        {
+          "title": "Intervals, recursive timeouts & drift",
+          "text": "An interval callback may begin new async work before earlier work finishes. A recursive timeout scheduled after awaited work avoids that overlap. Timer-based clocks can drift; derive remaining duration from timestamps. performance.now is monotonic within a context; Date.now follows the system clock."
+        },
+        {
+          "title": "Debounce and throttle deliberately",
+          "text": "Debouncing waits until a quiet period before running. Throttling limits execution frequency during continuing activity. Neither guarantees exact timing. Keep cancellation/cleanup and immediate user feedback separate from expensive work."
+        },
+        {
+          "title": "Coordinate promises, retries & cleanup",
+          "text": "Promise.all fails fast on rejection; allSettled records every outcome; race adopts the first settlement; any adopts the first fulfillment and rejects with AggregateError only if every input rejects. None automatically cancels the losing operations. Use AbortController where supported, bounded retries for suitable operations, and cleanup in finally."
+        }
+      ],
+      "examples": [
+        {
+          "title": "Schedule, cancel, pause & resume",
+          "code": "let timer = null,\n  ticker = null,\n  started = 0,\n  remaining = 0,\n  elapsed = 0;\nconst state = document.querySelector(\"#state\");\nfunction cancel() {\n  clearTimeout(timer);\n  clearInterval(ticker);\n  timer = ticker = null;\n}\nfunction arm() {\n  started = performance.now();\n  state.textContent = \"Callback pending: \" + Math.round(remaining) + \" ms\";\n  timer = setTimeout(() => {\n    elapsed += performance.now() - started;\n    cancel();\n    remaining = 0;\n    state.textContent = \"Callback executed\";\n    console.log(\"Actual callback after\", Math.round(elapsed), \"ms\");\n  }, remaining);\n  ticker = setInterval(() => {\n    document.querySelector(\"#elapsed\").textContent =\n      \"Elapsed \" +\n      Math.round(elapsed + performance.now() - started) +\n      \" ms\";\n  }, 50);\n}\ndocument.querySelector(\"#start\").addEventListener(\"click\", () => {\n  cancel();\n  elapsed = 0;\n  remaining = Math.max(\n    0,\n    Math.min(30000, Number(document.querySelector(\"#delay\").value) || 0),\n  );\n  arm();\n});\ndocument.querySelector(\"#pause\").addEventListener(\"click\", () => {\n  if (timer === null) return;\n  const delta = performance.now() - started;\n  elapsed += delta;\n  remaining = Math.max(0, remaining - delta);\n  cancel();\n  state.textContent = \"Paused; \" + Math.round(remaining) + \" ms remaining\";\n});\ndocument.querySelector(\"#resume\").addEventListener(\"click\", () => {\n  if (timer === null && remaining > 0) arm();\n});\ndocument.querySelector(\"#cancel\").addEventListener(\"click\", () => {\n  cancel();\n  remaining = 0;\n  state.textContent = \"Cancelled\";\n});\ndocument.querySelector(\"#reset\").addEventListener(\"click\", () => {\n  cancel();\n  remaining = elapsed = 0;\n  state.textContent = \"Idle\";\n  document.querySelector(\"#elapsed\").textContent = \"\";\n});",
+          "explanation": "Keep the handle, own the lifecycle, expect scheduling delay."
+        },
+        {
+          "title": "Intervals, recursive timeouts & drift",
+          "code": "let timer = null,\n  controller = null,\n  generation = 0;\nasync function refresh(turn, count) {\n  try {\n    document.querySelector(\"#state\").textContent = \"Loading \" + count;\n    controller = new AbortController();\n    const response = await fetch(\"/api/tasks\", {\n      signal: controller.signal,\n    });\n    if (!response.ok) throw Error(\"HTTP \" + response.status);\n    const rows = await response.json();\n    if (turn !== generation) return;\n    document.querySelector(\"#state\").textContent =\n      \"Refresh \" + count + \": \" + rows.length + \" fictional records\";\n    if (count < 3) timer = setTimeout(() => refresh(turn, count + 1), 300);\n  } catch (error) {\n    if (turn === generation)\n      document.querySelector(\"#state\").textContent = error.name;\n  }\n}\nfunction stop() {\n  generation++;\n  clearTimeout(timer);\n  controller?.abort();\n}\ndocument.querySelector(\"#start\").addEventListener(\"click\", () => {\n  stop();\n  refresh(generation, 1);\n});\ndocument.querySelector(\"#cancel\").addEventListener(\"click\", () => {\n  stop();\n  document.querySelector(\"#state\").textContent = \"Cancelled\";\n});",
+          "explanation": "Measure elapsed time; do not infer it solely from callback count."
+        },
+        {
+          "title": "Debounce and throttle deliberately",
+          "code": "let pending = null,\n  last = -Infinity,\n  updates = 0;\ndocument.querySelector(\"#search\").addEventListener(\"input\", (event) => {\n  const text = event.target.value;\n  document.querySelector(\"#immediate\").textContent = \"Typing: \" + text;\n  clearTimeout(pending);\n  pending = setTimeout(() => {\n    const names = [\"Asha\", \"Dev\", \"Mira\"];\n    document.querySelector(\"#results\").textContent =\n      names\n        .filter((n) => n.toLowerCase().includes(text.toLowerCase()))\n        .join(\", \") || \"No results\";\n  }, 300);\n});\ndocument.querySelector(\"#cancel\").addEventListener(\"click\", () => {\n  clearTimeout(pending);\n  document.querySelector(\"#results\").textContent =\n    \"Pending search cancelled\";\n});\ndocument.querySelector(\"#burst\").addEventListener(\"click\", () => {\n  const now = performance.now();\n  if (now - last < 500) return;\n  last = now;\n  document.querySelector(\"#throttled\").textContent =\n    \"Accepted update \" + ++updates;\n});",
+          "explanation": "Delay plus cancellation is debounce; a rate limit is throttle."
+        }
+      ],
+      "predict": {
+        "id": "13-p",
+        "kind": "Predict the result",
+        "prompt": "Does setTimeout(fn, 0) interrupt the current synchronous stack?",
+        "choices": [
+          "Yes",
+          "No, the callback waits for a later task"
+        ],
+        "answer": 1,
+        "explanation": "Delay is a minimum scheduling request, not guaranteed timing. The current stack and microtask checkpoint must finish first."
+      },
+      "debug": {
+        "prompt": "Keep timer identifiers, prevent duplicate starts, and cancel work on reset and teardown.",
+        "starter": "document\n  .querySelector(\"#start\")\n  .addEventListener(\"click\", () =>\n    setInterval(() => console.log(\"Tick\"), 100),\n  );",
+        "solution": "let timer = null,\n  ticker = null,\n  started = 0,\n  remaining = 0,\n  elapsed = 0;\nconst state = document.querySelector(\"#state\");\nfunction cancel() {\n  clearTimeout(timer);\n  clearInterval(ticker);\n  timer = ticker = null;\n}\nfunction arm() {\n  started = performance.now();\n  state.textContent = \"Callback pending: \" + Math.round(remaining) + \" ms\";\n  timer = setTimeout(() => {\n    elapsed += performance.now() - started;\n    cancel();\n    remaining = 0;\n    state.textContent = \"Callback executed\";\n    console.log(\"Actual callback after\", Math.round(elapsed), \"ms\");\n  }, remaining);\n  ticker = setInterval(() => {\n    document.querySelector(\"#elapsed\").textContent =\n      \"Elapsed \" +\n      Math.round(elapsed + performance.now() - started) +\n      \" ms\";\n  }, 50);\n}\ndocument.querySelector(\"#start\").addEventListener(\"click\", () => {\n  cancel();\n  elapsed = 0;\n  remaining = Math.max(\n    0,\n    Math.min(30000, Number(document.querySelector(\"#delay\").value) || 0),\n  );\n  arm();\n});\ndocument.querySelector(\"#pause\").addEventListener(\"click\", () => {\n  if (timer === null) return;\n  const delta = performance.now() - started;\n  elapsed += delta;\n  remaining = Math.max(0, remaining - delta);\n  cancel();\n  state.textContent = \"Paused; \" + Math.round(remaining) + \" ms remaining\";\n});\ndocument.querySelector(\"#resume\").addEventListener(\"click\", () => {\n  if (timer === null && remaining > 0) arm();\n});\ndocument.querySelector(\"#cancel\").addEventListener(\"click\", () => {\n  cancel();\n  remaining = 0;\n  state.textContent = \"Cancelled\";\n});\ndocument.querySelector(\"#reset\").addEventListener(\"click\", () => {\n  cancel();\n  remaining = elapsed = 0;\n  state.textContent = \"Idle\";\n  document.querySelector(\"#elapsed\").textContent = \"\";\n});",
+        "hint": "Keep timer identifiers, prevent duplicate starts, and cancel work on reset and teardown."
+      },
+      "challenge": {
+        "prompt": "Add a Cancel button and bounded backoff; compare all-rejected any with one fulfilled input.",
+        "starter": "// Build your independent browser exercise in the native experiment.",
+        "solution": "document.querySelector(\"#load\").addEventListener(\"click\", async () => {\n  const wait = (value, ms, fail = false) =>\n    new Promise((resolve, reject) =>\n      setTimeout(() => (fail ? reject(Error(value)) : resolve(value)), ms),\n    );\n  const results = await Promise.allSettled([\n    wait(\"A\", 20),\n    wait(\"B failed\", 10, true),\n  ]);\n  console.log(results.map((r) => r.status));\n  try {\n    await Promise.race([\n      wait(\"slow success\", 40),\n      wait(\"fast failure\", 10, true),\n    ]);\n  } catch (error) {\n    console.log(\"race:\", error.message);\n  }\n  console.log(\n    \"any:\",\n    await Promise.any([\n      wait(\"failure\", 10, true),\n      wait(\"first success\", 30),\n    ]),\n  );\n  const controller = new AbortController();\n  let attempts = 0;\n  try {\n    for (let attempt = 0; attempt < 2; attempt++) {\n      attempts++;\n      try {\n        const response = await fetch(\"/api/students\", {\n          signal: controller.signal,\n        });\n        if (!response.ok) throw Error(\"HTTP \" + response.status);\n        const rows = await response.json();\n        document.querySelector(\"#out\").textContent =\n          rows.length + \" rows after \" + attempts + \" attempt(s)\";\n        break;\n      } catch (error) {\n        if (error.name === \"AbortError\" || attempt === 1) throw error;\n        await wait(null, 50);\n      }\n    }\n  } catch (error) {\n    document.querySelector(\"#out\").textContent = error.message;\n  } finally {\n    controller.abort();\n    console.log(\"cleanup complete\");\n  }\n});",
+        "hint": "Handle rejection from race, compare any, and track outstanding timers or abort signals."
+      },
+      "quiz": [
+        {
+          "id": "13-a",
+          "kind": "Browser checkpoint",
+          "prompt": "What is a timer delay?",
+          "choices": [
+            "A guaranteed exact callback time",
+            "A minimum scheduling request",
+            "An instruction to interrupt synchronous code"
+          ],
+          "answer": 1,
+          "explanation": "Callbacks wait for the stack/task scheduling and may be delayed/throttled."
+        },
+        {
+          "id": "13-b",
+          "kind": "Browser checkpoint",
+          "prompt": "Which pattern avoids overlapping async refresh work?",
+          "choices": [
+            "Schedule the next timeout after awaited work",
+            "Start fetch in a frequent interval with no guard",
+            "Never handle errors"
+          ],
+          "answer": 0,
+          "explanation": "Scheduling after completion makes the sequence explicit and supports cancellation."
+        },
+        {
+          "id": "13-c",
+          "kind": "Browser checkpoint",
+          "prompt": "Why use a deadline for countdown display?",
+          "choices": [
+            "To correct for delayed callbacks",
+            "To ensure all timers execute exactly",
+            "To create secure sessions"
+          ],
+          "answer": 0,
+          "explanation": "Timestamps measure actual elapsed time; nominal tick counts drift. A display countdown is not a security boundary."
+        }
+      ],
+      "summary": "Keep the handle, own the lifecycle, expect scheduling delay. Measure elapsed time; do not infer it solely from callback count. Delay plus cancellation is debounce; a rate limit is throttle. Select a combinator by settlement semantics and clean up the underlying work.",
+      "notes": {
+        "say": "setTimeout schedules one callback after a minimum delay; setInterval repeats. Timer ids are cancellation handles, not promises. Browsers can delay/throttle timers, especially in background pages; zero delay does not run before synchronous work. Pausing is application logic, not a built-in timeout method.",
+        "demo": "Record a timestamp and schedule one callback. Use a separate ticker only to update the display. Pause by canceling and subtracting actual elapsed time. Resume with the remaining duration and clean up every handle.",
+        "ask": "Does setTimeout(fn, 0) interrupt the current synchronous stack?",
+        "answer": "Delay is a minimum scheduling request, not guaranteed timing. The current stack and microtask checkpoint must finish first.",
+        "misconception": "Delay is a minimum scheduling request, not guaranteed timing. The current stack and microtask checkpoint must finish first.",
+        "exercise": "Add a Cancel button and bounded backoff; compare all-rejected any with one fulfilled input.",
+        "transition": "Use the next chapter or browser applications pathway to connect these skills."
+      }
+    },
+    {
+      "id": 14,
+      "short": "Browser storage",
+      "title": "Storage, cookies & application state",
+      "subtitle": "Keep non-sensitive state with an accurate lifecycle model.",
+      "minutes": 100,
+      "color": "green",
+      "objective": "State, strings, JSON and failure handling; Session scope and origin boundaries; Cookies: scope, requests & server responsibility.",
+      "why": "A running variable is not a durable record; useful preferences and drafts need explicit persistence.",
+      "real": "Build interactive browser applications with explicit input, state, errors and lifecycle management.",
+      "analogy": "A note on the desk is temporary; a labeled notebook is retained, but can still be lost or unavailable.",
+      "sections": [
+        {
+          "title": "State, strings, JSON and failure handling",
+          "text": "Web Storage stores strings under keys on an origin. getItem returns null when absent; set/remove/clear change that storage area. JSON serializes supported data, not arbitrary objects. Catch unavailable/quota errors and invalid JSON; validate the parsed shape. Native storage events notify other eligible documents, not the document that made the change."
+        },
+        {
+          "title": "Session scope and origin boundaries",
+          "text": "Native localStorage is shared by same-origin documents and can survive browser sessions until cleared/evicted. Native sessionStorage is scoped to an origin and a top-level page session; reload normally preserves it. A new independent tab normally has a different session, opener copying and session restoration have caveats. IndexedDB holds larger structured local data. Neither local storage nor session storage is a backend database or secret vault."
+        },
+        {
+          "title": "Cookies: scope, requests & server responsibility",
+          "text": "document.cookie exposes permitted non-HttpOnly cookies as name=value pairs, not all attributes. Set one cookie per assignment. Encode values with encodeURIComponent and decode deliberately. Path/domain determine scope; Max-Age takes precedence over Expires. Secure restricts transmission to secure transport. SameSite controls eligible cross-site request contexts. JavaScript cannot set/read HttpOnly cookies; appropriate backend responses control sensitive session cookies. Limits vary by browser; keep cookies small."
+        }
+      ],
+      "examples": [
+        {
+          "title": "State, strings, JSON and failure handling",
+          "code": "const input = document.querySelector(\"#name\"),\n  out = document.querySelector(\"#state\");\ntry {\n  const saved = JSON.parse(localStorage.getItem(\"display-name\") || '\"\"');\n  input.value = typeof saved === \"string\" ? saved : \"\";\n} catch {\n  out.textContent = \"Saved data could not be read.\";\n}\ndocument.querySelector(\"#save\").addEventListener(\"click\", () => {\n  try {\n    localStorage.setItem(\"display-name\", JSON.stringify(input.value));\n    out.textContent = \"Learning preference saved. Run again to restore.\";\n  } catch (error) {\n    out.textContent = \"Could not save: \" + error.name;\n  }\n});\ndocument.querySelector(\"#remove\").addEventListener(\"click\", () => {\n  localStorage.removeItem(\"display-name\");\n  input.value = \"\";\n  out.textContent = \"Saved preference removed\";\n});",
+          "explanation": "Serialize, validate on read, handle failure, and never save secrets."
+        },
+        {
+          "title": "Session scope and origin boundaries",
+          "code": "const input = document.querySelector(\"#draft\"),\n  out = document.querySelector(\"#state\");\ndocument.querySelector(\"#save\").addEventListener(\"click\", () => {\n  sessionStorage.setItem(\"draft\", input.value);\n  out.textContent = \"Stored in this isolated run session\";\n});\ndocument.querySelector(\"#read\").addEventListener(\"click\", () => {\n  input.value = sessionStorage.getItem(\"draft\") ?? \"\";\n  out.textContent = \"Read isolated session draft\";\n});\ndocument.querySelector(\"#clear\").addEventListener(\"click\", () => {\n  sessionStorage.removeItem(\"draft\");\n  input.value = \"\";\n  out.textContent = \"Draft removed\";\n});",
+          "explanation": "Origin plus page session determines the storage area."
+        },
+        {
+          "title": "Cookies: scope, requests & server responsibility",
+          "code": "const value = \"light mode\";\nconsole.log(encodeURIComponent(value));\nconsole.log(decodeURIComponent(\"light%20mode\"));\ntry {\n  console.log(document.cookie);\n} catch (error) {\n  console.log(error.name);\n}\n// On a learner-owned HTTPS origin, a non-sensitive preference might use:\n// document.cookie='theme=dark; Path=/; Max-Age=3600; SameSite=Lax; Secure';\n// JavaScript cannot create or read an HttpOnly session cookie.",
+          "explanation": "Scope controls delivery; HttpOnly is a server-controlled script-access restriction."
+        }
+      ],
+      "predict": {
+        "id": "14-p",
+        "kind": "Predict the result",
+        "prompt": "What does getItem return for an absent key?",
+        "choices": [
+          "undefined",
+          "null",
+          "An empty object"
+        ],
+        "answer": 1,
+        "explanation": "The API returns null for a missing key. Distinguish an absent key from a deliberately stored empty string or the text \"null\"."
+      },
+      "debug": {
+        "prompt": "Check absent keys and validate parsed data before using properties. Catch JSON and storage failures.",
+        "starter": "const saved = JSON.parse(localStorage.getItem(\"missing\"));\nconsole.log(saved.name);",
+        "solution": "const input = document.querySelector(\"#name\"),\n  out = document.querySelector(\"#state\");\ntry {\n  const saved = JSON.parse(localStorage.getItem(\"display-name\") || '\"\"');\n  input.value = typeof saved === \"string\" ? saved : \"\";\n} catch {\n  out.textContent = \"Saved data could not be read.\";\n}\ndocument.querySelector(\"#save\").addEventListener(\"click\", () => {\n  try {\n    localStorage.setItem(\"display-name\", JSON.stringify(input.value));\n    out.textContent = \"Learning preference saved. Run again to restore.\";\n  } catch (error) {\n    out.textContent = \"Could not save: \" + error.name;\n  }\n});\ndocument.querySelector(\"#remove\").addEventListener(\"click\", () => {\n  localStorage.removeItem(\"display-name\");\n  input.value = \"\";\n  out.textContent = \"Saved preference removed\";\n});",
+        "hint": "Check absent keys and validate parsed data before using properties. Catch JSON and storage failures."
+      },
+      "challenge": {
+        "prompt": "In the Cookie Explorer, compare path, expiry, Secure, SameSite and a fictional server-set HttpOnly cookie; inspect both script-visible and eligible request views.",
+        "starter": "// Build your independent browser exercise in the native experiment.",
+        "solution": "const value = \"light mode\";\nconsole.log(encodeURIComponent(value));\nconsole.log(decodeURIComponent(\"light%20mode\"));\ntry {\n  console.log(document.cookie);\n} catch (error) {\n  console.log(error.name);\n}\n// On a learner-owned HTTPS origin, a non-sensitive preference might use:\n// document.cookie='theme=dark; Path=/; Max-Age=3600; SameSite=Lax; Secure';\n// JavaScript cannot create or read an HttpOnly session cookie.",
+        "hint": "Distinguish validation, storage visibility and authorization. Do not put real secrets in client-accessible storage."
+      },
+      "quiz": [
+        {
+          "id": "14-a",
+          "kind": "Browser checkpoint",
+          "prompt": "Which cookie flag cannot be controlled through document.cookie?",
+          "choices": [
+            "Path",
+            "HttpOnly",
+            "Max-Age"
+          ],
+          "answer": 1,
+          "explanation": "HttpOnly is controlled through an appropriate HTTP response and excludes script access."
+        },
+        {
+          "id": "14-b",
+          "kind": "Browser checkpoint",
+          "prompt": "What normally survives a same-tab native sessionStorage reload?",
+          "choices": [
+            "Its session data",
+            "Nothing under any condition",
+            "Only data copied into cookies"
+          ],
+          "answer": 0,
+          "explanation": "A normal reload stays in the page session. Ending/restoring sessions and opener behavior have caveats."
+        },
+        {
+          "id": "14-c",
+          "kind": "Browser checkpoint",
+          "prompt": "When both are valid, which expiry instruction takes precedence?",
+          "choices": [
+            "Max-Age",
+            "Expires",
+            "The longest value always wins"
+          ],
+          "answer": 0,
+          "explanation": "Max-Age takes precedence over Expires; security/privacy policies may impose additional limits."
+        }
+      ],
+      "summary": "Serialize, validate on read, handle failure, and never save secrets. Origin plus page session determines the storage area. Scope controls delivery; HttpOnly is a server-controlled script-access restriction.",
+      "notes": {
+        "say": "Web Storage stores strings under keys on an origin. getItem returns null when absent; set/remove/clear change that storage area. JSON serializes supported data, not arbitrary objects. Catch unavailable/quota errors and invalid JSON; validate the parsed shape. Native storage events notify other eligible documents, not the document that made the change.",
+        "demo": "Read a key with a safe fallback. Parse and validate the expected string. Save after an explicit action and catch failure. Remove just this exercise’s key; avoid unrelated clear operations.",
+        "ask": "What does getItem return for an absent key?",
+        "answer": "The API returns null for a missing key. Distinguish an absent key from a deliberately stored empty string or the text \"null\".",
+        "misconception": "The API returns null for a missing key. Distinguish an absent key from a deliberately stored empty string or the text \"null\".",
+        "exercise": "In the Cookie Explorer, compare path, expiry, Secure, SameSite and a fictional server-set HttpOnly cookie; inspect both script-visible and eligible request views.",
+        "transition": "Use the next chapter or browser applications pathway to connect these skills."
+      }
+    }
+  ],
+  "hashes": {
+    "src/data/newLessons.ts": "84f79458688e0e79a6c7fb06a24975d947d967f555a04afb480782a8760bfe37",
+    "src/data/concepts.ts": "fe31ab3d45315ccac2dd55b64c6e6349a999b659c966a8158abe52e315e473d4",
+    "src/data/controlConcepts.ts": "fb3ed9635d96206955c6ff1048cd58127b485c3d7d2d6513ab1bd2cf19ef601d",
+    "src/data/advancedConcepts.ts": "67fa72e543a0705da992a4dbbe3f65568ed1c58d7b6921d4dbd024a3f007ed44",
+    "src/data/appliedProjects.ts": "0139ff62771eec6c0f5e026ad3dd36970775e3e1eb6f008abd88eaaff78c5cd0",
+    "src/browser/curriculum.ts": "f1b25d0ca07840ff8d793ba59a82405ab9765f94c2a2e3319b7177c8b86e838c",
+    "src/browser/projects.mjs": "550e413089cc4f965539dd19ff588c42b907c782ab04d2b4dfda13ddc3e4bda1",
+    "src/utils/sandbox.ts": "56cc8bcdf7c7e984a18824b62962f00d157f2c26ad8ef2250154cf560045f23c",
+    "src/v3/worker.mjs": "597b149a6657a51459026a2ad66d5f1d1ede26120773693e7c595803d6da4101",
+    "src/v3/runtime.ts": "ba4be2b43aeebe63720e3d9876aab59b64033ffd25770e0e751732a362d1db45",
+    "src/v3/mock.mjs": "eb07c508d0c2bc5e6e1badceb1b92515c4710d3681d5697b43002689bc59e659",
+    "src/config/teacher.ts": "5d16ba32117c1c3933908b72307d033f48ec6de0e191efb15d840bfad7193bbb",
+    "src/styles.css": "730e6e731e5fbd990abfd450cf1be5d6b5820c3a1c6171f5259ee25b201e7bdc"
+  }
+}

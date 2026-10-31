@@ -89,3 +89,20 @@ Baseline: 5e07e28. The original nine-chapter registry is byte-equivalent after r
 Native mode is explicitly for ordinary classroom snippets, not hostile-code execution. Cooperative guards cannot guarantee handling of all native blocking calls or memory exhaustion. CSP restricts ordinary subresources/form navigation; frame self-navigation is outside its guarantees. The original restricted worker runners remain available and unchanged. Storage/cookies are explicitly labeled learning facades/models, not access to the real app origin or a backend.
 
 Deployment uses the existing main-branch Pages workflow. Rollback for this follow-up is its single release commit; the prior working release is 5e07e28. No backend migration or old progress deletion is involved.
+
+## V4 release verification — 2026-11-01
+
+Baseline 7e79e25; no new dependencies.
+
+- npm test: **49 passed, zero failed**. Exact original chapter 1–14 object preservation and protected-source hashes; closure independence; scope/TDZ and parameter/context trace outputs; strict/arrow/bound/class receivers; actual Promise ordering/adoption/recovery/combinators; CRUD/status/schema validation; exported offline adapter/abort; live allowlist/CSP boundaries; new assessment IDs and old/new progress round trips.
+- /tests/v4-browser.html: **47 deterministic checks passed, zero failed**, including all 25 unit sources, eight project interaction sequences, HTTP/type/parse/network/CORS failures, stale ownership, abort/204/origin isolation, sequential/concurrent user requests, existing module top-level this/await, clone-only inspector IDs, real React concept switching/counter/trace controls and existing Quiz feedback/callbacks. Its separate live-provider action passed **3 real provider checks** (JSONPlaceholder, Open-Meteo and TVMaze).
+- Preserved /tests/native-browser.html: **35 passed, zero failed**. Rendered-text test waits for initial frame layout without changing the curriculum or expected text.
+- Preserved /tests/v3-browser.html: **31 passed, zero failed**, including worker termination/isolation, module and previous project/form behavior.
+- Production TypeScript/Vite build passed without chunk-size warnings. Advanced data has its own chunk. Relative Pages URLs and absence of the private classroom code in built assets were checked.
+- Actual UI: private teacher unlock; V4 field notes with exact source; classroom timer start and return to Student; Promise adoption pending → fulfilled; separate counter A/B updates; removal of stale visualizers after switching; real live result, cached-live label, explicit mocked fallback and correct offline-default label.
+- Production preview at **375 × 812**: document client/scroll width both 360px (375px window including scrollbar), no horizontal page overflow; closure controls/lesson layout remain usable. Temporary viewport override reset afterward.
+- Actual Download source produced a five-file V4 ZIP. It was extracted and served independently: user search retrieved Asha/Dev then paginated to Mira/Sam through its labeled offline adapter, without JS Lab or a server API.
+
+Live checks confirm behavior at verification time, not future service uptime or cross-browser certification. No Firefox/Safari or physical-device claim. No telemetry/central monitoring backend is installed; no error-rate or latency guarantees are invented. Existing teacher UI lock retains its documented casual-access limitation. Native budgets remain for ordinary classroom snippets, not hostile-code guarantees.
+
+Release rollback triggers: a legacy/new chapter fails to open, native execution/worker isolation fails, teacher access behavior changes, or a live failure crashes the app. Revert the V4 release commit to restore 7e79e25 via the same Pages workflow. Existing local storage and project database schemas have not been replaced.

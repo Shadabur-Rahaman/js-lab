@@ -7,6 +7,7 @@ import { Play, Square, RotateCcw } from "lucide-react";
 import { renderSnapshot, startRuntime } from "./runtime";
 import { nativeDocument } from "../browser/native.mjs";
 import { download, zipProject } from "./files.mjs";
+import { offlineAdapterSource } from "../v4/api.mjs";
 export type BrowserExample = {
   id: string;
   title: string;
@@ -27,8 +28,10 @@ export default function BrowserLab({
   onCode,
   projectMode = false,
   engine = "bridge",
+  apiVersion = "v3",
 }: {
   engine?: "bridge" | "native";
+  apiVersion?: "v3" | "v4";
   projectMode?: boolean;
   example: BrowserExample;
   external?: { html: string; css: string; code: string };
@@ -187,7 +190,15 @@ export default function BrowserLab({
     if (engine === "native") {
       try {
         setSrcdoc(
-          nativeDocument(html, css, code, token.current, storageSeed, scenario),
+          nativeDocument(
+            html,
+            css,
+            code,
+            token.current,
+            storageSeed,
+            scenario,
+            apiVersion,
+          ),
         );
         setRunning(true);
       } catch (error) {
@@ -387,16 +398,26 @@ export default function BrowserLab({
             link.rel = "stylesheet";
             link.href = "style.css";
             d.head.append(link);
+            if (apiVersion === "v4") {
+              const adapter = d.createElement("script");
+              adapter.src = "mock-api.js";
+              d.body.append(adapter);
+            }
             const script = d.createElement("script");
             script.src = "app.js";
             d.body.append(script);
             download(
               zipProject({
+                ...(apiVersion === "v4"
+                  ? { "mock-api.js": offlineAdapterSource() }
+                  : {}),
                 "index.html": "<!doctype html>" + d.documentElement.outerHTML,
                 "style.css": css,
                 "app.js": code,
                 "README.md":
-                  "Exported educational source. Open index.html on your own origin. Preview-only mock APIs and learning storage are not included; no backend is supplied.",
+                  apiVersion === "v4"
+                    ? "# V4 exported application\n\nServe this directory with a local static server and open index.html. Deploy these same files to a static host for fictional offline practice. mock-api.js supplies a clearly labeled, per-page-run fictional /api/... service and can be removed when replacing endpoints with a real API/backend. It does not authenticate anyone or save a shared permanent database. Browser localStorage uses your own origin; JS Lab progress, teacher information and saved preview data are never exported.\n\nFor real requests, consult the provider’s current terms, schema, attribution and CORS rules. Never place a private reusable key in frontend code. Optional authenticated services need learner-owned secured infrastructure. Test normal, empty, invalid, cancelled, stale and failed states; verify keyboard focus, labels and announcements.\n"
+                    : "Exported educational source. Open index.html on your own origin. Preview-only mock APIs and learning storage are not included; no backend is supplied.",
               }),
               "browser-exercise.zip",
               "application/zip",
@@ -433,6 +454,17 @@ export default function BrowserLab({
               "slow",
               "rate",
               "invalid",
+              ...(apiVersion === "v4"
+                ? [
+                    "type",
+                    "cors",
+                    "bad",
+                    "unauthorized",
+                    "forbidden",
+                    "missing",
+                    "unavailable",
+                  ]
+                : []),
             ].map((s) => (
               <option key={s}>{s}</option>
             ))}

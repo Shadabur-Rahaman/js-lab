@@ -22,11 +22,13 @@ test("original nine chapter registry stays byte-equivalent after removing additi
   const after = fs
     .readFileSync("src/data/lessons.ts", "utf8")
     .replaceAll("\r\n", "\n")
+    .replace("import { advancedLessons } from '../v4/curriculum.ts';\n", "")
+    .replace("\nlessons.push(...advancedLessons);", "")
     .replace("import { browserLessons } from './browserLessons.ts';\n", "")
     .replace("\nlessons.push(...browserLessons);", "");
   assert.equal(createHash("sha256").update(after).digest("hex"), before);
   assert.deepEqual(
-    lessons.map((l) => l.id),
+    lessons.slice(0,14).map((l) => l.id),
     Array.from({ length: 14 }, (_, i) => i + 1),
   );
 });

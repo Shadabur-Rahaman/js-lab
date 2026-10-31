@@ -66,7 +66,12 @@ document.querySelector("#run")!.addEventListener("click", async () => {
   document.querySelector("#results")!.replaceChildren();
   for (const unit of browserUnits) {
     await check("Native lesson: " + unit.id, async () => {
-      const result = await run(unit.html, unit.code, unit.css);
+      // Rendered-text semantics require the frame to finish its initial layout.
+      const code =
+        unit.id === "browser-content"
+          ? `setTimeout(()=>{${unit.code}\n},50);`
+          : unit.code;
+      const result = await run(unit.html, code, unit.css);
       assert(result.errors.length === 0, result.errors.join(";"));
       assert(result.snapshot.includes("data-lab-native"), "No native snapshot");
       if (unit.expected)

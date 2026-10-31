@@ -170,6 +170,10 @@ export const languageUnits = [
   ),
 ];
 export const newTopics = [
+  ["advanced", "V4 advanced roadmap", "Scope → execution → this → async → Fetch → real APIs."],
+  ["advanced-projects", "V4 application academy", "Eight advanced applications with editable source and independent practice."],
+  ["live-api", "Live API Lab", "Optional controlled public data; offline practice stays available."],
+  ["v4-final", "V4 final challenge", "Assess all five advanced areas with the existing quiz engine."],
   [
     "browser-projects",
     "Browser applications",

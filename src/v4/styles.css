@@ -1,0 +1,43 @@
+.v4-current {
+  border-color: var(--yellow, #f3dc58);
+  box-shadow: inset 3px 0 var(--yellow, #f3dc58);
+}
+.v4-source {
+  white-space: pre-wrap;
+}
+.v4-source span {
+  display: inline;
+}
+.v4-source .v4-line {
+  background: #5c512b;
+  color: #fff7cb;
+}
+.v4-value {
+  display: block;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 12px 0;
+}
+.v4-learning .v3-card input,
+.v4-learning .v3-card select,
+.v4-learning .v3-card textarea {
+  max-width: 100%;
+}
+.v4-learning .v3-card pre {
+  overflow: auto;
+}
+.v4-learning .v3-card label {
+  display: block;
+  margin: 12px 0;
+}
+@media (max-width: 700px) {
+  .v4-learning .v3-card .controls {
+    gap: 8px;
+  }
+  .v4-learning .v3-card .button {
+    max-width: 100%;
+  }
+  .v4-source {
+    font-size: 12px;
+  }
+}

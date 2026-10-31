@@ -1,3 +1,6 @@
+import { AdvancedHub, AdvancedFinal } from "../v4/Hub";
+import AdvancedProjects from "../v4/AdvancedProjects";
+import LiveApiLab from "../v4/LiveApiLab";
 import BrowserProjects from "../browser/BrowserProjects";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, BookOpen } from "lucide-react";
@@ -62,7 +65,13 @@ export default function Academy({
   return (
     <div className="v3-academy">
       <div className="page-intro">
-        <span className="eyebrow">JS LAB V3 · THE NEXT LAYER</span>
+        <span className="eyebrow">
+          {["advanced", "advanced-projects", "live-api", "v4-final"].includes(
+            section,
+          )
+            ? "JS LAB V4 · ADVANCED DEVELOPMENT"
+            : "JS LAB V3 · THE NEXT LAYER"}
+        </span>
         <h1>
           {topic?.[1] || "From first steps to applications"}
           <span className="title-dot">.</span>
@@ -99,7 +108,24 @@ export default function Academy({
           Resume last V3 activity <ArrowRight size={14} />
         </a>
       )}
-      {section === "zero" ? (
+      {section === "advanced" ? (
+        <AdvancedHub
+          teacher={teacher}
+          legacy={legacy}
+          completed={progress.completed}
+          done={done}
+        />
+      ) : section === "advanced-projects" ? (
+        <AdvancedProjects
+          teacher={teacher}
+          onAnswer={onAnswer}
+          onComplete={done}
+        />
+      ) : section === "live-api" ? (
+        <LiveApiLab />
+      ) : section === "v4-final" ? (
+        <AdvancedFinal onAnswer={onAnswer} done={done} teacher={teacher} />
+      ) : section === "zero" ? (
         <>
           <section className="v3-card">
             <span className="eyebrow">
@@ -217,6 +243,14 @@ export default function Academy({
           merge={(p) => setProgress((v) => mergeAcademy(v, p))}
         />
       ) : null}
+      {section === "roadmap" && (
+        <AdvancedHub
+          teacher={teacher}
+          legacy={legacy}
+          completed={progress.completed}
+          done={done}
+        />
+      )}
       {teacher && <Classroom section={section} />}
       <div className="v3-next">
         <p>Predict → code → run → debug → apply → revise.</p>

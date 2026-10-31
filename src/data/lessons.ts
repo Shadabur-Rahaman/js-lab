@@ -1,3 +1,4 @@
+import { advancedLessons } from '../v4/curriculum.ts';
 import { browserLessons } from './browserLessons.ts';
 import { v2Comparisons } from './v2Comparisons.ts';
 import { newLessons } from './newLessons.ts';
@@ -134,6 +135,7 @@ export const arena: Question[] = [
 ];
 lessons.push(...newLessons);
 lessons.push(...browserLessons);
+lessons.push(...advancedLessons);
 export const comparisons = [
  {a:'let',b:'const',left:'A binding that can be reassigned. Use for counters and changing scores.',right:'A binding that cannot be reassigned. Use for values you do not replace. Objects inside can still change.',code:'let score = 1; score = 2;\nconst course = "JS"; // no reassignment'},
  {a:'=',b:'===',left:'Assigns a value. It changes what a variable stores.',right:'Compares without type conversion. It produces true or false.',code:'let age = 18;\nconsole.log(age === 18); // true'},

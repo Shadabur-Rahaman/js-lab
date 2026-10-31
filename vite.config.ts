@@ -41,6 +41,7 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
+          "curriculum-v4": ["./src/v4/curriculum.ts"],
           "v3-worker": ["virtual:v3-worker-source"],
           "react-vendor": ["react", "react-dom"],
           "motion-vendor": ["motion/react"],

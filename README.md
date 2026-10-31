@@ -71,3 +71,9 @@ No external fonts or image services are required at runtime. After dependencies 
 ## Browser mastery path
 
 Chapters 10–14 add native DOM, events, forms, timers and isolated storage learning. Eight editable browser application references are at #academy/browser-projects. See BROWSER_GAP_AUDIT.md and CURRICULUM_V3.md for coverage and execution limits. Native browser checks run at /tests/native-browser.html under the development server; prior V3 browser regressions remain at /tests/v3-browser.html. These harnesses are development-only and are not part of the published site.
+
+## V4 advanced JavaScript and API development
+
+Chapters 15–19 deepen scope/execution/closures, this/binding, async/Promises, HTTP/Fetch and API applications. Development academy includes the V4 roadmap, eight advanced projects, final challenge and optional controlled Live API Lab. Earlier runners and mock exercises retain their boundaries. See [CURRICULUM_V4.md](CURRICULUM_V4.md) and [V4_IMPLEMENTATION.md](V4_IMPLEMENTATION.md) for the additive map, provider conditions and limits.
+
+V4 source downloads include a labeled fictional API adapter for standalone static practice. Real API mode is restricted to approved fixed requests in a separate integration; arbitrary editable student code remains offline. Private-key services and a backend are not included. Run /tests/v4-browser.html on the dev server for deterministic checks; its live-provider button is optional and separate from CI.

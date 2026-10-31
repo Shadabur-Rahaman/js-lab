@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { ArrowLeft, ArrowRight, CheckCircle2 } from "lucide-react";
 import { browserUnits, chapterInfo, type BrowserUnit } from "./curriculum";
 import BrowserLab from "../v3/BrowserLab";
 import Quiz from "../components/Quiz";
 import StorageExplorer from "./StorageExplorer";
 import { lessons } from "../data/lessons";
+import { LESSON_COUNT } from "../data/catalog.mjs";
 
 export function useLearningStorage(scope: string) {
   const key = "js-lab-native-exercise:" + scope;
@@ -48,9 +49,11 @@ export function useLearningStorage(scope: string) {
 export function NativeExercise({
   unit,
   debug = false,
+  apiVersion = "v3",
 }: {
   unit: BrowserUnit;
   debug?: boolean;
+  apiVersion?: "v3" | "v4";
 }) {
   const store = useLearningStorage(unit.id);
   return (
@@ -63,6 +66,7 @@ export function NativeExercise({
       <BrowserLab
         key={unit.id + debug}
         engine="native"
+        apiVersion={apiVersion}
         storageSeed={store.saved}
         onStorage={store.save}
         example={{
@@ -93,6 +97,7 @@ export default function BrowserChapter({
   onConcept,
   onAnswer,
   onComplete,
+  extension,
 }: {
   id: number;
   teacher: boolean;
@@ -101,9 +106,16 @@ export default function BrowserChapter({
   onConcept: (id: string) => void;
   onAnswer: (id: string, correct: boolean) => void;
   onComplete: () => void;
+  extension?: {
+    units: BrowserUnit[];
+    chapters: typeof chapterInfo;
+    renderTool: (u: BrowserUnit) => ReactNode;
+  };
 }) {
-  const meta = chapterInfo.find((c) => c.id === id)!;
-  const units = browserUnits.filter((u) => u.chapter === id);
+  const meta = (extension?.chapters || chapterInfo).find((c) => c.id === id)!;
+  const units = (extension?.units || browserUnits).filter(
+    (u) => u.chapter === id,
+  );
   const [tab, setTab] = useState("Discover"),
     [selected, setSelected] = useState(units[0].id);
   const unit = units.find((u) => u.id === selected)!;
@@ -115,10 +127,16 @@ export default function BrowserChapter({
           <ArrowLeft size={14} />
           The learning path
         </a>
-        <span>CHAPTER {id} OF 14</span>
+        <span>
+          CHAPTER {id} OF {LESSON_COUNT}
+        </span>
       </div>
       <div className="page-intro lesson-intro">
-        <span className="eyebrow">BROWSER DEVELOPMENT · YOUR NEXT LAYER</span>
+        <span className="eyebrow">
+          {extension
+            ? "V4 · ADVANCED JAVASCRIPT & API DEVELOPMENT"
+            : "BROWSER DEVELOPMENT · YOUR NEXT LAYER"}
+        </span>
         <h1>
           {meta.title}
           <span className="title-dot">.</span>
@@ -184,6 +202,11 @@ export default function BrowserChapter({
               <p>
                 <b>Remember:</b> {u.recap}
               </p>
+              {"related" in u && (
+                <p>
+                  <b>Connect the ideas:</b> {String(u.related)}
+                </p>
+              )}
               <div className="controls wrap">
                 <button
                   className="button primary small"
@@ -219,14 +242,23 @@ export default function BrowserChapter({
           </label>
           {tab === "Experiment" ? (
             <>
-              <NativeExercise key={unit.id} unit={unit} />
+              {extension?.renderTool(unit)}
+              <NativeExercise
+                key={unit.id}
+                unit={unit}
+                apiVersion={extension ? "v4" : "v3"}
+              />
               {id === 14 && <StorageExplorer />}
               <div className="v3-card">
                 <h3>Build something useful</h3>
                 <p>{unit.task}</p>
                 <a
                   className="button secondary small"
-                  href="#academy/browser-projects"
+                  href={
+                    extension
+                      ? "#academy/advanced-projects"
+                      : "#academy/browser-projects"
+                  }
                 >
                   Browser applications — build real things{" "}
                   <ArrowRight size={14} />
@@ -239,7 +271,12 @@ export default function BrowserChapter({
               <Quiz question={unit.questions[1]} onAnswer={onAnswer} />
               <h2>Observe, hypothesize, fix, verify.</h2>
               <p>{unit.hint}</p>
-              <NativeExercise key={unit.id} unit={unit} debug />
+              <NativeExercise
+                key={unit.id}
+                unit={unit}
+                debug
+                apiVersion={extension ? "v4" : "v3"}
+              />
               <div className="callout">
                 <span className="eyebrow">APPLY & RECAP</span>
                 <p>
@@ -279,6 +316,30 @@ export default function BrowserChapter({
       <details className="v3-card">
         <summary>Read the original documentation</summary>
         <ul>
+          {extension && (
+            <>
+              <li>
+                <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures">
+                  MDN: closures and lexical scope
+                </a>
+              </li>
+              <li>
+                <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this">
+                  MDN: this and invocation
+                </a>
+              </li>
+              <li>
+                <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises">
+                  MDN: Promise coordination
+                </a>
+              </li>
+              <li>
+                <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch">
+                  MDN: Fetch and response handling
+                </a>
+              </li>
+            </>
+          )}
           <li>
             <a href="https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model">
               MDN: the DOM
@@ -323,9 +384,13 @@ export default function BrowserChapter({
         </a>
         <a
           className="text-button"
-          href={id === 14 ? "#academy/browser-projects" : "#lesson/" + (id + 1)}
+          href={
+            id === LESSON_COUNT
+              ? "#academy/advanced-projects"
+              : "#lesson/" + (id + 1)
+          }
         >
-          {id === 14 ? "Browser applications" : "Next chapter"}
+          {id === LESSON_COUNT ? "Advanced applications" : "Next chapter"}
           <ArrowRight size={14} />
         </a>
       </div>
@@ -350,6 +415,7 @@ function UnitTeacher({ unit: u }: { unit: BrowserUnit }) {
         <div>
           <span className="eyebrow">SHOW · ASK · EXPECT</span>
           <p>Show the native experiment: {u.how.join(" ")}</p>
+          {u.id.startsWith("v4-") && <pre className="code">{u.code}</pre>}
           <p>Ask: {u.questions[0].prompt}</p>
           <p>Expected answer: {u.questions[0].explanation}</p>
           <p>Common mistake: {u.misconception}</p>
@@ -361,8 +427,10 @@ function UnitTeacher({ unit: u }: { unit: BrowserUnit }) {
           <p>Independent practice/homework: {u.task}</p>
           <p>Recap: {u.recap}</p>
           <p>
-            Transition: connect the selected document data to an event,
-            validation, timer or persistent state in the browser projects.
+            Transition:{" "}
+            {"related" in u
+              ? String(u.related)
+              : "Connect the selected document data to an event, validation, timer or persistent state in the browser projects."}
           </p>
         </div>
       </div>

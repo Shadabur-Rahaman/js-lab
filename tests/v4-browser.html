@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>JS LAB V4 browser verification</title>
+    <style>
+      body {
+        font: 16px/1.6 system-ui;
+        padding: 24px;
+        background: #17191e;
+        color: #eee;
+      }
+      .pass {
+        color: #a8d9ab;
+      }
+      .fail {
+        color: #ffb7a2;
+      }
+      #frames {
+        position: fixed;
+        right: 12px;
+        top: 12px;
+        background: white;
+        color: black;
+      }
+      iframe {
+        width: 440px;
+        height: 220px;
+      }
+      button {
+        padding: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>JS LAB V4 browser verification</h1>
+    <button id="run">Run deterministic V4 checks</button
+    ><button id="live">Check approved live providers</button>
+    <p id="status">Ready</p>
+    <ol id="results"></ol>
+    <div id="frames"></div>
+    <script type="module" src="./v4-browser.ts"></script>
+  </body>
+</html>

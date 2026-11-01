@@ -12,6 +12,15 @@ await build({
     {
       name: "resource-test-fixtures",
       setup(builder) {
+        builder.onResolve({ filter: /\.mjs\?url$/ }, () => ({
+          path: "pdf-worker-url",
+          namespace: "worker-url",
+        }));
+        builder.onLoad({ filter: /.*/, namespace: "worker-url" }, () => ({
+          contents:
+            'export default "/node_modules/pdfjs-dist/legacy/build/pdf.worker.min.mjs";',
+          loader: "js",
+        }));
         builder.onResolve({ filter: /\/client$/ }, (args) => {
           if (args.importer.replaceAll("\\", "/").includes("/src/resources/"))
             return { path: path.resolve("tests/resources-fixture-client.ts") };

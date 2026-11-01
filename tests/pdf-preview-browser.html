@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>PDF rendering verification</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+    <link rel="stylesheet" href="./pdf-preview-browser.bundle.css" />
+    <style>
+      body {
+        padding: 24px;
+      }
+      .pass {
+        color: #8bd7b2;
+      }
+      .fail {
+        color: #efbba8;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>PDF rendering verification</h1>
+    <p>
+      Local-only verification of authorized classroom PDFs. No document is sent
+      to another preview service.
+    </p>
+    <button id="run" class="button primary">Run PDF rendering checks</button
+    ><select id="document" aria-label="Test PDF"></select
+    ><button id="open" class="button secondary">Open selected PDF</button>
+    <p id="status">Ready</p>
+    <ol id="results"></ol>
+    <div id="mount"></div>
+    <script type="module" src="./pdf-preview-browser.bundle.js"></script>
+  </body>
+</html>

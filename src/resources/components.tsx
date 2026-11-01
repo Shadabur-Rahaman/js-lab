@@ -1,4 +1,12 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import {
+  lazy,
+  Suspense,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
+const PdfPreview = lazy(() => import("./PdfPreview"));
 import { FileText, Download, Eye, X } from "lucide-react";
 import { lessons } from "../data/lessons";
 import {
@@ -222,6 +230,7 @@ export function Preview({
     ext = extension(resource),
     isText = ["txt", "md", "csv"].includes(ext);
   useEffect(() => {
+    if (ext === "pdf") return;
     let active = true;
     const control = new AbortController();
     setUrl("");
@@ -252,14 +261,16 @@ export function Preview({
       active = false;
       control.abort();
     };
-  }, [resource.id, attempt]);
+  }, [resource.id, resource.version, attempt, ext]);
   return (
     <Modal title={resource.title} onClose={onClose}>
       <p>
         {resource.original_filename} · {size(resource.file_size)}
       </p>
       <p className="muted">
-        Preview links last one minute. Retry to open a fresh link.
+        {ext === "pdf"
+          ? "Use the page and zoom controls below. Retry preview if loading fails."
+          : "Preview links last one minute. Retry to open a fresh link."}
       </p>
       <div className="resource-actions">
         <button
@@ -268,7 +279,7 @@ export function Preview({
         >
           Retry preview
         </button>
-        {!isText && (
+        {!isText && ext !== "pdf" && (
           <>
             <button
               className="button secondary"
@@ -291,17 +302,22 @@ export function Preview({
       </div>
       <Notice error={error} />
       <div className="resource-preview" ref={viewer}>
-        {!url && !error && <p role="status">Opening preview…</p>}
-        {url &&
+        {ext === "pdf" ? (
+          <Suspense fallback={<p role="status">Opening PDF viewer…</p>}>
+            <PdfPreview
+              key={resource.id + ":" + resource.version + ":" + attempt}
+              resource={resource}
+              attempt={attempt}
+            />
+          </Suspense>
+        ) : null}
+        {ext !== "pdf" && !url && !error && (
+          <p role="status">Opening preview…</p>
+        )}
+        {ext !== "pdf" &&
+          url &&
           (isText ? (
             <pre>{text}</pre>
-          ) : ext === "pdf" ? (
-            <iframe
-              title={resource.title + " PDF preview"}
-              src={url + "#toolbar=1&zoom=" + Math.round(zoom * 100)}
-              sandbox="allow-scripts"
-              referrerPolicy="no-referrer"
-            />
           ) : (
             <img
               src={url}

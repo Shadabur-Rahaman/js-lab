@@ -12,3 +12,5 @@ supabase/.branches/
 resource-backups/
 tests/resources-browser.bundle.js
 tests/resources-browser.bundle.css
+tests/pdf-preview-browser.bundle.js
+tests/pdf-preview-browser.bundle.css

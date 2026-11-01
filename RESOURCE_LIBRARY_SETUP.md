@@ -2,7 +2,7 @@
 
 JS LAB stays at https://shadabur-rahaman.github.io/js-lab/. Supabase provides teacher accounts, Postgres metadata, private file storage and two server functions. Once connected, uploads and publishing update the database immediately: **no GitHub commit or Pages deployment per file**.
 
-**Current delivery:** the integration is implemented, but no Supabase project or teacher account was supplied. Live sign-in, uploads, Storage policies and downloads have not been verified against a hosted project. The deployed site deliberately shows a setup state until configured. Existing lessons, progress, playgrounds and classroom tools work independently.
+**Connection status — 1 November 2026:** the JS LAB project is connected, the migration and both Edge Functions are deployed, and the owner-selected confirmed teacher account is authorized. Seventeen real cloud acceptance checks passed, including Auth, private Storage, uploads, downloads, replacement, trash/restore and denied unauthorized operations. The browser workflow was also checked with disposable real cloud files. See [RESOURCE_LIBRARY_VERIFICATION.md](RESOURCE_LIBRARY_VERIFICATION.md) for evidence and limits. Existing lessons, progress, playgrounds and classroom tools remain independent.
 
 ## 1. Create your project
 
@@ -37,7 +37,9 @@ insert into public.authorized_teachers(user_id, role)
 values ('REPLACE_WITH_AUTH_USER_UUID'::uuid, 'admin');
 ```
 
-Only the project owner runs this SQL. Future accounts can use role `teacher`, or `admin` if intended. Remove a mapping to revoke management rights. Sign out the old account as well. Existing short-lived file links expire separately.
+Only the project owner runs this SQL. Alternatively, from an authenticated owner terminal with the public project settings configured, run `node scripts/authorize-resource-teacher.mjs AUTH_USER_UUID --admin --confirm`. The helper verifies that the account already exists and is confirmed, records an audit entry and changes no password. Omit `--admin` for an ordinary teacher. It uses the official CLI to obtain a server credential in process memory; credentials are never printed or saved. Future accounts can use role `teacher`, or `admin` if intended. Remove a mapping to revoke management rights. Sign out the old account as well. Existing short-lived file links expire separately.
+
+The committed `supabase/config.toml` declares global signup disabled but keeps the hosted email provider enabled. These are different switches: setting `auth.email.enable_signup=false` on the hosted provider disables email sign-in too. Use `supabase config diff --project-ref YOUR_PROJECT_REF` to review, then `supabase config push --project-ref YOUR_PROJECT_REF` to apply declared settings only. Live tests assert email sign-in is enabled and public self-registration is blocked.
 
 In Authentication → URL Configuration, set Site URL to `https://shadabur-rahaman.github.io/js-lab/` and allow the exact recovery redirect `https://shadabur-rahaman.github.io/js-lab/?resource-recovery=1`. For local testing also allow `http://127.0.0.1:5177/?resource-recovery=1` (or your chosen port). The app uses PKCE; open the recovery email in the browser that requested it. Configure email templates to preserve the provider's confirmation redirect flow. Test an actual recovery email before relying on it.
 
@@ -88,7 +90,9 @@ Each download requests a fresh signed URL valid for 60 seconds and preserves the
 
 Replaced files are retained for 7 days. Trash can be restored for 30 days. Upload reservations expire after one hour. Cleanup first invalidates eligible records transactionally, then removes bytes through the Storage API. Failed deletions stay queued for another run. Unfinished TUS upload chunks are governed by the provider's separate upload expiry (currently 24 hours); cancelling a reservation does not guarantee immediate removal of every incomplete chunk.
 
-Until you configure a schedule, an admin must use **Run scheduled retention cleanup** periodically. To automate, enable Supabase Cron (`pg_cron`) and `pg_net`, store `resource_maintenance_url` (the full `/functions/v1/resource-maintenance` URL) and `resource_maintenance_secret` in Supabase Vault, then run this SQL in the project:
+**Current project:** daily cleanup is enabled with the owner’s explicit approval, at 03:20 UTC (08:50 Asia/Calcutta). The endpoint and an actual database HTTP request returned success. Replaced versions become eligible after 7 days; trashed resources after 30 days. To reproduce the approved setup in another project, run `node scripts/configure-resource-retention.mjs --confirm` from an authenticated owner terminal. The helper generates a private Edge secret, stores encrypted Vault values, schedules the job and removes temporary transfer files. Do not run it without approving permanent recurring retention cleanup.
+
+Without a schedule, an admin must use **Run scheduled retention cleanup** periodically. For a manual setup, enable Supabase Cron (`pg_cron`) and `pg_net`, store `resource_maintenance_url` (the full `/functions/v1/resource-maintenance` URL) and `resource_maintenance_secret` in Supabase Vault, then run this SQL in the project:
 
 ```sql
 select cron.schedule('js-lab-resource-retention', '20 3 * * *', $$
@@ -103,7 +107,7 @@ select cron.schedule('js-lab-resource-retention', '20 3 * * *', $$
 $$);
 ```
 
-Create each Vault value only once; avoid duplicate names. Inspect Cron history, Edge logs and `net._http_response` after the first run. A schedule entry alone does not prove the HTTP request succeeded. Rotate the maintenance secret if disclosed. No cleanup schedule has been created for you.
+Create each Vault value only once; avoid duplicate names. Inspect Cron history, Edge logs and `net._http_response` after the first run. A schedule entry alone does not prove the HTTP request succeeded. Rotate the maintenance secret if disclosed. The current project’s schedule is already configured. Vault encrypts secrets at rest, but pg_net temporarily places request headers in its queue; trusted database-login roles can read that queue. It is not exposed through the public Data API. Do not issue database-login credentials to untrusted clients.
 
 ## 8. Back up metadata AND file bytes
 

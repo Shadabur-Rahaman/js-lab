@@ -4,6 +4,7 @@ import {
   GlobalWorkerOptions,
   getDocument,
   type PDFDocumentProxy,
+  type PDFPageProxy,
   type RenderTask,
 } from "pdfjs-dist/legacy/build/pdf.mjs";
 import workerUrl from "pdfjs-dist/legacy/build/pdf.worker.min.mjs?url";
@@ -19,26 +20,18 @@ export default function PdfPreview({
   resource: Resource;
   attempt: number;
 }) {
-  const container = useRef<HTMLDivElement>(null),
-    surface = useRef<HTMLDivElement>(null);
+  const container = useRef<HTMLDivElement>(null);
   const [pdf, setPdf] = useState<PDFDocumentProxy | null>(null),
-    [page, setPage] = useState(1),
-    [zoom, setZoom] = useState(1),
+    [ratio, setRatio] = useState(1.414),
     [width, setWidth] = useState(600),
     [error, setError] = useState(""),
-    [status, setStatus] = useState("Loading PDF…"),
-    [rendered, setRendered] = useState(false);
-  const [accessibleText, setAccessibleText] = useState("");
+    [retry, setRetry] = useState(0);
   useEffect(() => {
     let active = true;
     const controller = new AbortController();
     let task: ReturnType<typeof getDocument> | undefined;
     setPdf(null);
-    setPage(1);
     setError("");
-    setStatus("Loading PDF…");
-    setRendered(false);
-    setAccessibleText("");
     void (async () => {
       try {
         const data = await pdfBytes(
@@ -48,8 +41,7 @@ export default function PdfPreview({
         );
         if (!active) return;
         const assets = new URL("./pdf-assets/", document.baseURI).href;
-        // Canvas-only rendering: no scripting manager, HTML forms, links, XFA or
-        // annotation actions are instantiated. PDF content is never app HTML.
+        // Only canvas and escaped text: no PDF scripting, forms or link actions.
         task = getDocument({
           data,
           cMapUrl: assets + "cmaps/",
@@ -61,20 +53,19 @@ export default function PdfPreview({
           canvasMaxAreaInBytes: 32 * 1024 * 1024,
         });
         const loaded = await task.promise;
+        const first = await loaded.getPage(1),
+          viewport = first.getViewport({ scale: 1 });
         if (active) {
+          setRatio(viewport.width / viewport.height);
           setPdf(loaded);
-          setStatus("Rendering PDF…");
         }
       } catch (e) {
-        if (active) {
+        if (active)
           setError(
             (e as Error).name === "PasswordException"
               ? "This PDF is password-protected. Download it to open with its password."
-              : (e as Error).message ||
-                  "PDF preview failed. Retry or download the original.",
+              : "PDF could not be loaded. Please retry or download the original.",
           );
-          setStatus("");
-        }
       }
     })();
     return () => {
@@ -82,154 +73,192 @@ export default function PdfPreview({
       controller.abort();
       void task?.destroy().catch(() => {});
     };
-  }, [resource.id, resource.version, attempt]);
+  }, [resource.id, resource.version, attempt, retry]);
   useEffect(() => {
     const element = container.current;
     if (!element) return;
-    const observer = new ResizeObserver((entries) =>
-      setWidth(Math.max(100, Math.floor(entries[0].contentRect.width))),
+    const observer = new ResizeObserver(() =>
+      setWidth(Math.max(100, element.clientWidth)),
     );
     observer.observe(element);
     return () => observer.disconnect();
   }, []);
+  return (
+    <section className="resource-pdf" aria-label="PDF document viewer">
+      {error ? (
+        <div className="resource-notice" role="alert">
+          <p>{error}</p>
+          <button
+            className="button secondary"
+            onClick={() => setRetry((n) => n + 1)}
+          >
+            Retry preview
+          </button>
+        </div>
+      ) : !pdf ? (
+        <p className="resource-pdf-status" role="status">
+          Loading PDF…
+        </p>
+      ) : null}
+      <div
+        className="resource-pdf-pages"
+        ref={container}
+        role="region"
+        aria-label="PDF pages"
+        tabIndex={0}
+        aria-busy={!pdf && !error}
+      >
+        {pdf &&
+          Array.from({ length: pdf.numPages }, (_, i) => (
+            <PdfPage
+              key={i + 1}
+              pdf={pdf}
+              number={i + 1}
+              title={resource.title}
+              width={width}
+              ratio={ratio}
+              root={container.current}
+            />
+          ))}
+      </div>
+    </section>
+  );
+}
+
+function PdfPage({
+  pdf,
+  number,
+  title,
+  width,
+  ratio,
+  root,
+}: {
+  pdf: PDFDocumentProxy;
+  number: number;
+  title: string;
+  width: number;
+  ratio: number;
+  root: HTMLDivElement | null;
+}) {
+  const frame = useRef<HTMLDivElement>(null),
+    surface = useRef<HTMLDivElement>(null);
+  const [near, setNear] = useState(false),
+    [pageRatio, setPageRatio] = useState(ratio),
+    [rendered, setRendered] = useState(false),
+    [error, setError] = useState(""),
+    [text, setText] = useState("");
   useEffect(() => {
-    if (!pdf) return;
-    let active = true,
-      render: RenderTask | undefined;
-    // A fresh canvas per render avoids overlapping PDF.js render tasks when a
-    // user rapidly changes page/zoom or resizes the dialog.
-    const target = document.createElement("canvas");
-    target.setAttribute("role", "img");
-    target.setAttribute(
-      "aria-label",
-      `${resource.title}, PDF page ${page} of ${pdf.numPages}`,
+    const observer = new IntersectionObserver(
+      (entries) => setNear(entries[0].isIntersecting),
+      { root, rootMargin: "800px 0px" },
     );
-    if (!surface.current) return;
-    setError("");
+    if (frame.current) observer.observe(frame.current);
+    return () => observer.disconnect();
+  }, [root]);
+  useEffect(() => {
+    if (!near) {
+      surface.current?.replaceChildren();
+      setRendered(false);
+      setText("");
+      return;
+    }
+    let active = true,
+      render: RenderTask | undefined,
+      page: PDFPageProxy | undefined;
+    const canvas = document.createElement("canvas");
+    canvas.setAttribute("role", "img");
+    canvas.setAttribute(
+      "aria-label",
+      `${title}, PDF page ${number} of ${pdf.numPages}`,
+    );
     setRendered(false);
-    setStatus(`Rendering page ${page}…`);
-    setAccessibleText("");
+    setError("");
     void (async () => {
       try {
-        const pdfPage = await pdf.getPage(page);
+        page = await pdf.getPage(number);
         if (!active) return;
-        const base = pdfPage.getViewport({ scale: 1 });
-        const bounds = pdfViewport(
-          base.width,
-          base.height,
-          width,
-          zoom,
-          window.devicePixelRatio || 1,
-        );
-        const viewport = pdfPage.getViewport({ scale: bounds.scale });
-        target.width = bounds.pixelWidth;
-        target.height = bounds.pixelHeight;
-        target.style.width = bounds.cssWidth + "px";
-        target.style.height = bounds.cssHeight + "px";
-        render = pdfPage.render({
-          canvas: target,
-          viewport,
+        const base = page.getViewport({ scale: 1 }),
+          bounds = pdfViewport(
+            base.width,
+            base.height,
+            width,
+            1,
+            window.devicePixelRatio || 1,
+          );
+        setPageRatio(base.width / base.height);
+        canvas.width = bounds.pixelWidth;
+        canvas.height = bounds.pixelHeight;
+        canvas.style.width = bounds.cssWidth + "px";
+        canvas.style.height = bounds.cssHeight + "px";
+        render = page.render({
+          canvas,
+          viewport: page.getViewport({ scale: bounds.scale }),
           transform: [bounds.outputScale, 0, 0, bounds.outputScale, 0, 0],
           annotationMode: AnnotationMode.DISABLE,
           background: "#ffffff",
         });
         await render.promise;
-        if (active) {
-          surface.current?.replaceChildren(target);
-          setRendered(true);
-          setStatus(`Page ${page} of ${pdf.numPages}`);
+        if (!active) return;
+        const old = surface.current?.querySelector("canvas");
+        surface.current?.replaceChildren(canvas);
+        if (old) {
+          old.width = 0;
+          old.height = 0;
         }
+        setRendered(true);
         try {
-          const text = await pdfPage.getTextContent();
-          if (active) setAccessibleText(text.items.map((item) => ("str" in item ? item.str : "")).join(" "));
-        } catch { /* A missing text layer must not hide a successfully drawn page. */ }
-      } catch (e) {
-        if (active && (e as Error).name !== "RenderingCancelledException") {
-          setError(
-            "This PDF page could not be rendered. Retry preview or download the original.",
-          );
-          setStatus("");
+          const content = await page.getTextContent();
+          if (active)
+            setText(
+              content.items
+                .map((item) => ("str" in item ? item.str : ""))
+                .join(" "),
+            );
+        } catch {
+          /* Image-only pages do not need a text layer. */
         }
+      } catch (e) {
+        if (active && (e as Error).name !== "RenderingCancelledException")
+          setError(
+            "This page could not be displayed. Download the original to view it.",
+          );
       }
     })();
     return () => {
       active = false;
       render?.cancel();
+      const release = () => {
+        if (!canvas.isConnected) {
+          canvas.width = 0;
+          canvas.height = 0;
+        }
+        page?.cleanup();
+      };
+      if (render) void render.promise.then(release, release);
+      else release();
     };
-  }, [pdf, page, zoom, width, resource.title]);
+  }, [pdf, number, width, near, title]);
   return (
-    <section className="resource-pdf" aria-label="PDF document viewer">
-      <div className="resource-actions resource-pdf-controls">
-        <button
-          className="button secondary"
-          disabled={!pdf || page === 1}
-          onClick={() => setPage((n) => n - 1)}
-        >
-          Previous page
-        </button>
-        <span aria-live="polite">
-          {pdf ? `Page ${page} of ${pdf.numPages}` : "PDF preview"}
+    <div
+      className="resource-pdf-page"
+      ref={frame}
+      style={{ aspectRatio: pageRatio }}
+      data-page={number}
+      data-rendered={rendered ? "true" : "false"}
+      aria-busy={near && !rendered && !error}
+    >
+      <div ref={surface} />
+      {near && !rendered && !error && (
+        <span className="resource-pdf-page-loading" role="status">
+          Loading page…
         </span>
-        <button
-          className="button secondary"
-          disabled={!pdf || page === pdf.numPages}
-          onClick={() => setPage((n) => n + 1)}
-        >
-          Next page
-        </button>
-        <button
-          className="button secondary"
-          disabled={!pdf || zoom <= 0.5}
-          onClick={() => setZoom((n) => Math.max(0.5, n - 0.25))}
-          aria-label="Zoom out PDF"
-        >
-          −
-        </button>
-        <span>{Math.round(zoom * 100)}%</span>
-        <button
-          className="button secondary"
-          disabled={!pdf || zoom >= 3}
-          onClick={() => setZoom((n) => Math.min(3, n + 0.25))}
-          aria-label="Zoom in PDF"
-        >
-          +
-        </button>
-        <button
-          className="button secondary"
-          disabled={!pdf}
-          onClick={() => setZoom(1)}
-        >
-          Fit to width
-        </button>
-        <button
-          className="button secondary"
-          onClick={async () => { try { const target=container.current?.parentElement;if(!target?.requestFullscreen)throw Error();await target.requestFullscreen(); }catch{setError('Fullscreen is unavailable.');} }}
-        >
-          Fullscreen
-        </button>
-      </div>
+      )}
       {error && (
         <p className="resource-notice" role="alert">
           {error}
         </p>
       )}
-      <p className="resource-pdf-status" role="status">
-        {status}
-      </p>
-      <div
-        className="resource-pdf-pages"
-        ref={container}
-        data-rendered={rendered ? "true" : "false"}
-        aria-busy={!rendered}
-      >
-        <div ref={surface} />
-      </div>
-      {accessibleText && (
-        <details className="resource-pdf-text">
-          <summary>Read page text</summary>
-          <p>{accessibleText}</p>
-        </details>
-      )}
-    </section>
+      {text && <p className="resource-pdf-page-text">{text}</p>}
+    </div>
   );
 }

@@ -30,10 +30,12 @@ export function Modal({
   title,
   onClose,
   children,
+  className = "",
 }: {
   title: string;
   onClose: () => void;
   children: ReactNode;
+  className?: string;
 }) {
   const ref = useRef<HTMLDialogElement>(null);
   useEffect(() => {
@@ -48,7 +50,7 @@ export function Modal({
   return (
     <dialog
       ref={ref}
-      className="resource-dialog"
+      className={"resource-dialog " + className}
       aria-label={title}
       onCancel={(e) => {
         e.preventDefault();
@@ -263,22 +265,46 @@ export function Preview({
     };
   }, [resource.id, resource.version, attempt, ext]);
   return (
-    <Modal title={resource.title} onClose={onClose}>
+    <Modal
+      title={resource.title}
+      onClose={onClose}
+      className={ext === "pdf" ? "resource-dialog-pdf" : ""}
+    >
       <p>
         {resource.original_filename} · {size(resource.file_size)}
       </p>
       <p className="muted">
         {ext === "pdf"
-          ? "Use the page and zoom controls below. Retry preview if loading fails."
+          ? "Scroll down to read the whole PDF."
           : "Preview links last one minute. Retry to open a fresh link."}
       </p>
       <div className="resource-actions">
-        <button
-          className="button secondary"
-          onClick={() => setAttempt((n) => n + 1)}
-        >
-          Retry preview
-        </button>
+        {ext !== "pdf" && (
+          <button
+            className="button secondary"
+            onClick={() => setAttempt((n) => n + 1)}
+          >
+            Retry preview
+          </button>
+        )}
+        {ext === "pdf" && (
+          <>
+            <button
+              className="button secondary"
+              onClick={async () => {
+                try {
+                  if (!viewer.current?.requestFullscreen) throw Error();
+                  await viewer.current.requestFullscreen();
+                } catch {
+                  setError("Fullscreen is unavailable.");
+                }
+              }}
+            >
+              Fullscreen
+            </button>
+            <FileDownload resource={resource} />
+          </>
+        )}
         {!isText && ext !== "pdf" && (
           <>
             <button
@@ -301,7 +327,12 @@ export function Preview({
         )}
       </div>
       <Notice error={error} />
-      <div className="resource-preview" ref={viewer}>
+      <div
+        className={
+          "resource-preview " + (ext === "pdf" ? "resource-preview-pdf" : "")
+        }
+        ref={viewer}
+      >
         {ext === "pdf" ? (
           <Suspense fallback={<p role="status">Opening PDF viewer…</p>}>
             <PdfPreview
@@ -331,7 +362,7 @@ export function Preview({
             />
           ))}
       </div>
-      <FileDownload resource={resource} />
+      {ext !== "pdf" && <FileDownload resource={resource} />}
     </Modal>
   );
 }

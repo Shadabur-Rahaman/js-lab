@@ -45,7 +45,7 @@ document.getElementById("run")!.onclick = async () => {
       await wait(
         () =>
           document
-            .querySelector(".resource-pdf-pages")
+            .querySelector('.resource-pdf-page[data-page="1"]')
             ?.getAttribute("data-rendered") === "true",
       );
       const canvas = document.querySelector("canvas")!;
@@ -57,37 +57,37 @@ document.getElementById("run")!.onclick = async () => {
         if (pixels[i] < 220 && pixels[i + 1] < 220 && pixels[i + 2] < 220)
           ink++;
       if (ink < 100) throw Error("PDF page was blank");
-      const initial = canvas.width;
-      (
-        document.querySelector(
-          '[aria-label="Zoom in PDF"]',
-        ) as HTMLButtonElement
-      ).click();
+      const pages =
+        document.querySelectorAll<HTMLElement>(".resource-pdf-page");
+      if (pages.length < 2) throw Error("Expected a multi-page PDF");
+      const controls = [...document.querySelectorAll("dialog button")].map(
+        (button) => button.textContent?.trim(),
+      );
+      if (
+        controls.some((text) =>
+          /Previous page|Next page|Fit to width/.test(text || ""),
+        )
+      )
+        throw Error("Page navigation controls should be absent");
+      const scroll = document.querySelector<HTMLElement>(
+        ".resource-pdf-pages",
+      )!;
+      scroll.scrollTo({ top: scroll.scrollHeight, behavior: "instant" });
+      const last = pages[pages.length - 1];
       await wait(
         () =>
-          document
-            .querySelector(".resource-pdf-pages")
-            ?.getAttribute("data-rendered") === "true" &&
-          document.querySelector("canvas")!.width > initial,
+          last.getAttribute("data-rendered") === "true" &&
+          !!last.querySelector("canvas"),
       );
-      const next = [...document.querySelectorAll("button")].find(
-        (b) => b.textContent === "Next page",
-      )!;
-      if (!next.disabled) {
-        next.click();
-        await wait(
-          () =>
-            document
-              .querySelector(".resource-pdf-pages")
-              ?.getAttribute("data-rendered") === "true" &&
-            document
-              .querySelector("canvas")
-              ?.getAttribute("aria-label")
-              ?.includes("page 2") === true,
-        );
-      }
+      const lastCanvas = last.querySelector("canvas")!;
+      if (!lastCanvas.width || !lastCanvas.height)
+        throw Error("Last PDF page did not render");
+      if (document.querySelectorAll("canvas").length >= pages.length)
+        throw Error("Offscreen pages should release their canvases");
+      scroll.scrollTo({ top: 0, behavior: "instant" });
+      await wait(() => pages[0].getAttribute("data-rendered") === "true");
       item.textContent =
-        "PASS actual PDF rendered with visible content, zoom and page controls: " +
+        "PASS continuous scrolling reaches the final page and returns to the first, without page controls: " +
         record.title;
       item.className = "pass";
       passed++;

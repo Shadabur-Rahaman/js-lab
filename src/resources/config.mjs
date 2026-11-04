@@ -1,4 +1,5 @@
 export function publicConfig(env = {}) {
+  if (env.VITE_PRIVATE_ACCESS === "true") return {url:location.origin,key:"private-gateway"};
   const url = String(env.VITE_SUPABASE_URL || "").replace(/\/$/, "");
   const key = String(env.VITE_SUPABASE_PUBLISHABLE_KEY || "");
   if (!url && !key) return null;

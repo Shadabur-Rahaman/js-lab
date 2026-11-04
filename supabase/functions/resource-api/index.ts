@@ -46,6 +46,13 @@ Deno.serve(async (req: Request) => {
     const raw = new TextDecoder().decode(bytes);
     const { action, ...body } = JSON.parse(raw);
     const db = service();
+    // Cutover switch blocks every legacy operation, including anonymous link
+    // issuance and password-authenticated uploads. The private Pages server is
+    // the only content gateway after activation.
+    const privacy = await db.rpc("private_resources_enforced");
+    if (privacy.error) return response({ error: "Access service unavailable." }, 503);
+    if (privacy.data !== false)
+      return response({ error: "Use the private JS Lab website." }, 403);
     if (action === "link") {
       if (!/^[a-f0-9-]{36}$/i.test(body.id || ""))
         throw new ClientError("Invalid resource.");

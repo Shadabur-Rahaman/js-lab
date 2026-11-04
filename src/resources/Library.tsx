@@ -1,3 +1,4 @@
+import {privateAccess} from '../access/session';
 import { useCallback, useEffect, useState } from "react";
 import { RefreshCw, BookOpen } from "lucide-react";
 import { lessons } from "../data/lessons";
@@ -23,7 +24,7 @@ export default function Library({ chapter }: { chapter?: number }) {
     [sort, setSort] = useState("order"),
     [page, setPage] = useState(0);
   const load = useCallback(async () => {
-    if (!cloud) return;
+    if (!cloud && !privateAccess) return;
     setLoading(true);
     setError("");
     try {
@@ -85,7 +86,7 @@ export default function Library({ chapter }: { chapter?: number }) {
             : "Everything you need for your JavaScript journey."}
         </p>
       </div>
-      {!cloud ? (
+      {!cloud && !privateAccess ? (
         <div className="resource-empty">
           <BookOpen size={32} />
           <h2>Study materials aren’t available yet.</h2>

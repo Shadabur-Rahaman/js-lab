@@ -14,3 +14,11 @@ tests/resources-browser.bundle.js
 tests/resources-browser.bundle.css
 tests/pdf-preview-browser.bundle.js
 tests/pdf-preview-browser.bundle.css
+
+dist-private/
+.wrangler/
+.dev.vars
+.dev.vars.*
+
+tests/private-access-browser.bundle.js
+tests/private-access-browser.bundle.css

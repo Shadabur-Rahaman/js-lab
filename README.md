@@ -1,6 +1,10 @@
 # JS LAB — Learn JavaScript by Doing
 
-A local classroom app built with React, TypeScript, Vite, Tailwind CSS, Lucide icons, Motion, and a Prism-highlighted editor. No accounts, API keys, or database.
+A classroom app built with React, TypeScript, Vite, Tailwind CSS, Lucide icons, Motion, and a Prism-highlighted editor, with a persistent Supabase resource library.
+
+The private deployment adds Cloudflare Access email-code sign-in, server-checked enrollment, administrator student management, expiry and revocation. Build it with `npm run build:private`; this creates `dist-private` with an authorization worker protecting every asset and API. Missing settings fail closed. `npm run build` preserves the legacy static deployment during migration.
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for Cloudflare configuration, progress transfer, verification, explicit public-site retirement and rollback; [SECURITY.md](SECURITY.md) for enforcement and limitations; and [TEST_REPORT.md](TEST_REPORT.md) for executed checks. The public site is not retired automatically.
 
 ## Run
 

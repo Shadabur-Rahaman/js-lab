@@ -1,3 +1,4 @@
+import {privateAccess, privateApi, uploadHeaders} from '../access/session';
 import { createClient } from "@supabase/supabase-js";
 import { Upload } from "tus-js-client";
 import { publicConfig } from "./config.mjs";
@@ -10,7 +11,7 @@ import {
 export const config = publicConfig(
   (import.meta as ImportMeta & { env: Record<string, string> }).env,
 );
-export const cloud = config
+export const cloud = config && !privateAccess
   ? createClient(config.url, config.key, {
       auth: {
         storageKey: "js-lab-resource-auth-v5",
@@ -61,6 +62,7 @@ export async function api<T = unknown>(
   action: string,
   body: Record<string, unknown> = {},
 ): Promise<T> {
+  if (privateAccess) return privateApi<T>("/api/resources", { action, ...body });
   if (!cloud || !config) throw Error("Connect a Supabase project first.");
   const {
     data: { session },
@@ -85,6 +87,7 @@ export async function api<T = unknown>(
   return value as T;
 }
 export async function catalogs() {
+  if (privateAccess) return api<{categories:Category[];max:number}>("catalogs");
   if (!cloud) throw Error("Connect a Supabase project first.");
   const [categories, settings] = await Promise.all([
     cloud.from("resource_categories").select("*").order("display_order"),
@@ -100,6 +103,7 @@ export async function catalogs() {
   };
 }
 export async function published() {
+  if (privateAccess) { const all:Resource[]=[];for(let page=0;;page++){const rows=await api<Resource[]>("published",{page});all.push(...rows);if(rows.length<500)return all;} }
   if (!cloud) return [];
   const rows: Resource[] = [];
   for (let start = 0; ; start += 500) {
@@ -169,6 +173,7 @@ export async function link(resource: Resource, preview = false) {
     id: resource.id,
     preview,
   });
+  if (privateAccess) {const parsed=new URL(url,location.origin);if(parsed.origin!==location.origin||!/^\/api\/files\/[a-f0-9-]{36}$/.test(parsed.pathname))throw Error("Unexpected file endpoint.");return parsed.href;}
   const parsed = new URL(url);
   const project = new URL(config!.url);
   if (
@@ -202,12 +207,13 @@ export function uploadJob(
   max: number,
   progress: (phase: string, percent: number) => void,
 ) {
+  const privateController=new AbortController();
   let transfer: Upload | undefined,
     cancelled = false,
     reservation: string | undefined = job.uploadId;
   let rejectTransfer: ((reason: Error) => void) | undefined;
   const done = (async () => {
-    if (!cloud || !config) throw Error("Connect Supabase first.");
+    if ((!cloud || !config) && !privateAccess) throw Error("Connect Supabase first.");
     progress("Checking file", 0);
     const info = fileInfo(job.file.name, job.file.size, job.file.type, max);
     const bytes = new Uint8Array(await job.file.arrayBuffer());
@@ -235,7 +241,12 @@ export function uploadJob(
       throw Error("Upload cancelled.");
     }
     if (reserved.state !== "ready" && !reserved.object_exists) {
-      const origin = new URL(config.url);
+      if (privateAccess) {
+        const response=await fetch("/api/uploads/"+reserved.id,{method:"POST",credentials:"same-origin",headers:uploadHeaders(),body:job.file,signal:privateController.signal});
+        if(!response.ok)throw Error("Upload failed. Cancel and retry after checking access and connection.");
+        progress("Uploading",100);
+      } else {
+      const origin = new URL(config!.url);
       if (origin.hostname.endsWith(".supabase.co"))
         origin.hostname = origin.hostname.replace(
           ".supabase.co",
@@ -287,6 +298,7 @@ export function uploadJob(
           .catch(reject);
       });
     }
+      }
     if (cancelled) throw Error("Upload cancelled.");
     progress("Verifying and saving", 100);
     await api("finalize", { upload_id: reserved.id });
@@ -296,6 +308,7 @@ export function uploadJob(
     done,
     cancel: async () => {
       cancelled = true;
+      privateController.abort();
       await transfer?.abort();
       rejectTransfer?.(Error("Upload cancelled."));
       if (reservation) await api("cancel", { upload_id: reservation });

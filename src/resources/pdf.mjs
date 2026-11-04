@@ -6,7 +6,7 @@ export async function pdfBytes(getLink, expectedSize, signal, fetcher = fetch) {
   for (let attempt = 0; attempt < 2; attempt++) {
     const response = await fetcher(await getLink(), {
       signal,
-      credentials: "omit",
+      credentials: "same-origin",
       cache: "no-store",
     });
     if ((response.status === 401 || response.status === 403) && attempt === 0)

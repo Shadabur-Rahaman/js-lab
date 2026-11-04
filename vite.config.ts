@@ -76,10 +76,12 @@ function pdfAssets(): Plugin {
 export default defineConfig({
   base: "./",
   server: {
+    warmup: {clientFiles: ["./src/main.tsx"]},
     watch: {
-      ignored: ["**/html-lab/**", "**/css-lab/**", "**/.deployment/**"],
+      ignored: ["**/html-lab/**", "**/css-lab/**", "**/python-lab/**", "**/dist-private/**", "**/.deployment/**"],
     },
   },
+  optimizeDeps: {entries:["index.html"]},
   plugins: [react(), tailwindcss(), v3Worker, pdfAssets()],
   build: {
     rollupOptions: {

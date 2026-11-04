@@ -1,3 +1,5 @@
+import {privateAccess} from '../access/session';
+import {useMember} from '../access/PrivateGate';
 import {
   useCallback,
   useEffect,
@@ -35,6 +37,11 @@ type QueueItem = UploadJob & {
   completed: boolean;
 };
 export default function TeacherResources() {
+ if(privateAccess)return <PrivateResources/>;
+ return <LegacyResources/>;
+}
+function PrivateResources(){const member=useMember();return member?.role==='admin'?<section className="resource-page"><h1>Manage Resources</h1><Dashboard profile={{...member,role:"admin"}}/></section>:<p role="alert">Only the administrator can manage resources.</p>;}
+function LegacyResources() {
   const [profile, setProfile] = useState<Profile | null>(null),
     [checking, setChecking] = useState(!!cloud),
     [error, setError] = useState(""),

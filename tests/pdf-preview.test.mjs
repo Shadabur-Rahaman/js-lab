@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { pdfBytes, pdfViewport } from "../src/resources/pdf.mjs";
 const pdf = new TextEncoder().encode("%PDF-1.7\nfixture");
-test("PDF preview reads bytes once with no cookies or browser persistence", async () => {
+test("PDF preview reads bytes once with same-origin cookies only and no browser persistence", async () => {
   let calls = 0;
   const data = await pdfBytes(
     async () => "/private.pdf",
@@ -10,7 +10,7 @@ test("PDF preview reads bytes once with no cookies or browser persistence", asyn
     new AbortController().signal,
     async (_url, options) => {
       calls++;
-      assert.equal(options.credentials, "omit");
+      assert.equal(options.credentials, "same-origin");
       assert.equal(options.cache, "no-store");
       return new Response(pdf);
     },

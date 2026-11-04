@@ -36,6 +36,7 @@ jobs:
         run: |
           psql -v ON_ERROR_STOP=1 -f supabase/tests/bootstrap.sql
           psql -v ON_ERROR_STOP=1 -f supabase/tests/permissions.sql
+          psql -v ON_ERROR_STOP=1 -f supabase/tests/private-access.sql
   build:
     runs-on: ubuntu-latest
     steps:
@@ -59,6 +60,8 @@ jobs:
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5
         with:
           path: dist
+      - name: Verify the separate private Cloudflare build
+        run: npm run build:private
   deploy:
     needs: [build, resource-permissions]
     runs-on: ubuntu-latest

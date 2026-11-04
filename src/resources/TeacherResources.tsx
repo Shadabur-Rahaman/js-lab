@@ -474,7 +474,7 @@ function Dashboard({ profile }: { profile: Profile }) {
         </h2>
         <p>
           Up to {size(max)} per file. PDF, Office documents, text, images and
-          ZIP. Files stay private until published.
+          ZIP. {privateAccess ? "Only active enrolled students can view published materials." : "Files stay private until published."}
         </p>
         <div
           className="resource-drop"
@@ -736,7 +736,7 @@ function Dashboard({ profile }: { profile: Profile }) {
       </div>
       <p className="muted">
         Trash can be restored for 30 days; replaced files are retained for 7
-        days. Previously issued download links may work for up to one minute.
+        days. {privateAccess ? "Access is checked on every new file request." : "Previously issued download links may work for up to one minute."}
         Downloaded copies cannot be recalled.
       </p>
       {profile.role === "admin" && (

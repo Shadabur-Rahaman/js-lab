@@ -8,6 +8,7 @@ import {
 } from "react";
 const PdfPreview = lazy(() => import("./PdfPreview"));
 import { FileText, Download, Eye, X } from "lucide-react";
+import { privateAccess } from "../access/session";
 import { lessons } from "../data/lessons";
 import {
   download,
@@ -276,7 +277,9 @@ export function Preview({
       <p className="muted">
         {ext === "pdf"
           ? "Scroll down to read the whole PDF."
-          : "Preview links last one minute. Retry to open a fresh link."}
+          : privateAccess
+            ? "Your access is checked whenever a file is requested. Retry if loading fails."
+            : "Preview links last one minute. Retry to open a fresh link."}
       </p>
       <div className="resource-actions">
         {ext !== "pdf" && (

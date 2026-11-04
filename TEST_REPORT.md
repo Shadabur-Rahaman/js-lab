@@ -14,7 +14,8 @@
 | Existing release preservation scan | Classroom code absent from built frontend assets; relative GitHub Pages URLs verified. |
 | Private artifact scan | All 26 frontend text assets checked for privileged-key/JWT patterns; required authorization worker and catch-all routes verified. |
 | `npm audit --omit=dev` | 0 production vulnerabilities reported. |
-| Hosted production and hash URL, unsigned HTTP requests | 12/12 denied for HTML, a real bundled JS asset, session API, download API and PDF assets. At initial deployment these return 503 because Access bindings are incomplete. This proves fail-closed preparation, not completed sign-in. |
+| Hosted production and hash URL, unsigned HTTP requests | 12/12 denied for HTML, a real bundled JS asset, session API, download API and PDF assets. Initial unconfigured deployment returned 503. After encrypted bindings and Access application activation, production redirects to Access (302) and the latest alternative deployment denies (403). This does not verify successful sign-in. |
+| Encrypted Cloudflare bindings | Configured successfully for both production and preview through CLI stdin; no server credential printed or saved. Latest deployed build: `7bb269f7.js-lab-private.pages.dev`. |
 | Hosted Supabase schema/API | Both additive migrations applied; existing resource-api redeployed with the cutover guard. Confirmed one previously authorized admin was bootstrapped. No real enrollment dates or resource metadata changed. |
 
 Security unit tests generate real RSA key pairs and signed JWTs: valid signature accepted; wrong signature/issuer/audience, expiry, missing token and invalid email rejected. They check every static path consults enrollment before assets, missing database/identity fail closed, CSRF/origin checks, student mutation denial and server-derived admin identity. Worker tests inject a fixture database where noted; the separate real-cloud tests use Supabase, with a fixture identity verifier for the revocation gateway check, not a fabricated Cloudflare login.
@@ -23,7 +24,7 @@ The first cloud acceptance run found a test-cleanup issue: published resources r
 
 ## Still requiring real account verification
 
-Cloudflare Zero Trust team: `broad-dew-2065.cloudflareaccess.com`. Pages project: `js-lab-private`. The Access application audience and policy setup are pending at this report revision.
+Cloudflare Zero Trust team: `broad-dew-2065.cloudflareaccess.com`. Pages project: `js-lab-private`. The public application AUD was obtained from the production login redirect and configured. The actual sign-in page currently offers **Cloudflare login only**; enabling One-time PIN in the team's identity providers and application Login methods is the remaining personal setup step. The email allowlist cannot be inspected through the available Pages CLI permissions; it still requires owner verification.
 
 Successful real OTP sign-in, the two real student accounts, actual Cloudflare allowlist rejection, real browser-to-private-gateway teacher uploads, authenticated alias tests, browser expiry/revocation timing under real Cloudflare sessions, and the complete sandbox/CSP interaction on the private host have **not yet been verified**. Private UI fixture passes do not substitute for them. Complete the matrix in DEPLOYMENT.md before retiring the public site.
 

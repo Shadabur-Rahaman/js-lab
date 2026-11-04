@@ -1,12 +1,12 @@
 import {createClient} from '@supabase/supabase-js';
-import {AccessError,configuration,verifyIdentity,csrf,jsonBody,secured,denial} from './access.mjs';
+import {AccessError,configuration,verifyIdentity,fetchMetadata,csrf,jsonBody,secured,denial,denialDiagnostic} from './access.mjs';
 import {resourceAction,uploadBytes,downloadFile} from './resources.mjs';
 
 export function createHandler(overrides={}) {
  return {async fetch(request,env) {
   try {
    const config=configuration(env,request), url=new URL(request.url);
-   if(request.headers.get('sec-fetch-site')==='cross-site')throw new AccessError('origin_denied');
+   fetchMetadata(request);
    const identity=await (overrides.verifyIdentity||verifyIdentity)(request,config);
    const db=overrides.db||createClient(env.SUPABASE_URL,env.SUPABASE_SERVICE_ROLE_KEY,{auth:{persistSession:false,autoRefreshToken:false},global:{fetch:(input,init)=>fetch(input,{...init,signal:AbortSignal.timeout(10000)})}});
    const {data:permission,error}=await db.rpc('enrollment_authorize',{verified_email:identity.email,verified_subject:identity.subject});
@@ -19,6 +19,12 @@ export function createHandler(overrides={}) {
    if(!allowed)throw new AccessError('rate_limited',429);
    if (!['GET','HEAD','POST'].includes(request.method)) throw new AccessError('method_denied',405);
    if (request.method==='POST')csrf(request);
+   // Cloudflare may retain this display marker in the post-login return URL.
+   // Remove it only AFTER real authorization. It never proves login or logout.
+   if(request.method==='GET' && !url.pathname.startsWith('/api/') && url.searchParams.get('__cf_access_message')==='logged_out') {
+    url.searchParams.delete('__cf_access_message');
+    return secured(new Response(null,{status:303,headers:{Location:url.pathname+url.search}}));
+   }
    let result;
    if(url.pathname==='/api/session' && request.method==='GET') {
     const token=request.headers.get('cookie')?.match(/(?:^|;\s*)__Host-jslab-csrf=([a-f0-9]{64})(?:;|$)/)?.[1] || [...crypto.getRandomValues(new Uint8Array(32))].map(n=>n.toString(16).padStart(2,'0')).join('');
@@ -45,7 +51,7 @@ export function createHandler(overrides={}) {
     result=await env.ASSETS.fetch(request);
    }
    return secured(result);
-  }catch(e){return secured(denial(e,request));}
+  }catch(e){(overrides.log||console.warn)(JSON.stringify(denialDiagnostic(e,request)));return secured(denial(e,request));}
  }};
 }
 export default createHandler();

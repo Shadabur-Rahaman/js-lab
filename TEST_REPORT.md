@@ -1,5 +1,7 @@
 # Private access verification — 4 November 2026
 
+Update, 5 November: the post-OTP student navigation failure was reproduced, fixed and verified with the actual student session. See [STUDENT_ACCESS_DEBUG.md](STUDENT_ACCESS_DEBUG.md) for the root cause, 79 passing tests, live pending/expired/revoked/sign-out checks and restoration evidence. The historical results below are retained as originally recorded.
+
 ## Executed
 
 | Check | Actual result |

@@ -2,7 +2,16 @@ import { createRemoteJWKSet, jwtVerify } from 'jose';
 
 const keys = new Map();
 export class AccessError extends Error {
-  constructor(code, status = 403) { super(code); this.code = code; this.status = status; }
+  constructor(code, status = 403, reason) { super(code); this.code = code; this.status = status; this.reason = reason; }
+}
+export function fetchMetadata(request) {
+  // Access's OTP form lives on the team domain. Its successful return is a
+  // cross-site, top-level GET navigation, just like opening a link from email.
+  // This is not a grant: JWT, enrollment and resource checks still follow.
+  if (request.headers.get('sec-fetch-site') === 'cross-site' && !(
+    request.method === 'GET' && request.headers.get('sec-fetch-mode') === 'navigate' &&
+    request.headers.get('sec-fetch-dest') === 'document'
+  )) throw new AccessError('origin_denied');
 }
 export function configuration(env, request) {
   let issuer, project;
@@ -15,7 +24,7 @@ export function configuration(env, request) {
 }
 export async function verifyIdentity(request, config, keySet) {
   const token = request.headers.get('Cf-Access-Jwt-Assertion');
-  if (!token || token.length>16384) throw new AccessError('unauthenticated',401);
+  if (!token || token.length>16384) throw new AccessError('unauthenticated',401,'assertion_missing_or_oversized');
   try {
     if (!keySet) {
       if (!keys.has(config.issuer)) keys.set(config.issuer,createRemoteJWKSet(new URL(config.issuer+'/cdn-cgi/access/certs'),{timeoutDuration:5000}));
@@ -24,7 +33,14 @@ export async function verifyIdentity(request, config, keySet) {
     const {payload}=await jwtVerify(token,keySet,{issuer:config.issuer,audience:config.audience,algorithms:['RS256'],requiredClaims:['exp','iat','sub','email'],clockTolerance:0});
     if (typeof payload.email!=='string' || typeof payload.sub!=='string' || !payload.sub || payload.sub.length>255 || payload.email.length>254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email) || typeof payload.iat!=='number' || !Number.isFinite(payload.iat) || payload.iat>Date.now()/1000+30) throw Error();
     return {email:payload.email.toLowerCase(),subject:payload.sub};
-  } catch { throw new AccessError('unauthenticated',401); }
+  } catch (error) {
+    if (['ERR_JWKS_TIMEOUT','ERR_JWKS_INVALID','ERR_JWKS_MULTIPLE_MATCHING_KEYS'].includes(error.code) || error instanceof TypeError)
+      throw new AccessError('authentication_unavailable',503,'key_service_unavailable');
+    const reason = error.code === 'ERR_JWT_CLAIM_VALIDATION_FAILED' && ['iss','aud','nbf','iat'].includes(error.claim)
+      ? 'invalid_'+error.claim
+      : error.code === 'ERR_JWT_EXPIRED' ? 'token_expired' : 'token_invalid';
+    throw new AccessError('unauthenticated',401,reason);
+  }
 }
 export function csrf(request) {
   if (request.headers.get('origin')!==new URL(request.url).origin || request.headers.get('sec-fetch-site')==='cross-site') throw new AccessError('origin_denied');
@@ -55,7 +71,20 @@ export function denial(error,request) {
   const code=error instanceof AccessError?error.code:'service_unavailable';
   const status=error instanceof AccessError?error.status:503;
   if(new URL(request.url).pathname.startsWith('/api/')) return Response.json({error:'Access is unavailable.',code},{status});
-  const titles={expired:'Access Expired',revoked:'Access Revoked',suspended:'Access Suspended',pending:'Awaiting Approval',not_started:'Enrollment Has Not Started'};
-  const title=titles[code]||'Access Required';
-  return new Response(`<!doctype html><html lang="en"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${title} · JS LAB</title><body style="background:#101115;color:#eee;font:18px system-ui;padding:8vw"><main><h1>${title}</h1><p>Contact your teacher to check your enrollment, or sign in with your approved email.</p><p>If the service is temporarily unavailable, please try again later.</p><a style="color:#f9e54e" href="/cdn-cgi/access/logout">Sign out</a></main></body></html>`,{status,headers:{'Content-Type':'text/html; charset=utf-8'}});
+  const loggedOut = code==='unauthenticated' && new URL(request.url).searchParams.get('__cf_access_message')==='logged_out';
+  const titles={expired:'Access Expired',revoked:'Access Revoked',suspended:'Access Suspended',pending:'Awaiting Approval',not_started:'Enrollment Has Not Started',unauthenticated:'Sign-in Required',service_unavailable:'Access Temporarily Unavailable',authentication_unavailable:'Access Temporarily Unavailable'};
+  const title=loggedOut?'Signed Out':titles[code]||'Access Required';
+  const description=loggedOut?'You have signed out. Sign in again to open your lessons.':code==='unauthenticated'?'Sign in with your approved email to open your lessons.':'Contact your teacher to check your enrollment. If the service is temporarily unavailable, please try again later.';
+  const primary=code==='unauthenticated'?'Sign in':'Try again';
+  const exit=code==='unauthenticated'?'':' <a style="color:#f9e54e;margin-left:24px" href="/cdn-cgi/access/logout">Sign out</a>';
+  return new Response(`<!doctype html><html lang="en"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${title} · JS LAB</title><body style="background:#101115;color:#eee;font:18px system-ui;padding:8vw"><main><h1>${title}</h1><p>${description}</p><a style="color:#f9e54e" href="/">${primary}</a>${exit}</main></body></html>`,{status,headers:{'Content-Type':'text/html; charset=utf-8'}});
+}
+export function denialDiagnostic(error,request) {
+  const code=error instanceof AccessError&&/^[a-z_]{1,48}$/.test(error.code)?error.code:'service_unavailable';
+  const path=new URL(request.url).pathname;
+  const area=path.startsWith('/api/files/')?'/api/files/*':path.startsWith('/api/uploads/')?'/api/uploads/*':path.startsWith('/api/')?'/api/*':path.startsWith('/assets/')?'/assets/*':path==='/'?'/':'/protected-content';
+  return {event:'jslab_access_denied',code,reason:error instanceof AccessError?error.reason:undefined,area,
+    cross_site:request.headers.get('sec-fetch-site')==='cross-site',
+    document_navigation:request.headers.get('sec-fetch-mode')==='navigate'&&request.headers.get('sec-fetch-dest')==='document',
+    assertion_present:!!request.headers.get('Cf-Access-Jwt-Assertion')};
 }

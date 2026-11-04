@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {generateKeyPair,SignJWT,createLocalJWKSet,exportJWK} from 'jose';
-import {verifyIdentity,configuration,csrf,jsonBody,secured} from '../server/access.mjs';
+import {verifyIdentity,configuration,fetchMetadata,csrf,jsonBody,secured,denial,denialDiagnostic,AccessError} from '../server/access.mjs';
 import {createHandler} from '../server/worker.mjs';
 const env={ACCESS_TEAM_DOMAIN:'https://classroom.cloudflareaccess.com',ACCESS_AUD:'real-app-audience',PROTECTED_HOSTS:'js-lab-private.pages.dev',SUPABASE_URL:'https://dacvuxwlowdgrdhukryj.supabase.co',SUPABASE_SERVICE_ROLE_KEY:'test-only-not-a-key'};
 const origin='https://js-lab-private.pages.dev';
@@ -34,7 +34,7 @@ test('CSRF requires same origin and matching secure host cookie',()=>{
 function fixture({code,role='student',dbError=false}={}){
  let assets=0;const commands=[];
  const db={rpc:async(name,args)=>{commands.push([name,args]);if(name==='enrollment_authorize')return {data:code?{allowed:false,code}:{allowed:true,member:{id:'11111111-1111-4111-8111-111111111111',role,name:'Student',email:'student@example.test'},server_time:new Date().toISOString()},error:dbError?{}:null};if(name==='resource_rate')return {data:true,error:null};return {data:[],error:null};}};
- return {handler:createHandler({db,verifyIdentity:async()=>({email:'student@example.test',subject:'verified'})}),env:{...env,ASSETS:{fetch:async()=>{assets++;return new Response('PRIVATE_LESSON',{headers:{etag:'cached'}})}}},assets:()=>assets,commands};
+ return {handler:createHandler({db,log:()=>{},verifyIdentity:async()=>({email:'student@example.test',subject:'verified'})}),env:{...env,ASSETS:{fetch:async()=>{assets++;return new Response('PRIVATE_LESSON',{headers:{etag:'cached'}})}}},assets:()=>assets,commands};
 }
 test('every static path rechecks enrollment, including cached assets, PDF assets and alternatives',async()=>{
  for(const code of ['pending','expired','revoked','suspended','unapproved','not_started','identity_mismatch'])for(const path of ['/','/index.html','/assets/chapter.js','/pdf-assets/wasm/openjpeg.wasm','/api/files/11111111-1111-4111-8111-111111111111']){const f=fixture({code});const r=await f.handler.fetch(request(path),f.env);assert.equal(r.status,403);assert.equal(f.assets(),0);assert.ok(!(await r.text()).includes('PRIVATE_LESSON'));}
@@ -55,4 +55,34 @@ test('oversized JSON and malformed body are rejected; security headers disallow 
  await assert.rejects(()=>jsonBody(request('/api/students',{method:'POST',body:'x'.repeat(32769)})));
  await assert.rejects(()=>jsonBody(request('/api/students',{method:'POST',body:'[]'})));
  const r=secured(new Response('ok'));assert.equal(r.headers.get('X-Frame-Options'),'DENY');assert.match(r.headers.get('Content-Security-Policy'),/object-src 'none'/);assert.equal(r.headers.get('Access-Control-Allow-Origin'),null);
+});
+
+const callbackHeaders={'sec-fetch-site':'cross-site','sec-fetch-mode':'navigate','sec-fetch-dest':'document'};
+test('OTP return navigation passes metadata filtering but still requires a real JWT and live enrollment',async()=>{
+ const good=fixture();assert.equal((await good.handler.fetch(request('/',{headers:callbackHeaders}),good.env)).status,200);assert.equal(good.assets(),1);
+ const missing=await createHandler({log:()=>{}}).fetch(request('/',{headers:callbackHeaders}),good.env);assert.equal(missing.status,401);
+ for(const code of ['unapproved','pending','expired','revoked','suspended']){const f=fixture({code});assert.equal((await f.handler.fetch(request('/',{headers:callbackHeaders}),f.env)).status,403);assert.equal(f.assets(),0);}
+});
+test('cross-site embedded content, API fetch and POST navigations remain blocked',()=>{
+ for(const [method,mode,dest] of [['GET','no-cors','script'],['GET','no-cors','image'],['GET','navigate','iframe'],['GET','cors','empty'],['POST','navigate','document'],['HEAD','navigate','document']]){
+  assert.throws(()=>fetchMetadata(request('/',{method,headers:{'sec-fetch-site':'cross-site','sec-fetch-mode':mode,'sec-fetch-dest':dest}})));
+ }
+ assert.doesNotThrow(()=>fetchMetadata(request('/',{headers:callbackHeaders})));
+});
+test('stale logged-out return marker is removed once only after authorization',async()=>{
+ const f=fixture();const r=await f.handler.fetch(request('/?__cf_access_message=logged_out&keep=1',{headers:callbackHeaders}),f.env);
+ assert.equal(r.status,303);assert.equal(r.headers.get('location'),'/?keep=1');assert.equal(f.assets(),0);
+ assert.equal((await f.handler.fetch(request('/?keep=1',{headers:callbackHeaders}),f.env)).status,200);
+ for(const code of ['unapproved','pending','expired','revoked']){const denied=fixture({code});const response=await denied.handler.fetch(request('/?__cf_access_message=logged_out',{headers:callbackHeaders}),denied.env);assert.equal(response.status,403);assert.equal(response.headers.get('location'),null);assert.equal(denied.assets(),0);}
+});
+test('signed-out message is informational and offers a clean sign-in link rather than repeated logout',async()=>{
+ const page=denial(new AccessError('unauthenticated',401),request('/?__cf_access_message=logged_out'));
+ assert.equal(page.status,401);const html=await page.text();assert.match(html,/<h1>Signed Out<\/h1>/);assert.match(html,/href="\/">Sign in/);assert.ok(!html.includes('/cdn-cgi/access/logout'));
+ const expired=await denial(new AccessError('expired'),request('/?__cf_access_message=logged_out')).text();assert.match(expired,/Access Expired/);assert.ok(!expired.includes('<h1>Signed Out'));
+});
+test('denial diagnostics never include email, tokens, cookies, query strings or resource IDs',()=>{
+ const r=request('/api/files/11111111-1111-4111-8111-111111111111?email=private@example.test',{headers:{'Cf-Access-Jwt-Assertion':'PRIVATE_TOKEN',cookie:'CF_Authorization=PRIVATE_COOKIE',...callbackHeaders}});
+ const text=JSON.stringify(denialDiagnostic(new AccessError('unauthenticated',401,'invalid_aud'),r));
+ assert.match(text,/invalid_aud/);assert.match(text,/assertion_present/);
+ for(const secret of ['private@example.test','PRIVATE_TOKEN','PRIVATE_COOKIE','11111111-1111-4111-8111-111111111111'])assert.ok(!text.includes(secret));
 });

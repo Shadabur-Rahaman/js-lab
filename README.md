@@ -4,7 +4,7 @@ A classroom app built with React, TypeScript, Vite, Tailwind CSS, Lucide icons, 
 
 The private deployment adds Cloudflare Access email-code sign-in, server-checked enrollment, administrator student management, expiry and revocation. Build it with `npm run build:private`; this creates `dist-private` with an authorization worker protecting every asset and API. Missing settings fail closed. `npm run build` preserves the legacy static deployment during migration.
 
-See [DEPLOYMENT.md](DEPLOYMENT.md) for Cloudflare configuration, progress transfer, verification, explicit public-site retirement and rollback; [SECURITY.md](SECURITY.md) for enforcement and limitations; and [TEST_REPORT.md](TEST_REPORT.md) for executed checks. The public site is not retired automatically.
+See [DEPLOYMENT.md](DEPLOYMENT.md) for Cloudflare configuration, progress transfer, verification, explicit public-site retirement and rollback; [SECURITY.md](SECURITY.md) for enforcement and limitations; and [TEST_REPORT.md](TEST_REPORT.md) for executed checks. On 5 November 2026 the owner approved closing the public site while keeping existing private-site users. GitHub Pages is unpublished, automatic Pages publishing is removed, and the legacy public resource gateway is disabled.
 
 ## Run
 
@@ -17,11 +17,9 @@ npm run dev
 
 Open the local URL printed in the terminal. To produce a static build, run `npm run build`. Serve that build with `npm run preview`. `dist/` can be hosted on any static host; hash navigation needs no server rewrite.
 
-## GitHub Pages
+## Hosting
 
-The included `.github/workflows/deploy.yml` tests, builds, and deploys the app whenever the `main` branch is pushed. In the repository’s **Settings → Pages**, select **GitHub Actions** as the publishing source. The Vite configuration uses relative asset URLs so the build works under a repository subpath such as `/js-lab/`.
-
-Deployment uses GitHub’s standard Pages actions, with read-only source access in the build job and Pages publishing permissions only in the deployment job. No personal access token or other secret belongs in the project.
+Use https://js-lab-private.pages.dev/ with an existing approved email. The old GitHub Pages URL is closed. `.github/workflows/deploy.yml` now verifies builds and permissions only; it does not publish a site. The source repository remains public, so this change protects the hosted application and cloud resources, not the publicly available lesson source.
 
 ## Classroom flow
 
